@@ -47,21 +47,6 @@ Future_EndYear = 2099     #2006-2099
 Hist_StartYear = 1950     #1950-2005
 Hist_EndYear = 2005       #1950-2005
 
-HotTemp = 90    # deg F. Default should be about 100 deg F
-ColdTemp = 32    # deg F
-PrecipThreshold = 0.05    # inches per day. Precip Threshold (used to measure Drought duration). For many GCMs shoud not 
-#  be 0 because models "drizzle". Some investigation necessary.
-
-QuantileLow = 0.05
-QuantileHigh = 0.95
-
-CFLow = 0.25     # Threshold percentages for defining Climate futures. Default low/high:  0.25, 0.75
-CFHigh = 0.75
-CFs = c("Warm Wet", "Hot Wet", "Central", "Warm Dry", "Hot Dry") #Use spaces and characters only
-
-Year = 2040
-Range = 30
-
 ######################### End user-defined initials ##############################
 
 
