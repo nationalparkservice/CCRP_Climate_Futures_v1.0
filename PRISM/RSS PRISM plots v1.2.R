@@ -21,16 +21,16 @@ library(reshape2)
 
 rm(list=ls())
     #  Load data file ONLY if not following previous script
-RDataFile <- "JECA_43.75_-103.83_PRISM_PptTminTmax_IntermediateFiles.RData"
+RDataFile <- "FIIS_40.69182965_-72.99435226_PRISM_PptTminTmax_IntermediateFiles.RData"
 #################################################
 # DataDir = location of .RData file
 # OFDir   = location where output (plots) files will be written. End with /
 
-WinDataDir <- "~/RSS/Parks/JECA/Figs PRISM"
-WinOFDir <- "~/RSS/Parks/JECA/Figs PRISM"
+WinDataDir <- "~/RSS/Working/FIIS/PRISM"
+WinOFDir <- "~/RSS/Working/FIIS/PRISM"
 
-MacDataDir <- "/Volumes/Seagate1_Blue2TB/CHOH RSS/Figs PRISM/"
-MacOFDir <-  "/Volumes/Seagate1_Blue2TB/CHOH RSS/Figs PRISM/"
+# MacDataDir <- "/Volumes/Seagate1_Blue2TB/CHOH RSS/Figs PRISM/"
+# MacOFDir <-  "/Volumes/Seagate1_Blue2TB/CHOH RSS/Figs PRISM/"
 
 doP1 <- "YES"  # Should a separate regression be calculated for the reference period (default 1900-1970)? 
 doP2 <- "YES"  # Should a separate regression be calculate for the period after the reference period (default 1971-present)? 
@@ -38,7 +38,7 @@ beginRefYr = 1900
 endRefYr = 1970
 
 BeginYr	= 1895   # is this data file or for plots?
-EndYr = 2016
+EndYr = 2017
 dataEndYr = 2016   # needed for rolling mean plot below.  
 stepYrs	= 10		  # for period plots 
 rollLen = 10      # period of calc for rolling average; default 10 = decadal
