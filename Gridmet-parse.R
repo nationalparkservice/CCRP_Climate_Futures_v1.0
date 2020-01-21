@@ -11,11 +11,11 @@ rm(list=ls())
 #Location of data
 DataDir <- "E:/ClimateData/gridmet/"
 #Location of output files
-OutDir <- "C:/Users/achildress/Documents/RSS/Working/FRSP/Gridmet/"
+OutDir <- "C:/Users/achildress/Documents/RSS/Working/FIIS/Gridmet/"
 
-SiteID = "FRSP" #Park code
-Lat = 38.30364
-Lon = -77.73877
+SiteID = "FIIS" #Park code
+Lat = 40.69182965
+Lon = -72.99435226
 
 setwd(DataDir)
 
