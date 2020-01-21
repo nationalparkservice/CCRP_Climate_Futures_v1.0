@@ -38,8 +38,8 @@ beginRefYr = 1900
 endRefYr = 1970
 
 BeginYr	= 1895   # is this data file or for plots?
-EndYr = 2017
-dataEndYr = 2016   # needed for rolling mean plot below.  
+EndYr = 2018
+dataEndYr = 2017   # needed for rolling mean plot below.  
 stepYrs	= 10		  # for period plots 
 rollLen = 10      # period of calc for rolling average; default 10 = decadal
 
