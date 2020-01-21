@@ -22,12 +22,12 @@ rm(list = ls())
 
 #############  Initialize   ##############
 
-#  for output file names
-SiteID <- "WABA"  # identifier.  Use "" if not desired
+    #  for output file names
+SiteID <- "SCBL"  # identifier.  Use "" if not desired
 
-# Coordinates for cell center. Cell size is 0.04166 for 4-km dataset, .008333 for 800-m dataset. 
-Lat = 35.62083955
-Lon = -99.70445142
+    # Coordinates for cell center. Cell size is 0.04166 for 4-km dataset, .008333 for 800-m dataset. 
+Lat = 41.83476
+Lon = -103.707
 
 Buffer <- 0.06    # dec degree.  
 
@@ -36,9 +36,9 @@ EndYr =  2018
 EndMo = 12
 Day = 15          # in output files, day of month in Date variable (req by strptime)
 
-#  Root Out File Dir MUST exist - can only create final subdirectory (not root of this)   
-WinDataDir <- "E:/ClimateData/PRISM/PRISM_LT81m_800m/"  #Drobo drive containing 800-m resolution 2017 data
-WinOFDir <- "C:/Users/achildress/Documents/RSS/Working/WABA/PRISM/"
+          #  Root Out File Dir MUST exist - can only create final subdirectory (not root of this)   
+WinDataDir <- "E:/ClimateData/PRISM/PRISM_LT81m_800m"  #Drobo drive containing 800-m resolution 2017 data
+WinOFDir <- "~/RSS/Working/SCBL/PRISM"
 
 OPath1 <-"/Volumes/Seagate1_Blue2TB/COLM RSS/Figs PRISM/"
 OPath2 <- "/Volumes/Seagate1_Blue2TB/Projects/RSS Climate/HOBE"
@@ -58,19 +58,19 @@ if(.Platform$OS.type=="unix"){     # does not distinguish MacOS from others
   OFDir <- MacOFDir}
 
 rm(WinDataDir, WinOFDir,MacDataDir,MacOFDir)
-#  Seagate Blue
+  #  Seagate Blue
 #PptDir <- paste(DataDir, "/ppt/bil/", sep = "")
 #TminDir <- paste(DataDir, "/tmin/bil/", sep = "")
 #TmaxDir <- paste(DataDir, "/tmax/bil/", sep = "")
 
-#   Seagate 4TB/Drobo
-PptDir <- paste(DataDir, "ppt/monthly/", sep = "")
-TminDir <- paste(DataDir, "tmin/monthly/", sep = "")
-TmaxDir <- paste(DataDir, "tmax/monthly/", sep = "")
+    #   Seagate 4TB/Drobo
+PptDir <- paste(DataDir, "/ppt/monthly/", sep = "")
+TminDir <- paste(DataDir, "/tmin/monthly/", sep = "")
+TmaxDir <- paste(DataDir, "/tmax/monthly/", sep = "")
 
 ############################################     
 ###########  End of Initials  ##############
-
+  
 AoaExt <- extent(Lon-Buffer, Lon+Buffer, Lat-Buffer, Lat+Buffer)
 
 GetFileNames <- function(DataDirectoryName){  
@@ -80,23 +80,23 @@ GetFileNames <- function(DataDirectoryName){
   bFiles <- afiles[grep("^[_a-zA-Z0-9]+\\.bil$", afiles)]   # files ending with.bil 
   return(bFiles)
 }
-
+ 
 GetMonMeans <- function(DataDirName, AOAExt){
-  DataFileNames <- GetFileNames(DataDirName)
-  DataFile = paste(DataDirName, DataFileNames[1], sep="")
-  R <- raster(DataFile)
-  RCrp <- crop(R, AOAExt)
-  Means = data.frame(File = as.character(DataFile), Mean = cellStats(RCrp, stat='mean', na.rm=TRUE))
-  
-  for(NFiles in 2:length(DataFileNames)){           
-    DataFile = paste(DataDirName, DataFileNames[NFiles], sep="")
+    DataFileNames <- GetFileNames(DataDirName)
+    DataFile = paste(DataDirName, DataFileNames[1], sep="")
     R <- raster(DataFile)
     RCrp <- crop(R, AOAExt)
-    M = data.frame(File = DataFile, Mean = cellStats(RCrp, stat='mean', na.rm=TRUE))
-    Means <- rbind(Means, M)
-  }   # next NFiles
-  return(Means)}
-
+    Means = data.frame(File = as.character(DataFile), Mean = cellStats(RCrp, stat='mean', na.rm=TRUE))
+    
+    for(NFiles in 2:length(DataFileNames)){           
+      DataFile = paste(DataDirName, DataFileNames[NFiles], sep="")
+      R <- raster(DataFile)
+      RCrp <- crop(R, AOAExt)
+      M = data.frame(File = DataFile, Mean = cellStats(RCrp, stat='mean', na.rm=TRUE))
+      Means <- rbind(Means, M)
+    }   # next NFiles
+return(Means)}
+  
 ## For Debugging variables
 NYr = BeginYr
 #EndYr = BeginYr + 2
@@ -104,7 +104,7 @@ NYr = BeginYr
 PptMeans = TminMeans = TmaxMeans = data.frame
 for(NYr in BeginYr:EndYr){
   print(NYr); flush.console()
-  
+ 
   PptYrDir <- paste(PptDir, NYr, "/", sep="")
   TminYrDir <- paste(TminDir, NYr, "/", sep="")
   TmaxYrDir <- paste(TmaxDir, NYr, "/", sep="")
@@ -122,7 +122,7 @@ for(NYr in BeginYr:EndYr){
   }   # end else
 }	# next NYr 
 
-#  Deal with dates and seasons
+      #  Deal with dates and seasons
 GetSeason <- function(DateVec){
   seas <- as.character(rep(NA, length(DateVec)))
   seas[which(format(DateVec,'%B') %in% c("December", "January", "February"))]<- "Winter"
@@ -145,7 +145,7 @@ TminMeans$YearMon <- substring(TminMeans$File[], nchar(TminMeans$File[])-9,nchar
 TminMeans$Date <- strptime(paste(TminMeans$YearMon, Day, sep=""), "%Y%m%d")
 Season <- GetSeason(TminMeans$Date)
 TminMeans<- cbind(TminMeans, Season)
-
+                           
 names(TmaxMeans)[2] <- "Tmax"
 TmaxMeans$File <- as.character(TmaxMeans$File)
 TmaxMeans$YearMon <- substring(TmaxMeans$File[], nchar(TmaxMeans$File[])-9,nchar(TmaxMeans$File[])-4)
@@ -159,14 +159,14 @@ PptMeans$PptIn <- PptMeans$Ppt/25.4     # mm to in
 TminMeans$TminF <- TminMeans$Tmin * 9/5 + 32
 TmaxMeans$TmaxF <- TmaxMeans$Tmax * 9/5 + 32
 
-# clean up before writing file
+      # clean up before writing file
 rm(PptDir, PptYrDir, TminDir, TminYrDir, TmaxDir, TmaxYrDir, NYr)
 
 dir.create(OFDir)
 setwd(OFDir)
 save.image(sprintf("%s_%s_%s_PRISM_PptTminTmax_IntermediateFiles.RData", SiteID, Lat, Lon))
-
-# reality check. Need print & flush to generate output to screen when full script run
+     
+      # reality check. Need print & flush to generate output to screen when full script run
 print(qplot(PptMeans$Date, PptMeans$PptIn, data=PptMeans)); flush.console()
 print(qplot(TmaxMeans$Date, TmaxMeans$TmaxF, data=TmaxMeans)); flush.console()
 print(qplot(TminMeans$Date, TminMeans$TminF, data=TminMeans)); flush.console()
