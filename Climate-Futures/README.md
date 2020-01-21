@@ -7,6 +7,6 @@ Run scripts in order:
 3. RSS_MACA_Plot_Table_Creation
     Separate GCM/RCPs into climate futures, summarize data into tables
 4. RSS_Scatter-Diagnostic
-    
+    Create scatterplots and diagnostic plots of all climate futures
 5. RSS_Plotting_Bar_Charts
-6. RSS_Plotting_Time-series
+    Bar charts of selected climate futures
