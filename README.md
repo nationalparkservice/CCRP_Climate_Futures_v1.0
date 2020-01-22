@@ -3,7 +3,9 @@ Set of functions to parse historical (PRISM and GridMET) data and CMIP5 (MACA) p
 
 ## Steps of analysis are in different folders:
 **1. Historical trends (PRISM)**
+
     - Script for parsing data; script for plotting data
+    
 **2. Climate Futures**
     - Script for parsing MACA; script for parsin GridMET; Plot table creation; scatterplots and diagnostics; plotting bar charts
 **3. Water balance (package in own repository)**
