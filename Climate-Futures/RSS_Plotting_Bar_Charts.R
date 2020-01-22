@@ -520,7 +520,7 @@ ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
   geom_bar(stat="identity",position="dodge",colour="black") +
   BarPlotTheme +
   # coord_cartesian(ylim=c(0, 40)) +
-  labs(title = paste(SiteID, " - Average annual growing degree days in ", Year, sep=""), 
+  labs(title = paste(SiteID, " - Average annual growing degree days in ", Year, sep=""),
        y = "Days/Yr", colour = "Climate Future")  +
   scale_fill_manual(name="",values = colors3) +
   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
@@ -528,8 +528,8 @@ ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
 ggsave(sprintf("%s_%s_%s_Growing-day.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
 
 # Boxplot
-p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) + 
-  geom_boxplot(colour="black",aes(fill = factor(CF)), outlier.shape=NA)+ 
+p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) +
+  geom_boxplot(colour="black",aes(fill = factor(CF)), outlier.shape=NA)+
   geom_jitter(shape = 21, size = 5, aes(fill = factor(CF),colour=factor(me.col)), position=position_jitter(0.2)) +
   BarPlotTheme +
   labs(title = paste(SiteID, " - Average annual growing degree days in ", Year, sep=""),
@@ -537,41 +537,42 @@ p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) +
   scale_color_manual(name="",values = c("black","white"),guide=FALSE) +
   scale_fill_manual(name="",values = colors3)
 dat<-ggplot_build(p)$data[[1]];dat1<-dat[3,]
-p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
+p + geom_segment(data=dat1, aes(x=xmin, xend=xmax,
                                 y=middle, yend=middle), colour="grey", size=1)
 ggsave(sprintf("%s_%s_%s_Growing-day-Boxplot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
 
 
-####################
-#Total number of days/year in growing season (ClimDex defn)
-var<-"GrowLen"
-At<-aggregate(eval(parse(text=var))~CF,Annual,mean);
-names(At)<-c("CF",var)
-ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
-  geom_bar(stat="identity",position="dodge",colour="black") +
-  BarPlotTheme +
-  # coord_cartesian(ylim=c(0, 40)) +
-  labs(title = paste(SiteID, " - Average annual growing season length in ", Year, sep=""), 
-       y = "Days/Yr", colour = "Climate Future")  +
-  scale_fill_manual(name="",values = colors3) +
-  coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
-
-ggsave(sprintf("%s_%s_%s_Growing-season.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
-
-# Boxplot
-p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) + 
-  geom_boxplot(colour="black",aes(fill = factor(CF)), outlier.shape=NA)+ 
-  geom_jitter(shape = 21, size = 5, aes(fill = factor(CF),colour=factor(me.col)), position=position_jitter(0.2)) +
-  BarPlotTheme +
-  labs(title = paste(SiteID, " - Average annual growing season length in ", Year, sep=""),
-       y = "Days/Yr") +
-  scale_color_manual(name="",values = c("black","white"),guide=FALSE) +
-  scale_fill_manual(name="",values = colors3)
-dat<-ggplot_build(p)$data[[1]];dat1<-dat[3,]
-p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
-                                y=middle, yend=middle), colour="grey", size=1)
-ggsave(sprintf("%s_%s_%s_Growing-season-Boxplot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
-
+# ####################
+# ####### COMMENTED OUT BECAUSE YEILDS WEIRD RESULTS IN COASTAL PARKS. MAKE SURE OUTPUT PLAUSIBLE IF USING
+# #Total number of days/year in growing season (ClimDex defn)
+# var<-"GrowLen"
+# At<-aggregate(eval(parse(text=var))~CF,Annual,mean);
+# names(At)<-c("CF",var)
+# ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
+#   geom_bar(stat="identity",position="dodge",colour="black") +
+#   BarPlotTheme +
+#   # coord_cartesian(ylim=c(0, 40)) +
+#   labs(title = paste(SiteID, " - Average annual growing season length in ", Year, sep=""), 
+#        y = "Days/Yr", colour = "Climate Future")  +
+#   scale_fill_manual(name="",values = colors3) +
+#   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
+# 
+# ggsave(sprintf("%s_%s_%s_Growing-season.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+# 
+# # Boxplot
+# p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) + 
+#   geom_boxplot(colour="black",aes(fill = factor(CF)), outlier.shape=NA)+ 
+#   geom_jitter(shape = 21, size = 5, aes(fill = factor(CF),colour=factor(me.col)), position=position_jitter(0.2)) +
+#   BarPlotTheme +
+#   labs(title = paste(SiteID, " - Average annual growing season length in ", Year, sep=""),
+#        y = "Days/Yr") +
+#   scale_color_manual(name="",values = c("black","white"),guide=FALSE) +
+#   scale_fill_manual(name="",values = colors3)
+# dat<-ggplot_build(p)$data[[1]];dat1<-dat[3,]
+# p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
+#                                 y=middle, yend=middle), colour="grey", size=1)
+# ggsave(sprintf("%s_%s_%s_Growing-season-Boxplot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+# 
 
 ####################
 #Beginning of growing season - green-up (Julian Day)
