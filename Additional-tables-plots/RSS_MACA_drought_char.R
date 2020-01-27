@@ -15,15 +15,15 @@ library(SPEI) # Make sure to install this pkg!
 
 ################################ USER INPUTS #################################################
 rm(list=ls())
-setwd("C:/Users/achildress/Documents/RSS/Working/WABA/")
+setwd("C:/Users/achildress/Documents/RSS/Working/SCBL/")
 
 # Load input data
-load("MACA/WABA_35.62083955_-99.70445142_Final_Environment.RData")
+load("MACA/Figs MACA/SCBL_41.83476_-103.707_Final_Environment.RData")
 rm(list=setdiff(ls(), c("ALL_HIST","ALL_FUTURE","CF_GCM","Lat","SiteID")))
 
-GCMs<-c("MRI-CGCM3.rcp45", "IPSL-CM5A-MR.rcp85")
+GCMs = c("MRI-CGCM3.rcp85","MIROC5.rcp45")
 CFs<- c("Warm Wet", "Hot Dry")
-Gridmet<-read.csv("Summary/GridMet.csv",header=T)
+Gridmet<-read.csv("Gridmet/GridMet.csv",header=T)
 
 ## SPEI variables
 SPEI_per<-6 # This is the value for the period SPEI is aggregated. 6-months is standard but could change if want. 
@@ -37,7 +37,7 @@ colors2<- c("#9A9EE5","#E10720")  # WarmWet/HotDry
 colors3<-c("white",colors2)
 
 # Set wd for saving plots
-OutDir<-("C:/Users/achildress/Documents/RSS/Working/WABA/Drought")
+OutDir<-("C:/Users/achildress/Documents/RSS/Working/SCBL/Drought")
 setwd(OutDir)
 ################################ END USER INPUTS #############################################
 
@@ -66,11 +66,11 @@ drt$SPEI<-SPEI$fitted;drt$SPEI[which(is.na(drt$SPEI))]<-0 #records used to norma
 names(drt)[6]<-"SPEI"
 drt3<-aggregate(cbind(Pr_mm,SPEI)~Year,drt,mean)
 
-# MACA
-AH<-ALL_HIST
-ALL_HIST$GCM<-paste(ALL_HIST$GCM,"rcp45",sep=".")
-AH$GCM<-paste(AH$GCM,"rcp85",sep=".")
-ALL_HIST<-rbind(ALL_HIST,AH); rm(AH)
+# # MACA      This step only needed if historical GCMs don't have RCPs pasted on end
+# AH<-ALL_HIST
+# ALL_HIST$GCM<-paste(ALL_HIST$GCM,"rcp45",sep=".")
+# AH$GCM<-paste(AH$GCM,"rcp85",sep=".")
+# ALL_HIST<-rbind(ALL_HIST,AH); rm(AH)
 H<-subset(ALL_HIST,GCM %in% GCMs,select=c(Date,GCM,PrecipCustom,TavgCustom))
 F<-subset(ALL_FUTURE, GCM %in% GCMs, select=c(Date,GCM,PrecipCustom,TavgCustom))
 ALL<-rbind(H,F)
