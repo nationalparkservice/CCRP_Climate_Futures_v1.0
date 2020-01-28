@@ -1,19 +1,23 @@
 rm(list=ls())
 library(ggplot2)
+library(zoo)
+library(gridExtra)
+library(grid)
 
-setwd("~/RSS/Working/SCBL/")
+setwd("~/RSS/Completed/PETE/")
 
-load("PRISM/SCBL_41.83476_-103.707_PRISM_PptTminTmax_IntermediateFiles.RData")
-load("MACA/Figs MACA/SCBL_41.83476_-103.707_Final_Environment.RData")
+load("PRISM/PETE_37.19106_-77.476_PRISM_PptTminTmax_IntermediateFiles.RData")
+load("MACA/Figs MACA/PETE_37.19106_-77.476_Final_Environment.RData")
 Future_all<-merge(ALL_FUTURE,CF_GCM,by="GCM")
-grid<-read.csv("Gridmet/GridMET.csv",header=T)
+grid<-read.csv("Gridmet/GridMet.csv",header=T)
 
 BC.min = 1979 #Bias correction range
-BC.max = 2018
+BC.max = 2017
 
-CF.sub = c("Historical", "Warm Wet", "Hot Dry") #CFs using
-col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
+CF.sub = c("Historical", "Warm Damp", "Hot Wet") #CFs using
+# col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
 # col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
+col<- c("darkgray","light green","orange")  # HotWet/WarmDry
 
 ############################################ Format Gridmet data ####################################################
 head(grid)
@@ -102,12 +106,22 @@ PlotTheme = theme(axis.text=element_text(size=20),    #Text size for axis tick m
 PlotWidth = 15
 PlotHeight = 9
 
+# Rolling 10 year avg
+tmeanAvg = with(PRISM.BC, tapply(Tavg.mean, year, mean))
+pptAvg = with(PRISM.BC, tapply(Precip.mean, year, mean))
+rollLen = 10
+PRISM.BC$Tmean.roll10 <- rollmean(PRISM.BC$Tavg.mean, rollLen,fill=NA)
+PRISM.BC$Precip.roll10 <- rollmean(PRISM.BC$Precip.mean, rollLen,fill=NA)
+yrAvgs.sub<-merge(yrAvgs.sub,PRISM.BC[,c("year","Tmean.roll10","Precip.roll10")],by="year",all=TRUE)
+
+
 # Tmean
 ggplot(yrAvgs.sub, aes(x=as.numeric(as.character(year)), y=Tavg.mean, col=CF, fill=CF)) + 
   geom_rect(xmin=2025, xmax=2055, ymin=0, ymax=80, alpha=0.1, fill="lightgray", col="lightgray") +
   geom_ribbon(aes(x=as.numeric(as.character(year)), ymin=Tavg.min, ymax=Tavg.max, fill=CF), alpha=0.5) +
   geom_line(size=2) + geom_point(col="black", size=2, shape=16) +
   geom_point() +
+  geom_line(aes(x=as.numeric(as.character(year)), y=Tmean.roll10),size=1.5,colour="gray37",na.rm=TRUE) +
   scale_x_continuous(breaks=c(1900, 1920, 1940, 1960, 1980, 2000, 2020, 2040, 2060, 2080, 2100)) +
   labs(x="Year", y=expression("Mean annual temperature "~(degree~F))) +
   scale_color_manual(name="Climate Future",values=col) +
@@ -120,8 +134,61 @@ ggplot(yrAvgs.sub, aes(x=as.numeric(as.character(year)), y=Precip.mean, col=CF, 
   geom_ribbon(aes(x=as.numeric(as.character(year)), ymin=Precip.min, ymax=Precip.max, fill=CF), alpha=0.5) +
   geom_line(size=2) + geom_point(col="black", size=2, shape=16) +
   geom_point() +
+  geom_line(aes(x=as.numeric(as.character(year)), y=Precip.roll10),size=1.5,colour="gray37",na.rm=TRUE) +
   scale_x_continuous(breaks=c(1900, 1920, 1940, 1960, 1980, 2000, 2020, 2040, 2060, 2080, 2100)) +
   labs( x="Year", y="Mean annual precipitation (in/year)") +
   scale_color_manual(name="Climate Future",values=col) +
   scale_fill_manual(name="Climate Future",values=col) + PlotTheme
 ggsave(paste(SiteID,"-precip.png",sep=""), height=PlotHeight, width=PlotWidth)
+
+#Panel plot
+t<-ggplot(yrAvgs.sub, aes(x=as.numeric(as.character(year)), y=Tavg.mean, col=CF, fill=CF)) + 
+  geom_rect(xmin=2025, xmax=2055, ymin=0, ymax=80, alpha=0.1, fill="lightgray", col="lightgray") +
+  geom_ribbon(aes(x=as.numeric(as.character(year)), ymin=Tavg.min, ymax=Tavg.max, fill=CF), alpha=0.5) +
+  geom_line(size=2) + geom_point(col="black", size=2, shape=16) +
+  geom_point() +
+  geom_line(aes(x=as.numeric(as.character(year)), y=Tmean.roll10),size=1.5,colour="gray37",na.rm=TRUE) +
+  scale_x_continuous(breaks=c(1900, 1920, 1940, 1960, 1980, 2000, 2020, 2040, 2060, 2080, 2100)) +
+  labs(title=paste("Historical and future projections for",SiteID, sep=" "),
+       x="Year", y=expression("Mean annual temperature "~(degree~F))) +
+  scale_color_manual(name="Climate Future",values=col) +
+  scale_fill_manual(name="Climate Future",values=col) +
+  theme(axis.text=element_text(size=20),    #Text size for axis tick mark labels
+        axis.text.x=element_blank(),
+        axis.title.x=element_blank(),               #Text size and alignment for x-axis label
+        axis.title.y=element_text(size=20, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20)),              #Text size and alignment for y-axis label
+        plot.title=element_text(size=24,hjust=.5),  
+        legend.position = "none",  #Set top left
+        panel.border = element_blank(), #Remove border around plot
+        axis.line = element_line(colour = "black"), #Add axis lines
+        panel.background = element_blank(), #Background white
+        panel.grid.major = element_line("light grey",0.3)) #add grid back
+t
+
+p<-ggplot(yrAvgs.sub, aes(x=as.numeric(as.character(year)), y=Precip.mean, col=CF, fill=CF)) + 
+  geom_rect(xmin=2025, xmax=2055, ymin=0, ymax=100, alpha=0.1, fill="lightgray", col="lightgray") +
+  geom_ribbon(aes(x=as.numeric(as.character(year)), ymin=Precip.min, ymax=Precip.max, fill=CF), alpha=0.5) +
+  geom_line(size=2) + geom_point(col="black", size=2, shape=16) +
+  geom_point() +
+  geom_line(aes(x=as.numeric(as.character(year)), y=Precip.roll10),size=1.5,colour="gray37",na.rm=TRUE) +
+  scale_x_continuous(breaks=c(1900, 1920, 1940, 1960, 1980, 2000, 2020, 2040, 2060, 2080, 2100)) +
+  labs( x="Year", y="Mean annual precipitation (in/year)") +
+  scale_color_manual(name="Climate Future",values=col) +
+  scale_fill_manual(name="Climate Future",values=col) + 
+  theme(axis.text=element_text(size=20),    #Text size for axis tick mark labels
+        axis.title.x=element_text(size=20, hjust=0.5, margin=margin(t=20, r=20, b=20, l=20)),               #Text size and alignment for x-axis label
+        axis.title.y=element_text(size=20, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20)),              #Text size and alignment for y-axis label
+        plot.title=element_blank(),      #No title       
+        legend.position = "bottom",  #Set top left
+        legend.text=element_text(size=20), legend.title=element_text(size=20),
+        panel.border = element_blank(), #Remove border around plot
+        axis.line = element_line(colour = "black"), #Add axis lines
+        panel.background = element_blank(), #Background white
+        panel.grid.major = element_line("light grey",0.3)) #add grid back
+p
+
+
+grid.arrange(t,p, nrow=2)
+
+g <- arrangeGrob(t,p, nrow=2)
+ggsave("Long-term_panel-gridmet.png", g,width = 15, height = 15)
