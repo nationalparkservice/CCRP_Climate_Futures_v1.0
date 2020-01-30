@@ -96,7 +96,7 @@ baseData <- cbind(yrMons, seas=PptMeans$Season, tmin=TminMeans$TminF, tmax=TmaxM
                   tmean=(TminMeans$TminF+TmaxMeans$TmaxF)/2, ppt=PptMeans$PptIn)
 names(baseData)[1:3] <- c("yr", "mon","yrmon")
 
-refData<-baseData[baseData$yr >= beginRefYr & baseData$year <= endRefYr,]
+refData<-baseData[baseData$yr >= beginRefYr & baseData$yr <= endRefYr,]
 
 	# maybe should use PRISM year avgs instead i.e. month 14
 pptAvg = with(baseData, tapply(ppt, yr, mean))  * 12  # xx/mo ->: xx/yr
