@@ -32,7 +32,8 @@ OutDir = "~/RSS/Working/SCBL/WB"
 
 #Select GCMs - Include RCP
 unique(ALL_FUTURE$GCM)
-GCMs = c("MRI-CGCM3.rcp85","MIROC5.rcp45")  
+GCMs = c("MRI-CGCM3.rcp85","MIROC5.rcp45")
+CFs = c("Warm Wet","Hot Dry")
 
 colors2<- c("#9A9EE5","#E10720")  # WarmWet/HotDry
 # colors2<- c("#F3D3CB","#12045C")  # HotWet/WarmDry
