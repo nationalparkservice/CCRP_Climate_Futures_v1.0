@@ -102,7 +102,7 @@ ggplot(FM, aes(DeltaTavg, DeltaPr*365, xmin=Tavg25, xmax=Tavg75, ymin=Pr25*365, 
         plot.title=element_text(size=20,face="bold",vjust=2,hjust=0.5),
         legend.text=element_text(size=20), legend.title=element_text(size=20)) + 
   ###
-  labs(title ="Changes in climate means centered on 2065 (2050-2080)\n relative to historical period (1950-2000) by GCM run", 
+  labs(title =" Changes in climate means centered on 2065 (2050-2080)\n relative to historical period (1950-2000) by GCM run", 
        x = paste("Change in ",Longx,sep=""), # Change
        y = paste("Change in ",Longy,sep="")) + #change
   scale_color_manual(name="Climate Futures", values=colors5) +
@@ -142,7 +142,7 @@ dualscatter  + geom_point(colour="black",size=4) +
         plot.title=element_text(size=18,face="bold",vjust=2,hjust=0.5),
         legend.text=element_text(size=18), legend.title=element_text(size=16)) + 
     ###
-  labs(title =paste(SiteID, "Changes in climate means in 2040 by GCM run\n", Longx," vs. ",Longy,sep=""), 
+  labs(title =paste(SiteID, " Changes in climate means in 2040 by GCM run\n", Longx," vs. ",Longy,sep=""), 
             x = paste("Changes in ",Longx,sep=""), # Change
             y = paste("Changes in ",Longy,sep="")) + #change
   scale_color_manual(name="Scenarios", values=c("black")) +
