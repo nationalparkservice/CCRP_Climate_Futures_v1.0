@@ -126,7 +126,7 @@ dualscatter  + geom_point(colour="black",size=4) +
         plot.title=element_text(size=18,face="bold",vjust=2,hjust=0.5),
         legend.text=element_text(size=18), legend.title=element_text(size=16)) + 
    ###
-  labs(title =paste(SiteID, "Changes in climate means in 2040 by GCM run\n", Longx," vs. ",Longy,sep=""), 
+  labs(title =paste(SiteID, " Changes in climate means in 2040 by GCM run\n", Longx," vs. ",Longy,sep=""), 
             x = paste("Changes in ",Longx,sep=""), # Change
             y = paste("Changes in ",Longy,sep="")) + #change
   theme(legend.position="none") +
