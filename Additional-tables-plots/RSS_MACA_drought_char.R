@@ -205,7 +205,7 @@ ggplot(data = grid.append, aes(x=as.numeric(as.character(Year)), y=SPEI,fill = c
   geom_bar(stat="identity",aes(fill=col),col="black") +
     geom_hline(yintercept=-.5,linetype=2,colour="black",size=1) +
   scale_fill_manual(name="",values =c("blue","red")) +
-  labs(title = paste("SPEI values for", CFs[2], "(Gridmet + MACA", sep = " " ), 
+  labs(title = paste("SPEI values for", CFs[2], "(Gridmet + MACA)", sep = " " ), 
        x = "Date", y = "SPEI") +
   guides(color=guide_legend(override.aes = list(size=7))) + PlotTheme
 ggsave(paste(CFs[2], "Drought+Gridmet.png",sep=" "), width = 18, height = 9)
