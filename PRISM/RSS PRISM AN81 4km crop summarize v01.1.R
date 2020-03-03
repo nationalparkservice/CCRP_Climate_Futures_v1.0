@@ -23,11 +23,11 @@ rm(list = ls())
 #############  Initialize   ##############
 
     #  for output file names
-SiteID <- "SCBL"  # identifier.  Use "" if not desired
+SiteID <- "CONG"  # identifier.  Use "" if not desired
 
     # Coordinates for cell center. Cell size is 0.04166 for 4-km dataset, .008333 for 800-m dataset. 
-Lat = 41.83476
-Lon = -103.707
+Lat = 33.791868
+Lon = -80.748665
 
 Buffer <- 0.06    # dec degree.  
 
@@ -38,7 +38,7 @@ Day = 15          # in output files, day of month in Date variable (req by strpt
 
           #  Root Out File Dir MUST exist - can only create final subdirectory (not root of this)   
 WinDataDir <- "E:/ClimateData/PRISM/PRISM_LT81m_800m"  #Drobo drive containing 800-m resolution 2017 data
-WinOFDir <- "~/RSS/Working/SCBL/PRISM"
+WinOFDir <- "C:/Users/adillon/Documents/RSS/CONG/PRISM"
 
 OPath1 <-"/Volumes/Seagate1_Blue2TB/COLM RSS/Figs PRISM/"
 OPath2 <- "/Volumes/Seagate1_Blue2TB/Projects/RSS Climate/HOBE"
