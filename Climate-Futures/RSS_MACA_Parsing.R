@@ -20,20 +20,20 @@ rm(list=ls())
 ############################# User-defined initials #################################
 
 ####Location for data extraction
-SiteID = "SCBL"
+SiteID = "CONG"
 
 #Cell resolution is 0.041666 degrees, reference coordinates are cell centers
 # YOSE_Valley  37.7460, -119.5880
 # YOSE_Tuolumne 37.8746, -119.3672
 
-Lat = 41.83476
-Lon = -103.707
+Lat = 33.791868
+Lon = -80.748665
 cLon = Lon + 360 #Adjusts negative lon. values 
 
 ###Parameters for extracting data from NetCDF files
 #Specify top-level directory where MACA data is stored (all scenarios and variables)
 MACADir = "E:/ClimateData/MACAv2Metdata" #no '/' at the end
-setwd("C:/Users/achildress/Documents/RSS/Working/SCBL/MACA/")
+setwd("C:/Users/adillon/Documents/RSS/CONG/MACA")
 
 #Variable and scenario names corresponding to MACA data directory structure
 vars = c("pr", "tasmax", "tasmin","rhsmax","rhsmin")
@@ -56,7 +56,7 @@ Hist_EndYear = 2005      #1950-2005
 HistYears = 50  
 
 #Directory where output tables will be saved
-OutDir = "C:/Users/achildress/Documents/RSS/Working/SCBL/MACA/"
+OutDir = "C:/Users/adillon/Documents/RSS/CONG/MACA"
 
 ######################### End user-defined initials ##############################
 
