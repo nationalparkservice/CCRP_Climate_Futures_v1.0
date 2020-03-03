@@ -20,14 +20,15 @@ library(cowplot)
 library(reshape2)
 
 rm(list=ls())
+setwd('C:/Users/adillon/Documents/RSS/CONG/PRISM')
     #  Load data file ONLY if not following previous script
-RDataFile <- "FIIS_40.69182965_-72.99435226_PRISM_PptTminTmax_IntermediateFiles.RData"
+RDataFile <- "CONG_33.791868_-80.748665_PRISM_PptTminTmax_IntermediateFiles.RData"
 #################################################
 # DataDir = location of .RData file
 # OFDir   = location where output (plots) files will be written. End with /
 
-WinDataDir <- "~/RSS/Working/FIIS/PRISM"
-WinOFDir <- "~/RSS/Working/FIIS/PRISM"
+WinDataDir <- "C:/Users/adillon/Documents/RSS/CONG/PRISM"
+WinOFDir <- "C:/Users/adillon/Documents/RSS/CONG/PRISM"
 
 # MacDataDir <- "/Volumes/Seagate1_Blue2TB/CHOH RSS/Figs PRISM/"
 # MacOFDir <-  "/Volumes/Seagate1_Blue2TB/CHOH RSS/Figs PRISM/"
@@ -86,7 +87,7 @@ DoYrMon <- function(YrMon){    #  YrMon = char vector of year mon as 189501.  Re
   return(YRMON)
 }
 
-setwd(DataDir)
+#setwd(DataDir)
 dte = Sys.Date()
     # clean up trashy namespace
 rm(WinDataDir, WinOFDir, MacDataDir, MacOFDir)
