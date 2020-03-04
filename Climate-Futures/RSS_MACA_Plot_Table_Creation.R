@@ -17,11 +17,11 @@ rm(list=ls())
 
 ################################################## INITIALS ##################################################
 
-SiteID = "TUMA"
+SiteID = "CONG"
 
 #Directory and RData file where daily data series is stored
-DataDir = "C:/Users/achildress/Downloads"
-DataFile = "TUMA_init_parsed.RData"
+DataDir = "C:/Users/adillon/Documents/RSS/CONG/MACA"
+DataFile = "CONG_init_parsed.RData"
 
 #Year range for summarizing future climate (Year - Range/2) to (Year + Range/2)
 Year = 2040 #Central year
@@ -30,7 +30,7 @@ Range = 30  #Number of years to summarize (should be at least 30)
 # Threshold percentages for defining Climate futures. Default low/high:  0.25, 0.75
 CFLow = 0.25     
 CFHigh = 0.75
-CFs = c("Warm Wet", "Hot Wet", "Central", "Warm Dry", "Hot Dry") #Use spaces and characters only
+CFs = c("Warm Wet", "Hot Wet", "Central", "Warm Damp", "Hot Damp") #Use spaces and characters only
 
 #Temperature/precip threshold values
 HotTemp = 90    # deg F. Default should be about 100 deg F
