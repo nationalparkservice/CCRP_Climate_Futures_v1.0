@@ -226,7 +226,7 @@ for(i in 2:length(vars)){
   df2.melt$variable <- paste(df2.melt$variable, "rcp85", sep=".")
   df <- rbind(df1.melt, df2.melt)
   colnames(df) <- c("Date", "GCM", VarNames[i])
-  Future_all <- merge(Future_all, df, by=c("Date", "GCM"))
+  Future_all <- merge(Future_all, df, by=c("Date", "GCM"),all=T)
 }
 
 # RCP45 <- melt(RCP45_Data[[1]], id="Dates")
