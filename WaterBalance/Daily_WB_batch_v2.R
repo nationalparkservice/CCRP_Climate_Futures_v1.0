@@ -10,13 +10,13 @@ library(dplyr)
 ############################################################# USER INPUTS ##################################################################### 
 
 #Formatted input data as a daily time series. Needs to include the following columns: Date, ppt_mm, tmax_C, tmin_C, and tmean_C (temp.'s in deg. Celsius)
-setwd("C:/Users/achildress/Documents/RSS/Working/SCBL/MACA/Figs MACA/")
-load("SCBL_41.83476_-103.707_Final_Environment.RData") # Load final environment
-PARK<-SiteID
+setwd("C:/Users/adillon/Documents/RSS/CONG/MACA/Figs MACA")
+load("CONG_33.791868_-80.748665_Final_Environment.RData") # Load final environment
+PARK<-"CONG"
 rm(list=setdiff(ls(), c("ALL_HIST","ALL_FUTURE","PARK","CF_GCM")))
 
 #Site characteristics 
-Sites = read.csv("C:/Users/achildress/Documents/RSS/Working/SCBL/WB/SCBL_site_parameters.csv") #CSV file containing properties for all sites
+Sites = read.csv("C:/Users/adillon/Documents/RSS/CONG/WB/CONG_site_characteristics.csv") #CSV file containing properties for all sites
 n<-nrow(Sites)
 #Threshold temperature (deg C) for growing degree-days calculation
 T.Base = 0 
@@ -28,15 +28,16 @@ Method = "Hamon"  #Hamon is default method for daily PRISM and MACA data (contai
 DateFormat = "%m/%d/%Y"
 
 #Output directory
-OutDir = "~/RSS/Working/SCBL/WB"
+OutDir = "C:/Users/adillon/Documents/RSS/CONG/WB"
+
 
 #Select GCMs - Include RCP
 unique(ALL_FUTURE$GCM)
-GCMs = c("MRI-CGCM3.rcp85","MIROC5.rcp45")
-CFs = c("Warm Wet","Hot Dry")
+GCMs = c("BNU-ESM.rcp85","inmcm4.rcp45") # CONG model selection
+CFs = c("Hot Wet","Warm Damp")
 
-colors2<- c("#9A9EE5","#E10720")  # WarmWet/HotDry
-# colors2<- c("#F3D3CB","#12045C")  # HotWet/WarmDry
+#colors2<- c("#9A9EE5","#E10720")  # WarmWet/HotDry
+colors2<- c("#F3D3CB","#12045C")  # HotWet/WarmDry
 
 colors3<-c("gray",colors2)
 ############################################################ END USER INPUTS ###################################################################
