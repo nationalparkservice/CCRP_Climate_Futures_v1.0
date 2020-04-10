@@ -796,6 +796,7 @@ DecDat1<-aggregate(ppt~yr,baseData,sum,na.rm=TRUE)
 DecDat1$decade<-DecDat1$yr - DecDat1$yr %% 10
 DecDat2<-aggregate(ppt~decade,DecDat1,mean,na.rm=TRUE)
 DecDat<-merge(DecDat,DecDat2,by="decade"); rm(DecDat1,DecDat2)
+DecDat$decade <- DecDat$decade + 5             # centers bars at YYY5 (the mid-point of data) instead of YYY0 (the beginning year of data)
 
 DecDat$Atmin<-DecDat$tmin-mean(DecDat$tmin)
 DecDat$Atmax<-DecDat$tmax-mean(DecDat$tmax)
