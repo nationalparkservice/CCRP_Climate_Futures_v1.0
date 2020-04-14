@@ -8,9 +8,9 @@
 # FBI_max_delta FLI_rate FBI_rate"    
 
 rm(list=ls())
-DataDirName <- "C:/Users/achildress/Documents/RSS/"
+DataDirName <- "C:/Users/adillon/Documents/RSS/"
 
-pCode <- "PETE"
+pCode <- "TUMA"
 # print plots to screen or to file in working directory?
 outDevice <- "file"
 # outDevice <- "screen"    # use ONLY "screen" or "file"
