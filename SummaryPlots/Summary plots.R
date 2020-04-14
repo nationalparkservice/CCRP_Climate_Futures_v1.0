@@ -4,10 +4,10 @@ library(zoo)
 library(gridExtra)
 library(grid)
 
-setwd("~/RSS/Completed/PETE/")
+setwd("C:/Users/adillon/Documents/RSS/CONG")
 
-load("PRISM/PETE_37.19106_-77.476_PRISM_PptTminTmax_IntermediateFiles.RData")
-load("MACA/Figs MACA/PETE_37.19106_-77.476_Final_Environment.RData")
+load("PRISM/CONG_33.791868_-80.748665_PRISM_PptTminTmax_IntermediateFiles.RData")
+load("MACA/Figs MACA/CONG_33.791868_-80.748665_Final_Environment.RData")
 Future_all<-merge(ALL_FUTURE,CF_GCM,by="GCM")
 grid<-read.csv("Gridmet/GridMet.csv",header=T)
 
@@ -16,8 +16,8 @@ BC.max = 2017
 
 CF.sub = c("Historical", "Warm Damp", "Hot Wet") #CFs using
 # col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
-# col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
-col<- c("darkgray","light green","orange")  # HotWet/WarmDry
+col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
+#col<- c("darkgray","light green","orange")  # HotWet/WarmDry
 
 ############################################ Format Gridmet data ####################################################
 head(grid)
