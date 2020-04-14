@@ -120,11 +120,11 @@ ggsave(paste(SiteID, "Scatter BY SCENARIO-",x,"--",y,".png",sep=""), width = 15,
 # Points only w/out
 dualscatter = ggplot(Future_Means, aes(DeltaTavg, DeltaPr*365, xmin=Tavg25, xmax=Tavg75, ymin=Pr25*365, ymax=Pr75*365))
 dualscatter  + geom_point(colour="black",size=4) +
-  theme(axis.text=element_text(size=18),
-        axis.title.x=element_text(size=18,vjust=-0.2),
-        axis.title.y=element_text(size=18,vjust=0.2),
-        plot.title=element_text(size=18,face="bold",vjust=2,hjust=0.5),
-        legend.text=element_text(size=18), legend.title=element_text(size=16)) + 
+  theme(axis.text=element_text(size=20),
+        axis.title.x=element_text(size=24,vjust=-0.5),
+        axis.title.y=element_text(size=24,vjust=0.5),
+        plot.title=element_text(size=26,face="bold",vjust=2,hjust=0.5),
+        legend.text=element_text(size=22), legend.title=element_text(size=24)) + 
    ###
   labs(title =paste(SiteID, " Changes in climate means in 2040 by GCM run\n", Longx," vs. ",Longy,sep=""), 
             x = paste("Changes in ",Longx,sep=""), # Change
@@ -136,11 +136,11 @@ ggsave(paste(SiteID,"-Scatter-POINTS ONLY",x,"--",y,".png",sep=""), width = 15, 
 # Points only w/ box
 dualscatter = ggplot(Future_Means, aes(DeltaTavg, DeltaPr*365, xmin=Tavg25, xmax=Tavg75, ymin=Pr25*365, ymax=Pr75*365))
 dualscatter  + geom_point(colour="black",size=4) +
-  theme(axis.text=element_text(size=18),
-        axis.title.x=element_text(size=18,vjust=-0.2),
-        axis.title.y=element_text(size=18,vjust=0.2),
-        plot.title=element_text(size=18,face="bold",vjust=2,hjust=0.5),
-        legend.text=element_text(size=18), legend.title=element_text(size=16)) + 
+  theme(axis.text=element_text(size=20),
+        axis.title.x=element_text(size=24,vjust=-0.5),
+        axis.title.y=element_text(size=24,vjust=0.5),
+        plot.title=element_text(size=26,face="bold",vjust=2,hjust=0.5),
+        legend.text=element_text(size=22), legend.title=element_text(size=24)) + 
     ###
   labs(title =paste(SiteID, " Changes in climate means in 2040 by GCM run\n", Longx," vs. ",Longy,sep=""), 
             x = paste("Changes in ",Longx,sep=""), # Change
