@@ -8,25 +8,25 @@ library(plyr)
 library(lubridate)
 library(dplyr)
 
-setwd("~/RSS/Working/SCBL/")
+setwd("C:/Users/adillon/Documents/RSS/CONG")
 
-load("MACA/Figs MACA/SCBL_41.83476_-103.707_Final_Environment.RData")
+load("MACA/Figs MACA/CONG_33.791868_-80.748665_Final_Environment.RData")
 PARK<-SiteID
 ALL_FUTURE<-merge(ALL_FUTURE,CF_GCM,by="GCM")
 rm(list=setdiff(ls(), c("ALL_FUTURE","PARK","CF_GCM")))
 
-load("PRISM/SCBL_41.83476_-103.707_PRISM_PptTminTmax_IntermediateFiles.RData")
+load("PRISM/CONG_33.791868_-80.748665_PRISM_PptTminTmax_IntermediateFiles.RData")
 grid<-read.csv("Gridmet/GridMET.csv",header=T)
 
 BC.min = 1979 #Bias correction range
 BC.max = 2018
 
-CF.sub = c("Historical", "Warm Wet", "Hot Dry") #CFs using
-col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
-# col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
+CF.sub = c("Historical", "Warm Damp", "Hot Wet") #CFs using
+#col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
+col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
 
 #Site characteristics 
-Sites = read.csv("C:/Users/achildress/Documents/RSS/Working/SCBL/WB/Model/SCBL_site_parameters.csv") #CSV file containing properties for all sites
+Sites = read.csv("C:/Users/adillon/Documents/RSS/CONG/WB/CONG_site_characteristics2.csv") #CSV file containing properties for all sites
 n<-nrow(Sites)
 #Threshold temperature (deg C) for growing degree-days calculation
 T.Base = 0 
