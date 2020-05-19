@@ -32,7 +32,7 @@ load("CONG_33.791868_-80.748665_Final_Environment.RData")
 
 # Need to check all the subsets
 ### NEED TO CHANGE LINE 72 for ordering scenarios on plots
-FutureSubset <- c("Hot Wet","Warm Damp")          # Select two scenarios from the CFs vector specified in CMIP5_Parsing script. Names must match.
+FutureSubset <- c("Warm Wet","Hot Damp")          # Select two scenarios from the CFs vector specified in CMIP5_Parsing script. Names must match.
 Scenario1<-FutureSubset[1]
 Scenario2<-FutureSubset[2]
 
@@ -41,8 +41,8 @@ col.RCP2 = c("blue", "red")
 
 ## All 508-compliant color scheme -- navy (hot wet), light blue (warm wet), pink (warm dry), red (hot dry)
 colors5 <-   c("white","#12045C","#9A9EE5","#F3D3CB","#E10720")
-#colors2<- c("#9A9EE5","#E10720")  # WarmWet/HotDry
-colors2<- c("#F3D3CB","#12045C")  # HotWet/WarmDry
+colors2<- c("#9A9EE5","#E10720")  # WarmWet/HotDamp
+#colors2<- c("#F3D3CB","#12045C")  # HotWet/WarmDry
 
 colors3<-c("white",colors2)
 
