@@ -10,7 +10,7 @@ library(dplyr)
 ############################################################# USER INPUTS ##################################################################### 
 
 #Formatted input data as a daily time series. Needs to include the following columns: Date, ppt_mm, tmax_C, tmin_C, and tmean_C (temp.'s in deg. Celsius)
-setwd("C:/Users/adillon/Documents/RSS/CONG/MACA/Figs MACA")
+setwd("C:/Users/adillon/Documents/RSS/CONG/MACA/Figs MACA/Hot Damp_Warm Wet")
 load("CONG_33.791868_-80.748665_Final_Environment.RData") # Load final environment
 PARK<-"CONG"
 rm(list=setdiff(ls(), c("ALL_HIST","ALL_FUTURE","PARK","CF_GCM")))
@@ -33,11 +33,11 @@ OutDir = "C:/Users/adillon/Documents/RSS/CONG/WB"
 
 #Select GCMs - Include RCP
 unique(ALL_FUTURE$GCM)
-GCMs = c("BNU-ESM.rcp85","inmcm4.rcp45") # CONG model selection
-CFs = c("Hot Wet","Warm Damp")
+GCMs = c("CNRM-CM5.rcp45", "MIROC-ESM-CHEM.rcp85") # CONG model selection - WW/HD
+CFs = c("Warm Wet", "Hot Damp")
 
-#colors2<- c("#9A9EE5","#E10720")  # WarmWet/HotDry
-colors2<- c("#F3D3CB","#12045C")  # HotWet/WarmDry
+colors2<- c("#9A9EE5","#E10720")  # WarmWet/HotDamp
+#colors2<- c("#F3D3CB","#12045C")  # HotWet/WarmDry
 
 colors3<-c("gray",colors2)
 ############################################################ END USER INPUTS ###################################################################
@@ -241,7 +241,7 @@ ggsave(paste(PARK,"-SOIL_in_density_panel.png",sep=""), width = 15, height = 9)
 
 ########################
 # biome plots
-biome<-read.csv("C:/Users/achildress/Documents/RSS/Background/Biome_plots/D_AET_points.csv",header=T)
+biome<-read.csv("C:/Users/adillon/Documents/RSS/D_AET_points.csv",header=T)
 head(biome)
 color<-as.character(unique(biome$color,ordered=T))
 
