@@ -15,14 +15,14 @@ library(SPEI) # Make sure to install this pkg!
 
 ################################ USER INPUTS #################################################
 rm(list=ls())
-setwd("C:/Users/achildress/Documents/RSS/Working/SCBL/")
+setwd("C:/Users/adillon/Documents/RSS/CONG")
 
 # Load input data
-load("MACA/Figs MACA/SCBL_41.83476_-103.707_Final_Environment.RData")
+load("C:/Users/adillon/Documents/RSS/CONG/MACA/Figs MACA/Hot Damp_Warm Wet/CONG_33.791868_-80.748665_Final_Environment.RData")
 rm(list=setdiff(ls(), c("ALL_HIST","ALL_FUTURE","CF_GCM","Lat","SiteID")))
 
-GCMs = c("MRI-CGCM3.rcp85","MIROC5.rcp45")
-CFs<- c("Warm Wet", "Hot Dry")
+GCMs = c("MIROC-ESM-CHEM.rcp85","CNRM-CM5.rcp45") # per DJL email 5/20/20
+CFs<- c("Warm Wet", "Hot Damp")
 Gridmet<-read.csv("Gridmet/GridMet.csv",header=T)
 
 ## SPEI variables
@@ -37,7 +37,7 @@ colors2<- c("#9A9EE5","#E10720")  # WarmWet/HotDry
 colors3<-c("white",colors2)
 
 # Set wd for saving plots
-OutDir<-("C:/Users/achildress/Documents/RSS/Working/SCBL/Drought")
+OutDir<-("C:/Users/adillon/Documents/RSS/CONG/Drought")
 setwd(OutDir)
 ################################ END USER INPUTS #############################################
 
