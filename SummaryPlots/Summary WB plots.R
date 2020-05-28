@@ -21,12 +21,15 @@ grid<-read.csv("Gridmet/GridMET.csv",header=T)
 BC.min = 1979 #Bias correction range
 BC.max = 2018
 
-CF.sub = c("Historical", "Warm Damp", "Hot Wet") #CFs using
-#col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
-col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
+CF.sub = c("Historical", "Warm Wet", "Hot Damp") #CFs using
+col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
+#col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
 
 #Site characteristics 
-Sites = read.csv("C:/Users/adillon/Documents/RSS/CONG/WB/CONG_site_characteristics2.csv") #CSV file containing properties for all sites
+Sites = read.csv("C:/Users/adillon/Documents/RSS/CONG/WB/CONG_site_characteristics.csv")
+Sites <- Sites[1:10,]  # If there are NA's in df, make sure they are deleted
+
+#CSV file containing properties for all sites
 n<-nrow(Sites)
 #Threshold temperature (deg C) for growing degree-days calculation
 T.Base = 0 

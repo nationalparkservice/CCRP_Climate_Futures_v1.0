@@ -14,9 +14,9 @@ grid<-read.csv("Gridmet/GridMet.csv",header=T)
 BC.min = 1979 #Bias correction range
 BC.max = 2017
 
-CF.sub = c("Historical", "Warm Damp", "Hot Wet") #CFs using
-# col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
-col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
+CF.sub = c("Historical", "Warm Wet", "Hot Damp") #CFs using
+col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
+#col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
 #col<- c("darkgray","light green","orange")  # HotWet/WarmDry
 
 ############################################ Format Gridmet data ####################################################
