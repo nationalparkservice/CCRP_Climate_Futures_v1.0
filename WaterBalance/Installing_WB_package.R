@@ -10,3 +10,5 @@ setwd("~/R/win-library/3.5/") #Directory containing package folder
 install("WaterBalance")
 
 library("WaterBalance")
+
+##test
