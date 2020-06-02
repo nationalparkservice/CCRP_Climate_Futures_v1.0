@@ -218,10 +218,11 @@ ggplot(Annual, aes(x=deficit, colour=CF,fill=CF,linetype=CF),show.legend=F) +geo
   scale_colour_manual(values=colors3) +
   scale_fill_manual(values=colors3) +  
   scale_linetype_manual(values=seq(1,length(unique(Annual$CF)),1)) +
+  xlim(0,14) + # changed for CONG 06/02/2020 - change back +
   labs(y = "Density",
        x = "Annual moisture deficit (in)",
        title = paste(PARK,"  Water Deficit for GCMs (2025-2055) and Historical Period (1895-1999)",sep=" ")) +
-  theme(axis.text = element_text(size=20), axis.title = element_text(size=20), legend.text=element_text(size=14),
+  theme(axis.text = element_text(size=20), axis.title = element_text(size=20), legend.text=element_text(size=20), legend.background=element_rect(fill = "White", size = 0.5),
         plot.title=element_text(size=22, hjust=0),legend.position = c(.8,.8)) 
 
 ggsave(paste(PARK,"-Deficit_density_panel.png",sep=""), width = 15, height = 9)
