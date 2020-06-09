@@ -20,15 +20,15 @@ library(cowplot)
 library(reshape2)
 
 rm(list=ls())
-setwd('C:/Users/adillon/Documents/RSS/CONG/PRISM') 
+setwd('C:/Users/msears/Documents/RSS/Mammoth_Cave/PRISM') 
     #  Load data file ONLY if not following previous script
-RDataFile <- "CONG_33.791868_-80.748665_PRISM_PptTminTmax_IntermediateFiles.RData"
+RDataFile <- "MACA_37.19758_-86.130895_PRISM_PptTminTmax_IntermediateFiles.RData"
 #################################################
 # DataDir = location of .RData file
 # OFDir   = location where output (plots) files will be written. End with /
 
-WinDataDir <- "C:/Users/adillon/Documents/RSS/CONG/PRISM"
-WinOFDir <- "C:/Users/adillon/Documents/RSS/CONG/PRISM/"
+WinDataDir <- "C:/Users/msears/Documents/RSS/Mammoth_Cave/PRISM"
+WinOFDir <- "C:/Users/msears/Documents/RSS/Mammoth_Cave/PRISM"
 
 # MacDataDir <- "/Volumes/Seagate1_Blue2TB/CHOH RSS/Figs PRISM/"
 # MacOFDir <-  "/Volumes/Seagate1_Blue2TB/CHOH RSS/Figs PRISM/"
@@ -884,7 +884,7 @@ ggsave("Historical SPEI.png",width = 15, height = 9)
 # Find tmax overall vs. tmax during dustbowl
 mean(tmaxAvg)
 dustbowl.max <- tmaxAvg[36:46]
-mean(dustbowl)
+mean(dustbowl.max)
 
 # Find tmin overall vs. tmin during dustbowl
 
