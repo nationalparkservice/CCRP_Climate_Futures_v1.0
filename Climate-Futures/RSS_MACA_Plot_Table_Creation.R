@@ -17,11 +17,11 @@ rm(list=ls())
 
 ################################################## INITIALS ##################################################
 
-SiteID = "CONG"
+SiteID = "MACA"
 
 #Directory and RData file where daily data series is stored
-DataDir = "C:/Users/adillon/Documents/RSS/CONG/MACA"
-DataFile = "CONG_init_parsed.RData"
+DataDir = "C:/Users/msears/Documents/RSS/Mammoth_Cave/MACA"
+DataFile = "MACA_init_parsed.RData"
 
 #Year range for summarizing future climate (Year - Range/2) to (Year + Range/2)
 Year = 2040 #Central year
@@ -33,7 +33,7 @@ CFHigh = 0.75
 CFs = c("Warm Wet", "Hot Wet", "Central", "Warm Damp", "Hot Damp") #Use spaces and characters only
 
 #Temperature/precip threshold values
-HotTemp = 90    # deg F. Default should be about 100 deg F
+HotTemp = 95    # deg F. Default should be about 100 deg F
 ColdTemp = 32    # deg F
 PrecipThreshold = 0.05    # inches per day. Precip Threshold (used to measure Drought duration). For many GCMs shoud not 
 #  be 0 because models "drizzle". Some investigation necessary.
