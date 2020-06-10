@@ -17,8 +17,8 @@ library(WriteXLS)
 
 rm(list=ls())
 
-setwd("C:/Users/adillon/Documents/RSS/CONG/MACA/Figs MACA")
-load("CONG_33.791868_-80.748665_Final_Environment.RData")
+setwd("C:/Users/msears/Documents/RSS/Mammoth_Cave/MACA/Figs MACA/")
+load("MACA_37.19758_-86.130895_Final_Environment.RData")
 
 ######### INITIALS #########
 
@@ -89,7 +89,7 @@ FM<-Future_Means
 FM$CFnew<-as.character(FM$CF)
 # FM$CFnew[which(FM$CFnew %ni% FutureSubset)]<-"Not Selected"
 FM$CFnew[which(FM$CFnew=="Central")]<-"Not Selected"
-FM$CFnew<-factor(FM$CFnew,levels=c("Warm Wet","Hot Wet","Not Selected","Warm Dry","Hot Dry"))
+FM$CFnew<-factor(FM$CFnew,levels=c("Warm Wet","Hot Wet","Not Selected","Warm Damp","Hot Damp"))
 levels(FM$CFnew)
 
 ggplot(FM, aes(DeltaTavg, DeltaPr*365, xmin=Tavg25, xmax=Tavg75, ymin=Pr25*365, ymax=Pr75*365)) +
