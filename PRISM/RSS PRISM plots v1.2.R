@@ -871,8 +871,8 @@ ggplot(data = spei, aes(x = date, y = SPEI,fill = col)) +
         legend.text=element_text(size=20), legend.title=element_text(size=20)) +
   labs(title = "SPEI values for Historical Period", 
        x = "Date", y = "SPEI") +
-  guides(color=guide_legend(override.aes = list(size=7))) +
-  scale_y_continuous(limits=c(min(spei$SPEI)-.5, max(spei$SPEI)+1))
+  guides(color=guide_legend(override.aes = list(size=7))) + 
+  scale_y_continuous(limits=c(min(spei$SPEI)-.5, max(spei$SPEI)+1)) #warning message that 11 rows are removed will occur due to the rolling mean, ignore warning
 ggsave("Historical SPEI.png",width = 15, height = 9)
 
 
