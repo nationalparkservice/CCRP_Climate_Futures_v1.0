@@ -89,7 +89,7 @@ FM<-Future_Means
 FM$CFnew<-as.character(FM$CF)
 # FM$CFnew[which(FM$CFnew %ni% FutureSubset)]<-"Not Selected"
 FM$CFnew[which(FM$CFnew=="Central")]<-"Not Selected"
-FM$CFnew<-factor(FM$CFnew,levels=c("Warm Wet","Hot Wet","Not Selected","Warm Damp","Hot Damp"))
+FM$CFnew<-factor(FM$CFnew,levels=c("Warm Wet","Hot Wet","Not Selected","Warm Dry","Hot Dry"))
 levels(FM$CFnew)
 
 ggplot(FM, aes(DeltaTavg, DeltaPr*365, xmin=Tavg25, xmax=Tavg75, ymin=Pr25*365, ymax=Pr75*365)) +
