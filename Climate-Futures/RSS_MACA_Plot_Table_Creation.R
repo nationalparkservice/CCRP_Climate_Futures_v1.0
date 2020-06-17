@@ -30,7 +30,7 @@ Range = 30  #Number of years to summarize (should be at least 30)
 # Threshold percentages for defining Climate futures. Default low/high:  0.25, 0.75
 CFLow = 0.25     
 CFHigh = 0.75
-CFs = c("Warm Wet", "Hot Wet", "Central", "Warm Damp", "Hot Damp") #Use spaces and characters only
+CFs = c("Warm Wet", "Hot Wet", "Central", "Warm Dry", "Hot Dry") #Use spaces and characters only
 
 #Temperature/precip threshold values
 HotTemp = 95    # deg F. Default should be about 100 deg F
