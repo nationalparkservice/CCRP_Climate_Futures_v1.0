@@ -24,7 +24,7 @@ library(reshape2)
 library(openxlsx)
 
 rm(list=ls())
-setwd("C:/Users/msears/Documents/RSS/Mammoth_Cave/MACA/Figs MACA/")
+setwd("C:/Users/msears/Documents/RSS/Mammoth_Cave/MACA/Figs MACA/Warm Wet_Hot Dry/")
 load("MACA_37.19758_-86.130895_Final_Environment.RData")
 
 
@@ -32,7 +32,7 @@ load("MACA_37.19758_-86.130895_Final_Environment.RData")
 
 # Need to check all the subsets
 ### NEED TO CHANGE LINE 72 for ordering scenarios on plots
-FutureSubset <- c("Warm Dry","Hot Wet")          # Select two scenarios from the CFs vector specified in CMIP5_Parsing script. Names must match.
+FutureSubset <- c("Warm Wet","Hot Dry")          # Select two scenarios from the CFs vector specified in CMIP5_Parsing script. Names must match.
 Scenario1<-FutureSubset[1]
 Scenario2<-FutureSubset[2]
 
