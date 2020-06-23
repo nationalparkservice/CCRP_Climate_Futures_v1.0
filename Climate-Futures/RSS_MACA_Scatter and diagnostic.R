@@ -93,7 +93,7 @@ FM$CFnew<-factor(FM$CFnew,levels=c("Warm Wet","Hot Wet","Not Selected","Warm Dry
 levels(FM$CFnew)
 
 ggplot(FM, aes(DeltaTavg, DeltaPr*365, xmin=Tavg25, xmax=Tavg75, ymin=Pr25*365, ymax=Pr75*365)) +
-  geom_text(aes(label=GCM,color=CFnew),position=position_jitter(0,.2)) + 
+  geom_text_repel(aes(label=GCM,color=CFnew),position=position_jitter(0,.2)) + 
   geom_point(size=5,colour="black")+
   geom_point(aes(color=CFnew),size=4) +
   theme(axis.text=element_text(size=18),
