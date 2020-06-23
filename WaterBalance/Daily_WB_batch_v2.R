@@ -10,7 +10,7 @@ library(dplyr)
 ############################################################# USER INPUTS ##################################################################### 
 
 #Formatted input data as a daily time series. Needs to include the following columns: Date, ppt_mm, tmax_C, tmin_C, and tmean_C (temp.'s in deg. Celsius)
-setwd("C:/Users/msears/Documents/RSS/Mammoth_Cave/MACA/Figs MACA/Warm Wet_Hot Dry")
+setwd("C:/Users/msears/Documents/RSS/Mammoth_Cave/MACA/Figs MACA/Warm Wet_Hot Dry/")
 load("MACA_37.19758_-86.130895_Final_Environment.RData") # Load final environment
 PARK<-"MACA"
 rm(list=setdiff(ls(), c("ALL_HIST","ALL_FUTURE","PARK","CF_GCM")))
@@ -28,7 +28,7 @@ Method = "Hamon"  #Hamon is default method for daily PRISM and MACA data (contai
 DateFormat = "%m/%d/%Y"
 
 #Output directory
-OutDir = "C:/Users/msears/Documents/RSS/MACA/WB"
+OutDir = "C:/Users/msears/Documents/RSS/Mammoth_Cave/WB/"
 
 
 #Select GCMs - Include RCP
@@ -241,7 +241,7 @@ ggsave(paste(PARK,"-SOIL_in_density_panel.png",sep=""), width = 15, height = 9)
 
 ########################
 # biome plots
-biome<-read.csv("C:/Users/adillon/Documents/RSS/D_AET_points.csv",header=T)
+biome<-read.csv("C:/Users/msears/Documents/RSS/D_AET_points.csv",header=T)
 head(biome)
 color<-as.character(unique(biome$color,ordered=T))
 
