@@ -3,9 +3,9 @@ library(reshape2)
 
 #### INITIALS ####
 
-AudubonDataPath = "C:/Users/adillon/Documents/Repos/CCRP-RSS-plots/Additional-tables-plots/Audubon-NPS_study-all_species_trends_filtered.csv"
-ParkCode = "CONG"
-OutDir = "C:/Users/adillon/Documents/RSS/CONG/Additional-tables-plots"
+AudubonDataPath = "C:/Users/msears/Documents/Repos/RSS-plots/Additional-tables-plots/Audubon-NPS_study-all_species_trends_filtered.csv"
+ParkCode = "MACA"
+OutDir = "C:/Users/msears/Documents/RSS/Mammoth_Cave"
 
 #### END INITIALS ####
 
