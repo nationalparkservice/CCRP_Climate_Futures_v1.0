@@ -8,25 +8,25 @@ library(plyr)
 library(lubridate)
 library(dplyr)
 
-setwd("C:/Users/adillon/Documents/RSS/CONG")
+setwd("C:/Users/msears/Documents/RSS/Mammoth_Cave")
 
-load("MACA/Figs MACA/CONG_33.791868_-80.748665_Final_Environment.RData")
+load("MACA/Figs MACA/MACA_37.19758_-86.130895_Final_Environment.RData")
 PARK<-SiteID
 ALL_FUTURE<-merge(ALL_FUTURE,CF_GCM,by="GCM")
 rm(list=setdiff(ls(), c("ALL_FUTURE","PARK","CF_GCM")))
 
-load("PRISM/CONG_33.791868_-80.748665_PRISM_PptTminTmax_IntermediateFiles.RData")
-grid<-read.csv("Gridmet/GridMET.csv",header=T)
+load("PRISM/MACA_37.19758_-86.130895_PRISM_PptTminTmax_IntermediateFiles.RData")
+grid<-read.csv("GridMet.csv",header=T)
 
 BC.min = 1979 #Bias correction range
-BC.max = 2018
+BC.max = 2018 
 
-CF.sub = c("Historical", "Warm Wet", "Hot Damp") #CFs using
+CF.sub = c("Historical", "Warm Wet", "Hot Dry") #CFs using
 col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
 #col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
 
 #Site characteristics 
-Sites = read.csv("C:/Users/adillon/Documents/RSS/CONG/WB/CONG_site_characteristics.csv")
+Sites = read.csv("C:/Users/msears/Documents/RSS/Mammoth_Cave/WB/MACA_site_characteristics.csv")
 Sites <- Sites[1:10,]  # If there are NA's in df, make sure they are deleted
 
 #CSV file containing properties for all sites
@@ -53,7 +53,7 @@ GCMs = unique(ALL_FUTURE$GCM[which(ALL_FUTURE$CF %in% CF.sub)])
 ############################################ Format Gridmet data ####################################################
 head(grid)
 grid$tmean<-(grid$tmax+grid$tmin)/2
-grid$Date = as.Date(as.character(grid$Date, "%m/%d/%Y"))
+grid$Date = as.Date(grid$Date, "%m/%d/%Y")
 grid$month = strftime(grid$Date, "%m")
 grid$year = strftime(grid$Date, "%Y")
 grid.yrMAvgs = aggregate(tmean ~ year+month, data=grid, FUN=mean)
@@ -134,6 +134,7 @@ for(i in 1:nrow(Sites)){
 MonthlyWB<-do.call(rbind,AllMonthlyWB)
 MonthlyWB<-aggregate(.~year+month+CF,MonthlyWB,mean)
 ############### AGGREGATE TO ANNUAL & CONVERT TO D TO INCHES ##########
+MonthlyWB$Date <- as.POSIXct.Date(MonthlyWB$Date)
 MonthlyWB$year = as.numeric(strftime(MonthlyWB$Date, "%Y"))
 
 #Annual
@@ -211,6 +212,7 @@ for (j in 1:length(GCMs)){
 WBData<-do.call(rbind,AllMonthlyWB)
 WBData<-aggregate(.~year+month+GCM+CF,WBData,mean)
 ############### AGGREGATE TO ANNUAL & CONVERT TO D TO INCHES ##########
+WBData$Date<-as.POSIXct.Date(WBData$Date)
 WBData$year = as.numeric(strftime(WBData$Date, "%Y"))
 
 #Annual
