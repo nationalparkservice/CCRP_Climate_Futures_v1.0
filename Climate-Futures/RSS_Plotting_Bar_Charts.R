@@ -249,7 +249,7 @@ ggsave(sprintf("%s_%s_%s_Avg_Monthly_Tavg_Delta_Line.png", SiteID, Lat, Lon), wi
 ggplot(Monthly_delta, aes(x=Month,y=RHmean,fill=CF)) +
   geom_bar(stat="identity",position="dodge",colour="black") +
   PlotTheme +
-  labs(title = paste(SiteID, "- Change in avg. monthly relative humidity in 2040 (2025-2055) vs 1950-1999"), 
+  labs(title = paste(SiteID, "- Change in avg. monthly relative humidity\n in 2040 (2025-2055) vs 1950-1999"), 
        x = "Month", y = "Change in relative humidity (%)") +
   scale_fill_manual(name="",values = colors2) +
   scale_x_discrete(labels = MonthLabels)
@@ -260,7 +260,7 @@ ggsave(sprintf("%s_%s_%s_Avg_Monthly_RHmean_Delta_Bar.png", SiteID, Lat, Lon), w
 ggplot(Season_delta, aes(x=season,y=RHmean,fill=CF)) +
   geom_bar(stat="identity",position="dodge",colour="black") +
   PlotTheme +
-  labs(title = paste(SiteID, "- Change in avg. seasonal relative humidity in 2040 (2025-2055) vs 1950-1999"), 
+  labs(title = paste(SiteID, "- Change in avg. seasonal relative humidity\n in 2040 (2025-2055) vs 1950-1999"), 
        x = "Season", y = "Change in relative humidity (%)") +
   scale_fill_manual(name="",values = colors2) 
 
@@ -308,7 +308,7 @@ ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
   geom_bar(stat="identity",position="dodge",colour="black") +
   BarPlotTheme +
   # coord_cartesian(ylim=c(0, 40)) +
-  labs(title = paste(SiteID, "- Avg. Tot. Days/Yr <", ColdTemp, "Deg in Historical (1950-1999) & Future (2025-2055)"), 
+  labs(title = paste(SiteID, "- Avg. Tot. Days/Yr <", ColdTemp, "Deg \n in Historical (1950-1999) & Future (2025-2055)"), 
        y = "Days/Yr", colour = "Climate Future")  +
   scale_fill_manual(name="",values = colors3) +
   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
@@ -322,7 +322,7 @@ p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) +
   geom_boxplot(colour="black",aes(fill = factor(CF)), outlier.shape=NA)+ 
   geom_jitter(shape = 21, size = 5, aes(fill = factor(CF),colour=factor(me.col)), position=position_jitter(0.2)) +
   BarPlotTheme +
-  labs(title = paste(SiteID, "- Avg. Tot. Days/Yr <", ColdTemp, "Deg in Historical (1950-1999) & Future (2025-2055)"), 
+  labs(title = paste(SiteID, "- Avg. Tot. Days/Yr <", ColdTemp, "Deg \n in Historical (1950-1999) & Future (2025-2055)"), 
        y = "Days/Yr") +
   scale_color_manual(name="",values = c("black","white"),guide=FALSE) +
   scale_fill_manual(name="",values = colors3)
