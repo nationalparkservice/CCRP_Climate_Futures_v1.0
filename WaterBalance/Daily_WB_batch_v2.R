@@ -155,7 +155,7 @@ colnames(AnnualWB)[3]<-"sum_p"
 AnnualWB$avg_t = aggregate(tmean_C ~ year+GCM, data=WBData, FUN=mean)[,3]
 AnnualWB$sum_rain = aggregate(RAIN ~ year+GCM, data=aggregate(RAIN~year+GCM+SiteID,data=WBData,sum), mean)[,3]
 AnnualWB$sum_snow = aggregate(SNOW ~ year+GCM, data=aggregate(SNOW~year+GCM+SiteID,data=WBData,sum), mean)[,3]
-AnnualWB$max_pack = aggregate(PACK ~ year+GCM, data=aggregate(PACK~year+GCM+SiteID,data=WBData,sum), mean)[,3]
+AnnualWB$max_pack = aggregate(PACK ~ year+GCM, data=aggregate(PACK~year+GCM+SiteID,data=WBData,max), mean)[,3]
 AnnualWB$sum_melt = aggregate(MELT ~ year+GCM, data=aggregate(MELT~year+GCM+SiteID,data=WBData,sum), mean)[,3]
 AnnualWB$sum_w = aggregate(W ~ year+GCM, data=aggregate(W~year+GCM+SiteID,data=WBData,sum), mean)[,3]
 AnnualWB$sum_pet = aggregate(PET ~ year+GCM, data=aggregate(PET~year+GCM+SiteID,data=WBData,sum), mean)[,3]
