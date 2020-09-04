@@ -5,22 +5,19 @@ library(plyr)
 rm(list=ls())
 
 #load daily data
-setwd("C:/Users/msears/Documents/APIS CCSP/")
-grid<-read.csv("GridMet.csv")
-grid$Date<-as.Date(grid$Date,format="%Y-%m-%d")
-head(grid)
+setwd("C:/Users/achildress/DOI/NPS-CCRP-FC Science Adaptation - Documents/General/RSS Stuff/Parks/MACA/Figs projections/")
+load("MACA_37.19758_-86.130895_Final_Environment.RData")
+rm(list=setdiff(ls(), c("Baseline_all","Future_all","SiteID")))
 
-#Colors for RCP 4.5, RCP 8.5
-col.RCP2 = c("blue", "red")
+#Use same GCMs/CFs used for drought / WB data
+GCMs = c("CNRM-CM5.rcp45","HadGEM2-ES365.rcp85") 
+CFs<- c("Warm Wet", "Hot Dry")
 
 ## All 508-compliant color scheme -- navy (hot wet), light blue (warm wet), pink (warm dry), red (hot dry)
-colors5 <-   c("white","#12045C","#9A9EE5","#F3D3CB","#E10720")
 colors2<- c("#9A9EE5","#E10720")  # WarmWet/HotDry
 #colors2<- c("#F3D3CB","#12045C")  # HotWet/WarmDry
 
-colors3<-c("white",colors2)
- 
-PARK <- "APIS"
+colors3<-c("dark grey",colors2)
 
 #Height and width 
 PlotWidth = 18
@@ -42,63 +39,17 @@ BarPlotTheme = theme(axis.text.x=element_text(size=24),    #Text size for axis t
                      plot.title=element_text(size=26,face="bold",hjust=0.5, margin=margin(t=20, r=20, b=20, l=20)),      #Text size and alignment for plot title
                      legend.position = "none") 
 
-
-#plot data
-#ggplot(grid,aes(x=Date,y=precip)) + geom_point(colour="blue")
-
-#annual maxima
-#grid$Year <- format(grid$Date, "%Y")
-#maxima<-aggregate(precip~Year,grid,max)
-
-#sort by descending precip (changed this from ascending)
-#maxima <- maxima[order(-maxima$precip),]
-#maxima$rank<-seq(1:nrow(maxima))
-
-#calculate return period as
-  # T = (n+1)/i ; i=rank (1 being greatest precip event); n=length record (# of years)
-#this calc was changed from EP to return period
-#n=nrow(maxima)
-#maxima$return <- (n+1)/(maxima$rank)
-
-#exceedance probability is inverse of return period
-#maxima$EP <- 1/maxima$return
-
-#plot daily precip on y-axis and return interval on x-axis
-# x = return interval, y = precip (linear scale)
-#plot(x=maxima$return,y=maxima$precip)
-#plot(x=log(maxima$return),y=maxima$precip)
-
-#regression<-lm(precip~log(return),data=maxima)
-#maxima$modeled<-predict(regression)
-
-#max100<-data.frame(return=seq(1,100,1))
-#max100$modeled<-predict(regression,newdata=max100)
-#max100$CF<-"gridMET"
-
-#plot(maxima$return,maxima$precip, "p", las=1, xlab="return", ylab="Precip",
-    # xlim=c(0,100),ylim=c(0,max(max100$modeled)))
-#lines(max100$modeled~max100$return, col="blue", lwd=2)
-
-#return20<-data.frame(return=20)
-#return20$mod<-predict(regression,newdata=return20)
-#return20$CF<-"gridMET"
-#ecdf(grid$precip)(return20$mod)
-
 ####################################################################################
 ############### Analysis on MACA data###########################
 
-# Read in MACA data and format DFs
-load("APIS_init_parsed.RData")
-
 ### CF1 future 
-model1<-c("GFDL-ESM2G.rcp85")
+model1<-GCMs[1]
 Future_all$Year<-format(Future_all$Date,"%Y")
 Future_model1<-subset(Future_all,GCM %in% model1 & Year >2024 & Year<2056)
 
 ##CF1 baseline
-Baseline_all$GCM<-paste(Baseline_all$GCM,"rcp85",sep=".")
 Baseline_all$Year<-format(Baseline_all$Date,"%Y")
-Baseline_model1<-subset(Baseline_all, GCM %in% model1 & Year<2006)
+Baseline_model1<-subset(Baseline_all, GCM %in% model1 & Year<1999)
 
 # Annual max and plot for cF1
 Base1_max<-aggregate(PrecipCustom~Year+GCM,Baseline_model1,max)
@@ -132,7 +83,7 @@ Base1$modeled<-predict(regression)
 
 max100base1<-data.frame(return=seq(1,100,1))
 max100base1$modeled<-predict(regression,newdata=max100base1)
-max100base1$CF<-"Climate Future 1"
+max100base1$CF<-CFs[1]
 
 plot(Base1$return,Base1$PrecipCustom, "p", las=1, xlab="return", ylab="Precip",
      xlim=c(0,100),ylim=c(0,max(max100base1$modeled)))
@@ -149,7 +100,7 @@ Future1$modeled<-predict(regression)
 
 max100future1<-data.frame(return=seq(1,100,1))
 max100future1$modeled<-predict(regression,newdata=max100future1)
-max100future1$CF<-"Climate Future 1"
+max100future1$CF<-CFs[1]
 
 plot(Future1$return,Future1$PrecipCustom, "p", las=1, xlab="return", ylab="Precip",
      xlim=c(0,100),ylim=c(0,max(max100future1$modeled)))
@@ -157,15 +108,14 @@ lines(max100future1$modeled~max100future1$return, col="blue", lwd=2)
 
 return20future1<-data.frame(return=20)
 return20future1$mod<-predict(regression,newdata=return20future1)
-return20future1$CF<-"Climate Future 1"
+return20future1$CF<-CFs[1]
 
 ##################################################################
 ######## CF2 future and baseline
-model2<-c("MIROC-ESM.rcp85")
-Future_all$Year<-format(Future_all$Date,"%Y")
+model2<-GCMs[2]
 Future_model2<-subset(Future_all,GCM %in% model2 & Year >2024 & Year<2056)
 
-Baseline_model2<-subset(Baseline_all, GCM %in% model2 & Year<2006)
+Baseline_model2<-subset(Baseline_all, GCM %in% model2 & Year<1999)
 
 # Annual max and plot for cF2
 Base2_max<-aggregate(PrecipCustom~Year+GCM,Baseline_model2,max)
@@ -200,7 +150,7 @@ Base2$modeled<-predict(regression)
 
 max100base2<-data.frame(return=seq(1,100,1))
 max100base2$modeled<-predict(regression,newdata=max100base2)
-max100base2$CF<-"Climate Future 2"
+max100base2$CF<-CFs[2]
 
 plot(Base2$return,Base2$PrecipCustom, "p", las=1, xlab="return", ylab="Precip",
      xlim=c(0,100),ylim=c(0,max(max100base2$modeled)))
@@ -217,7 +167,7 @@ Future2$modeled<-predict(regression)
 
 max100future2<-data.frame(return=seq(1,100,1))
 max100future2$modeled<-predict(regression,newdata=max100future2)
-max100future2$CF<-"Climate Future 2"
+max100future2$CF<-CFs[2]
 
 plot(Future2$return,Future2$PrecipCustom, "p", las=1, xlab="return", ylab="Precip",
      xlim=c(0,100),ylim=c(0,max(max100future2$modeled)))
@@ -225,20 +175,20 @@ lines(max100future2$modeled~max100future2$return, col="blue", lwd=2)
 
 return20future2<-data.frame(return=20)
 return20future2$mod<-predict(regression,newdata=return20future2)
-return20future2$CF<-"Climate Future 2"
+return20future2$CF<-CFs[2]
 
 #############################################################
 
 #average of two baseline return 20 values
 return20baseavg<-data.frame(return=20)
 return20baseavg$mod<-((return20base1$mod + return20base2$mod)/2)
-return20baseavg$CF<-"Baseline Avg of Climate Future 1 & 2"
+return20baseavg$CF<-"Historical"
                     
 
 #average two baseline regression values from CF1 and 2
 max100baseavg<-data.frame(return=seq(1,100,1))
 max100baseavg$modeled<-((max100base1$modeled+max100base2$modeled)/2)
-max100baseavg$CF<-"Baseline Avg of Climate Future 1 & 2"
+max100baseavg$CF<-"Historical"
 
 ######################################################
 
@@ -248,13 +198,13 @@ max100baseavg$CF<-"Baseline Avg of Climate Future 1 & 2"
 allreturns<-rbind(return20future1, return20future2, return20baseavg)
 
 #add levels for formatting
-allreturns$CF<-factor(allreturns$CF, levels=c("Baseline Avg of Climate Future 1 & 2","Climate Future 1", "Climate Future 2"))
+allreturns$CF<-factor(allreturns$CF, levels=c("Historical",CFs[1], CFs[2]))
 
 #Bar graph 20-year return int for a 24-hour event
 ggplot(allreturns, aes(x=CF, y=mod,fill=CF)) +
   geom_bar(stat="identity",position="dodge",colour="black") +
   BarPlotTheme +
-  labs(title = "APIS 20-year recurrence interval", 
+  labs(title = paste(SiteID, " - 20-year recurrence interval",sep=""), 
        x ="20-year recurrence interval", y ="Precipitation (inches/day)") +
   scale_fill_manual(name="",values = colors3) 
 
@@ -267,7 +217,7 @@ ggsave("20yr-bar-plot.png", width = PlotWidth, height = PlotHeight)
 allregressions<-rbind(max100baseavg, max100future1, max100future2)
 
 #add levels for formatting
-allregressions$CF<-factor(allregressions$CF, levels=c("Baseline Avg of Climate Future 1 & 2","Climate Future 1", "Climate Future 2"))
+allregressions$CF<-factor(allregressions$CF, levels=c("Historical",CFs[1], CFs[2]))
 
 #line plots of regressions
 ggplot(allregressions, aes(x=return, y=modeled, group=CF, colour = CF)) +
@@ -275,11 +225,13 @@ ggplot(allregressions, aes(x=return, y=modeled, group=CF, colour = CF)) +
   geom_line(size = 1.5, stat = "identity") +
   geom_point(colour= "black", size=4, aes(fill = factor(CF), shape = factor(CF))) +
   PlotTheme +
-  labs(title = paste("APIS, Recurrence intervals for 24-hour precipitation totals"),
+  labs(title = paste(SiteID, " - Recurrence intervals for 24-hour precipitation totals",sep=""),
        x = "Recurrence interval (year)", y = "Precipitation (inches/day)") +
   scale_color_manual(name="",values = colors3) +
   scale_fill_manual(name="",values = colors3) +
   scale_shape_manual(name="",values = c(21,22,23))
 
 ggsave("20yr-regressions.png", width = PlotWidth, height = PlotHeight)
+
+allregressions
 
