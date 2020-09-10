@@ -1,0 +1,713 @@
+---
+title: "DINO_T2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+#
+```
+
+```{r message=FALSE}
+rm(list = ls())
+
+library(plyr)
+library(ncdf4)
+library(reshape2)
+library(WriteXLS)
+library(data.table)
+library(zoo)
+library(corrplot)
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(forcats)
+library(SPEI) # Make sure to install this pkg!
+library(WaterBalance)
+library(openxlsx)
+library(tidyr)
+library(raster)
+```
+
+```{r}
+
+load("C:/Users/adillon/Documents/RSS/DINO/MACA_S/DINO-S_init_parsed.RData") # Need this to run Plot Table
+#load("C:/Users/adillon/Documents/RSS/DINO/MACA_S/DINO-S_T1.RData")
+#load("C:/Users/adillon/Documents/RSS/DINO/DINO-S_T2.RData")
+
+WB<-read.csv("C:/Users/adillon/Documents/RSS/DINO/WB/MonthlyWB.csv",header=T) # Need this to run PLot Table
+
+GCMs = c("GFDL-ESM2G.rcp85", "MIROC-ESM.rcp85", "CSIRO-Mk3-6-0.rcp45", "HadGEM2-ES365.rcp85") # DINO S
+CFs<- c("Climate Future 1","Climate Future 2","Climate Future 3","Climate Future 4")
+
+colors5 <-  c("#12045C","#9A9EE5","#ffcccc","#E10720","white")
+colors4 <- c("#12045C","#9A9EE5","#ffcccc","#E10720")
+
+#For Report -- rename plots to workshop names
+rename<-function(df){ # These names are for DINO 2020
+  levels(df$GCM)[levels(df$GCM)=="GFDL-ESM2G.rcp85"] <- "Climate Future 1"
+  levels(df$GCM)[levels(df$GCM)=="MIROC-ESM.rcp85"] <- "Climate Future 2"
+  levels(df$GCM)[levels(df$GCM)=="CSIRO-Mk3-6-0.rcp45"] <- "Climate Future 3"
+  levels(df$GCM)[levels(df$GCM)=="HadGEM2-ES365.rcp85"] <- "Climate Future 4"
+  df
+}
+```
+
+
+
+```{r warning=FALSE}
+source("plotThemes.R") # Themes for plotting {ggplot2}
+PlotWidth = 18
+PlotHeight = 9
+```
+
+
+# Pr99
+
+```{r warning = FALSE}
+
+source("DINO_RSS_MACA_Plot_Table_T2.R", print.eval = FALSE) 
+```
+
+```{r, warning=FALSE}
+# Precip99: # Days over 99th percentile for precipitation
+
+
+Annual$me.col<-"b"
+Annual$me.col[which(Annual$GCM=="Climate Future 1")]<-"w"
+
+Annual <- rename(Annual)
+
+PLOT = "OverPrecip99"
+p<-ggplot(Annual, aes(x=GCM, y=OverPrecip99, colour=GCM)) + 
+  geom_boxplot(colour="black",aes(fill = factor(GCM)), outlier.shape=NA)+ 
+  geom_jitter(shape = 21, size = 5, aes(fill = factor(GCM),colour=factor(me.col)), position=position_jitter(0.2)) +
+  BarPlotTheme +
+  labs(title = "Days with precip > 99th Percentile", y = "Days") +
+  scale_color_manual(name="",values = c("black","white"),guide=FALSE) +
+  scale_fill_manual(name="",values = colors5)
+dat<-ggplot_build(p)$data[[1]];dat1<-dat[1,]
+p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
+                                y=middle, yend=middle), colour="grey", size=1)
+
+ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
+
+```
+
+# Growing Season Length
+
+```{r}
+
+p<-ggplot(Annual, aes(x=GCM, y=GrowLen, colour=GCM)) + 
+  geom_boxplot(colour="black",aes(fill = factor(GCM)), outlier.shape=NA)+ 
+  geom_jitter(shape = 21, size = 5, aes(fill = factor(GCM),colour=factor(me.col)), position=position_jitter(0.2)) +
+  BarPlotTheme +
+  labs(title = "Growing Season Length", y = "Days") +
+  scale_color_manual(name="",values = c("black","white"),guide=FALSE) +
+  scale_fill_manual(name="",values = colors5)
+dat<-ggplot_build(p)$data[[1]];dat1<-dat[1,]
+p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
+                                y=middle, yend=middle), colour="grey", size=1)
+
+ggsave("Growing Season Length.png", width = PlotWidth, height = PlotHeight)
+
+```
+# Beginning of Growing Season
+
+```{r}
+PLOT = "Beginning of Growing Season"
+p<-ggplot(Annual, aes(x=GCM, y=BegGrow, colour=GCM)) + 
+  geom_boxplot(colour="black",aes(fill = factor(GCM)), outlier.shape=NA)+ 
+  geom_jitter(shape = 21, size = 5, aes(fill = factor(GCM),colour=factor(me.col)), position=position_jitter(0.2)) +
+  BarPlotTheme +
+  labs(title = "Beginning of Growing Season", y = "Ordinal Day") +
+  scale_color_manual(name="",values = c("black","white"),guide=FALSE) +
+  scale_fill_manual(name="",values = colors5)
+dat<-ggplot_build(p)$data[[1]];dat1<-dat[1,]
+p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
+                                y=middle, yend=middle), colour="grey", size=1)
+ggsave("Beginning of Growing Season.png", width = PlotWidth, height = PlotHeight)
+```
+
+# Seasonal Precipitation
+
+```{r warning=FALSE, message=FALSE}
+
+
+H_Season<-subset(H_Season, GCM %in% GCMs)
+H_Season$CF <- "Historical"
+
+F_Season<-subset(F_Season, GCM %in% GCMs)
+
+
+# Add CF to Futures df
+
+CF_GCM <- cbind(CFs, GCMs)
+CF_GCM <- data.frame(CF_GCM)
+colnames(CF_GCM) <- c("CF", "GCM")
+
+F_Season <- merge(F_Season,CF_GCM,by="GCM")
+
+H_precip <- H_Season %>%
+  group_by(CF, season) %>%
+  summarize(meanPrecip = mean(PrecipCustom))
+
+F_precip <- F_Season %>%
+  group_by(CF, season) %>%
+  summarize(meanPrecip = mean(PrecipCustom))
+
+
+deltas_precip <- F_precip %>%
+   mutate(delta = if(season == "Fall"){
+   meanPrecip - H_precip$meanPrecip[1]
+} else if (season == "Spring"){
+  meanPrecip - H_Season$meanPrecip[2]
+} else if (season == "Summer"){
+  meanPrecip - H_Season$meanPrecip[3]
+} else if (season == "Winter"){
+  meanPrecip - H_Season$meanPrecip[4]
+}
+)
+
+
+# Plot
+
+ggplot(deltas_precip, aes(x = season,y = delta, fill=CF)) +
+  geom_bar(stat="identity",position="dodge",colour="black") +
+  PlotTheme +
+  labs(title = "Change in avg. seasonal precip. in 2040 (2025-2055) vs 1950-1999", 
+      x = "Season", y = "Change in Precipitation (in)") + # hmmm...mm or in?
+  scale_fill_manual(name="",values = colors4) 
+
+ggsave("SeasonalPrecip.png", width = 18, height = 9)
+
+```
+
+```{r, echo=FALSE}
+
+# Find last and first days of snow on ground. Count number of days between the two. Then subtract from 365 to get snow duration.
+
+source("C:/Users/adillon/Documents/Repos/CCRP-RSS-plots/DINO/Daily_WB_batch_CCSP.R") #requires init_parsed 
+
+
+
+WBData$Year <- year(WBData$Date)
+WBData$Month <- month(WBData$Date)
+WBData$Ordinal <- yday(WBData$Date)
+
+
+WBData <- WBData %>%
+  mutate(Season = if_else(Month < 7, "Winter/Spring", "Summer/Fall"))
+
+
+lastSnow <- WBData %>%
+  group_by(GCM, Year) %>%
+  filter(Season == "Winter/Spring" & SNOW > 0) %>%
+  slice_tail()
+
+firstSnow <- WBData %>%
+  group_by(GCM, Year) %>%
+  filter(Season == "Summer/Fall" & SNOW > 0) %>%
+  slice_head()
+
+snow <- rbind(lastSnow, firstSnow)
+
+snow <- snow %>%
+  group_by(GCM, Year) %>%
+  mutate(lengthSummer = c(difftime(tail(Date, -1), head(Date, -1)),0)) %>%
+  slice_head()
+
+snow$lengthSummer <- as.numeric(snow$lengthSummer)
+
+snow$lengthWinter <- 365 - snow$lengthSummer
+
+F.start = 2025
+F.end = 2055
+
+# Create CF_GCM
+
+CF_GCM <- cbind(CFs, GCMs)
+CF_GCM <- data.frame(CF_GCM)
+colnames(CF_GCM) <- c("CF", "GCM")
+
+snow <- merge(snow,CF_GCM,by="GCM")
+
+
+snow$CF<-factor(snow$CF,levels=unique(snow$CF))
+
+# Subset to correct years for each period
+snowHist<-subset(snow,Year<2000)
+snowFut<-subset(snow,Year>=F.start & Year<=F.end)
+snowHist$CF<-"Historical"
+
+# Average over sites and subset historical to be 30 years
+set.seed(113) # set seed so same every time
+Hist.subset<-sample_n(snowHist,size=length(snowFut$CF)/length(unique(snowFut$CF)),replace=F)
+
+allSnow<-rbind(Hist.subset,snowFut)
+allSnow$CF = factor(allSnow$CF, levels = c(CFs, "Historical"))
+
+allSnow$me.col<-"b" # color of mean bar - because cannot see black on dark blue in CF 1
+allSnow$me.col[which(allSnow$GCM=="Climate Future 1")]<-"w"
+
+
+p<-ggplot(allSnow, aes(x=CF, y=lengthWinter, colour=CF)) + 
+  geom_boxplot(colour="black",aes(fill = factor(CF)), outlier.shape=NA)+ 
+  geom_jitter(shape = 21, size = 5, aes(fill = factor(CF),colour=factor(me.col)), position=position_jitter(0.2)) +
+  BarPlotTheme +
+  labs(title = "Snow Duration", y = "Days") +
+  scale_color_manual(name="",values = c("black","white"),guide=FALSE) +
+  scale_fill_manual(name="",values = colors5)
+dat<-ggplot_build(p)$data[[1]];dat1<-dat[1,]
+p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
+                                y=middle, yend=middle), colour="grey", size=1)
+  
+ggsave("Snow Duration.png", width = 18, height = 9)
+
+```
+
+# VPD
+
+```{r warning=FALSE, message = FALSE}
+
+rcp45 <- read.csv("C:/Users/adillon/Documents/RSS/DINO/MACA_S/4.5_vpd.csv") 
+rcp85 <- read.csv("C:/Users/adillon/Documents/RSS/DINO/MACA_S/8.5_vpd.csv")
+vpd_hist <- read.csv("C:/Users/adillon/Documents/RSS/DINO/MACA_S/historical_vpd.csv")
+
+# For reference
+GCMs = c("GFDL-ESM2G.rcp85", "MIROC-ESM.rcp85", "CSIRO-Mk3-6-0.rcp45", "HadGEM2-ES365.rcp85") # DINO S
+CFs<- c("Climate Future 1","Climate Future 2","Climate Future 3","Climate Future 4")
+
+colnames(vpd_hist) <- c("Date", "CSIRO-Mk3-6-0", "GFDL-ESM2G", "HadGEM2-ES365", "MIROC-ESM")
+
+vpd_hist$Date <- mdy(vpd_hist$Date)
+vpd_hist$Month <- month(vpd_hist$Date)
+
+# Summarize historical monthly VPD values by GCM
+vpdHistMonthly <- vpd_hist %>%
+  dplyr::select(-Date) %>%
+  group_by(Month) %>%
+  summarize_each(funs(mean))
+
+vpd_fut <- full_join(rcp45, rcp85)
+vpd_fut <- dplyr::select(vpd_fut, 1:2, 7:9) # select relevant GCM's
+
+vpd_fut$Date <- mdy(vpd_fut$yyyy.mm.dd)
+vpd_fut$Year <- year(vpd_fut$Date)
+vpd_fut$Month <- month(vpd_fut$Date)
+
+vpdFutSub <- subset(vpd_fut, Year >= 2025 & Year <= 2055)
+colnames(vpdFutSub) <- c("Date1", "Climate Future 3", "Climate Future 1", "Climate Future 4", "Climate Future 2", "Date", "Year", "Month")
+
+# Summarize future monthly VPD values by CF
+vpdFutMonthly <- vpdFutSub %>%
+  dplyr::select(Month, "Climate Future 1", "Climate Future 2", "Climate Future 3", "Climate Future 4") %>%
+  group_by(Month) %>%
+  summarize_each(funs(mean))
+
+delta1 <- vpdFutMonthly[2] - vpdHistMonthly[3] 
+delta2 <- vpdFutMonthly[3] - vpdHistMonthly[5]
+delta3 <- vpdFutMonthly[4] - vpdHistMonthly[2]
+delta4 <- vpdFutMonthly[5] - vpdHistMonthly[4]  
+
+deltas <- cbind(delta1, delta2, delta3, delta4)
+deltas$Month <- seq(1:12)
+
+
+delta_VPD <- deltas %>% pivot_longer(-Month, names_to = "CF", values_to = "deltaVPD")
+delta_VPD$Month <- month.abb[delta_VPD$Month]
+
+colors4 <- c("#12045C","#9A9EE5","#ffcccc","#E10720")
+
+ggplot(delta_VPD, aes(x=Month, y = deltaVPD, group=CF, colour = CF)) +
+  geom_line(size = 2, stat = "identity",colour="black") + 
+  geom_line(size = 1.5, stat = "identity") +
+  geom_point(colour= "black", size=4, aes(fill = factor(CF), shape = factor(CF))) +
+   theme(axis.text=element_text(size=16),
+        axis.title.x=element_text(size=16,vjust=-0.2),
+        axis.title.y=element_text(size=20,vjust=1.0),
+        plot.title=element_text(size=24,face="bold",vjust=2,hjust=0.5),
+        legend.text=element_text(size=20)) +
+  scale_x_discrete(labels = month.abb) +
+  labs(title = "Change in avg. monthly VPD in 2040 (2025-2055) vs 1950-1999",
+            x = "Month", y = "Change in VPD from historical value") +
+  scale_color_manual(name="",values = colors4) +
+  scale_fill_manual(name="",values = colors4) +
+  scale_shape_manual(name="",values = c(21,22,23,24)) 
+  #scale_y_continuous(limits=c(0, ceiling(max(deltas$VPD)))) 
+
+ggsave("VPD.png", width = 18, height = 9)
+  
+```
+
+# AET
+
+```{r warning=FALSE}
+
+# Subset into Historical (1950 - 1999) and Future (2025 - 2055) datasets
+
+WBData$Year <- year(WBData$Date)
+WBData$Month <- month(WBData$Date)
+WBData$Month <- month.abb[WBData$Month]
+
+H_AET <- subset(WBData, Year <= 1999)
+F_AET <- subset(WBData, Year >= 2025 & Year <= 2055)
+
+H_AET_monthAvg <- H_AET %>%
+  group_by(GCM, Month) %>%
+  summarise(HistMeanAET = mean(AET))
+
+F_AET_monthAvg <- F_AET %>%
+  group_by(GCM,Month) %>%
+  summarise(meanAET = mean(AET))
+
+allAET <- full_join(F_AET_monthAvg, H_AET_monthAvg)
+
+allAET <- allAET %>%
+  mutate(deltaAET = meanAET - HistMeanAET)
+
+# Add climate futures
+
+CF_GCM <- cbind(CFs, GCMs)
+CF_GCM <- data.frame(CF_GCM)
+colnames(CF_GCM) <- c("CF", "GCM")
+
+allAET <- merge(allAET,CF_GCM,by="GCM")
+
+ggplot(allAET, aes(x=Month, y = deltaAET, group=CF, colour = CF)) +
+  geom_line(size = 2, stat = "identity",colour="black") + 
+  geom_line(size = 1.5, stat = "identity") +
+  geom_point(colour= "black", size=4, aes(fill = factor(CF), shape = factor(CF))) +
+   theme(axis.text=element_text(size=16),
+        axis.title.x=element_text(size=16,vjust=-0.2),
+        axis.title.y=element_text(size=20,vjust=1.0),
+        plot.title=element_text(size=24,face="bold",vjust=2,hjust=0.5),
+        legend.text=element_text(size=20)) +
+  scale_x_discrete(labels = month.abb) +
+  labs(title = "Change in avg. monthly AET in 2040 (2025-2055) vs 1950-1999",
+            x = "Month", y = "Change in AET from historical value") +
+  scale_color_manual(name="",values = colors4) +
+  scale_fill_manual(name="",values = colors4) +
+  scale_shape_manual(name="",values = c(21,22,23,24)) 
+  #scale_y_continuous(limits=c(0, ceiling(max(deltas$VPD)))) 
+
+ggsave("AET.png", width = 18, height = 9)
+```
+
+# T1 Variables
+
+* Days over hot temperature - OverHotTemp
+* Annual Tmean - Tmean
+* Spring Soil Moisture - GS_SM
+* Average Annual Deficit - D_in
+
+
+# Days Over Hot Temp
+
+
+```{r}
+
+OverHotTemp <- Annual %>%
+  group_by(GCM) %>%
+  summarize(avg = mean(Tmax99))
+
+ggplot(OverHotTemp, aes(x = GCM, y = avg,fill=GCM)) +
+  geom_bar(stat="identity",position="dodge",colour="black") +
+  BarPlotTheme +
+  # coord_cartesian(ylim=c(0, 40)) +
+  labs(title = "Days per Year where Tmax > 99th Percentile in Historical (1950-1999) & Future (2025-2055) Timeframes", 
+       y = "Days/Yr", colour = "Climate Future")  +
+  scale_fill_manual(name="",values = colors5) +
+  #coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
+
+ggsave("Days_Over_HotTemp.png", path = "C:/Users/adillon/Documents/RSS/DINO", width = PlotWidth, height = PlotHeight)
+
+```
+
+
+# Annual Tmean 
+
+```{r}
+
+p <- ggplot(Annual, aes(x=GCM, y=TavgCustom, colour=GCM)) + 
+  geom_boxplot(colour="black",aes(fill = factor(GCM)), outlier.shape=NA)+ 
+  geom_jitter(shape = 21, size = 5, aes(fill = factor(GCM),colour=factor(me.col)), position=position_jitter(0.2)) +
+  BarPlotTheme +
+  labs(title = "Annual Mean Temperature", y = "Degrees F") +
+  scale_color_manual(name="",values = c("black","white"),guide=FALSE) +
+  scale_fill_manual(name="",values = colors5)
+dat<-ggplot_build(p)$data[[1]];dat1<-dat[1,]
+p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
+                                y=middle, yend=middle), colour="grey", size=1)
+  
+ggsave("Annual Tmean.png", path = "C:/Users/adillon/Documents/RSS/DINO", width = PlotWidth, height = PlotHeight)
+```
+
+# Average annual water deficit: Density plot
+
+```{r}
+# Deficit
+
+ggplot(Annual, aes(x=D_mm, colour=GCM,fill=GCM,linetype=GCM),show.legend=F) +geom_density(alpha=0.3,size=1.5) +
+  scale_colour_manual(values=colors5) +
+  scale_fill_manual(values=colors5) +  
+  scale_linetype_manual(values=seq(1,length(unique(Annual$GCM)),1)) +
+  labs(y = "Density",
+       x = "Annual moisture deficit (in)",
+       title = "Water Deficit for Climate Futures (2025-2055) and Historical Period (1895-1999)",sep=" ") +
+  theme(axis.text = element_text(size=20), axis.title = element_text(size=20), legend.text=element_text(size=20), legend.background=element_rect(fill = "White", size = 0.5),
+        plot.title=element_text(size=22, hjust=0),legend.position = c(.8,.8)) 
+
+ggsave("Deficit Density Panel.png", width = 18, height = 9)
+```
+
+# Create tables for all variables except Drought and Soil Moisture
+
+```{r}
+
+# Means
+
+Means <- Annual %>%
+  group_by(GCM) %>%
+  summarise(across(PrecipCustom:D_mm, mean))
+
+# Monthly
+
+H_Monthly <- subset(H_Monthly, GCM %in% GCMs)
+
+
+H_Monthly <- H_Monthly %>%
+  group_by(Month) %>%
+  summarise(across(TmaxCustom:RHmean, mean))
+
+H_Monthly$CF <- "Historical"
+
+F_Monthly <- subset(F_Monthly, GCM %in% GCMs)
+F_Monthly <- merge(F_Monthly, CF_GCM, by = "GCM")
+F_Monthly <- dplyr::select(F_Monthly, -GCM)
+
+Monthly <- rbind(H_Monthly, F_Monthly)
+
+Monthly <- Monthly %>% 
+  dplyr::select(Month, CF, RHmean, ends_with("Custom")) %>%
+  arrange(Month, CF)
+
+# Monthly delta
+
+Monthly_delta <- F_Monthly %>%
+  left_join(H_Monthly, by = "Month") %>%
+  mutate(Tmax_delta = TmaxCustom.x - TmaxCustom.y) %>%
+  mutate(Tmin_delta = TminCustom.x - TminCustom.y) %>%
+  mutate(Tavg_delta = TavgCustom.x - TavgCustom.y) %>%
+  mutate(RHmean_delta = RHmean.x - RHmean.y) %>%
+  dplyr::select(Month, CF.x, ends_with("delta")) %>%
+  arrange(Month, CF.x)
+
+H_Season_means <- H_Season %>%
+  group_by(season) %>%
+  summarise(across(TmaxCustom:RHmean, mean)) 
+
+H_Season_means$CF <- "Historical"
+
+Season <- rbind(H_Season, F_Season)
+
+Season_delta <- F_Season %>%
+  left_join(H_Season_means, by = "season") %>%
+  mutate(Tmax_delta = TmaxCustom.x - TmaxCustom.y) %>%
+  mutate(Tmin_delta = TminCustom.x - TminCustom.y) %>%
+  mutate(Tavg_delta = TavgCustom.x - TavgCustom.y) %>%
+  mutate(Precip_delta = PrecipCustom.x - PrecipCustom.y) %>%
+  mutate(RHmean_delta = RHmean.x - RHmean.y) %>%
+  dplyr::select(season, CF.x, ends_with("delta")) %>%
+  arrange(season, CF.x)
+
+# Water Balance means
+
+Snow <- allSnow %>%
+  group_by(CF) %>%
+  summarise(lengthWinter.me = mean(lengthWinter)) %>%
+  dplyr::select(CF, lengthWinter.me)
+
+deltaAET <- allAET %>%
+  group_by(CF) %>%
+  summarise(deltaAET.me = mean(deltaAET)) %>%
+  dplyr::select(CF, deltaAET.me)
+
+WB <- left_join(Snow, deltaAET)
+
+# Create workbook
+write.xlsx(list("Means"=Means, "Annual"=Annual, "Season"=Season, "D_Season"=Season_delta, "Monthly"=Monthly, "Monthly_delta"=Monthly_delta, "WB" = WB, "Fire" = delta_VPD),
+           file=("Plot_data1.xlsx"),col.names=TRUE)
+
+```
+
+
+# Drought 
+
+```{r, echo = FALSE}
+
+# STOP HERE BECAUSE THIS SCRIPT REQUIRES DINO-S_T2.RData
+
+source("DINO_drought_T2.R", print.eval = FALSE) # Requires loading DINO-S_T2.RData
+
+```
+
+```{r}
+#Drought duration barplot
+ggplot(Drought_all, aes(x=CF, y=as.numeric(Duration), fill=CF)) + geom_bar(stat="identity", col="black") + 
+  scale_y_continuous() + 
+  labs(x="", y="Years", 
+       title=paste(SiteID, "- Average Drought Duration")) + 
+  scale_fill_manual(values = colors5) + 
+  BarPlotTheme
+ggsave(paste(SiteID, "Duration.png"), height=PlotHeight, width=PlotWidth, dpi=600)
+
+#Drought severity barplot
+ggplot(Drought_all, aes(x=CF, y=as.numeric(Severity), fill=CF)) + geom_bar(stat="identity", col="black") + 
+  scale_y_continuous() + 
+  labs(x="", y="Severity (SPEI * duration)", 
+       title=paste(SiteID, "- Average Drought Severity")) + 
+  scale_fill_manual(values = colors5) + 
+  BarPlotTheme
+ggsave(paste(SiteID, "Severity.png"), height=PlotHeight, width=PlotWidth, dpi=600)
+
+#Drought intensity barplot
+ggplot(Drought_all, aes(x=CF, y=as.numeric(Intensity), fill=CF)) + geom_bar(stat="identity", col="black") + 
+  scale_y_continuous() + 
+  labs(x="", y="Intensity (Minimum SPEI values)", 
+       title=paste(SiteID, "- Average Drought Intensity")) + 
+  scale_fill_manual(values = colors5) + 
+  BarPlotTheme
+ggsave(paste(SiteID, "Intensity.png"), height=PlotHeight, width=PlotWidth, dpi=600)
+
+#Drought-free interval barplot
+ggplot(Drought_all, aes(x=CF, y=as.numeric(Frequency), fill=CF)) + geom_bar(stat="identity", col="black") + 
+  scale_y_continuous() + 
+  labs(x="", y="Years", 
+       title=paste(SiteID, "- Average Drought-Free Interval")) + 
+  scale_fill_manual(values = colors5) + 
+  BarPlotTheme
+ggsave(paste(SiteID, "Frequency.png"), height=PlotHeight, width=PlotWidth, dpi=600)
+
+# Create workbook
+write.xlsx(Drought_all,
+           file="Plot_data_drought.xlsx",col.names=TRUE)
+
+```
+
+
+
+```{r}
+load("C:/Users/adillon/Documents/RSS/DINO/DINO-S_T1.RData") # Switch environments
+source("plotThemes.R")
+
+# recode below because was lost when environment changed
+
+GCMs = c("GFDL-ESM2G.rcp85", "MIROC-ESM.rcp85", "CSIRO-Mk3-6-0.rcp45", "HadGEM2-ES365.rcp85") # DINO S
+CFs<- c("Climate Future 1","Climate Future 2","Climate Future 3","Climate Future 4")
+
+rename<-function(df){ # These names are for DINO 2020
+  levels(df$GCM)[levels(df$GCM)=="GFDL-ESM2G.rcp85"] <- "Climate Future 1"
+  levels(df$GCM)[levels(df$GCM)=="MIROC-ESM.rcp85"] <- "Climate Future 2"
+  levels(df$GCM)[levels(df$GCM)=="CSIRO-Mk3-6-0.rcp45"] <- "Climate Future 3"
+  levels(df$GCM)[levels(df$GCM)=="HadGEM2-ES365.rcp85"] <- "Climate Future 4"
+  df
+}
+
+colors5 <-  c("#12045C","#9A9EE5","#ffcccc","#E10720","white")
+colors4 <- c("#12045C","#9A9EE5","#ffcccc","#E10720")
+```
+
+# Soil Moisture 
+
+```{r}
+# Growing Season
+
+GCMsubset = function(df){
+  df$GCM = as.factor(df$GCM)
+  DF = subset(df, GCM %in% GCMs)
+  DF$GCM = droplevels(DF$GCM)
+  return(DF)
+}
+
+GSSM <- GCMsubset(Sp.SM)
+
+
+SM.hist <- subset(GSSM, Year < 2000)
+
+GSSM <- GSSM %>%
+  mutate(hist_avg = mean(SM.hist$avg_soil)) %>%
+  mutate(pct.change = (avg_soil - hist_avg)/hist_avg*100) %>%
+  dplyr::filter(Year >= 2025 & Year <= 2055)
+
+GSSM$me.col<-"b" # color of mean bar - because cannot see black on dark blue in CF 1
+GSSM$me.col[which(GSSM$GCM=="Climate Future 1")]<-"w"
+
+GSSM <- rename(GSSM)
+
+p <- ggplot(GSSM, aes(x=GCM, y=pct.change, colour=GCM)) + 
+  geom_boxplot(colour="black",aes(fill = factor(GCM)), outlier.shape=NA)+ 
+  geom_jitter(shape = 21, size = 5, aes(fill = factor(GCM),colour=factor(me.col)), position=position_jitter(0.2)) +
+  BarPlotTheme +
+  labs(title = "Percent Change in Growing Season Soil Moisture (May - Sept)", y = "Percent Change") +
+  scale_color_manual(name="",values = c("black","white"),guide=FALSE) +
+  scale_fill_manual(name="",values = colors4)
+
+dat<-ggplot_build(p)$data[[1]];dat1<-dat[1,]
+p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
+                                y=middle, yend=middle), colour="grey", size=1)
+
+ggsave("Growing Season Soil Moisture.png", path = "C:/Users/adillon/Documents/RSS/DINO", width = PlotWidth, height = PlotHeight)
+
+# Cold Season
+
+CSSM <- GCMsubset(CS.SM)
+
+CSSM.hist <- subset(CS.SM, Year < 2000)
+
+CSSM <- CSSM %>%
+  mutate(hist_avg = mean(CSSM.hist$avg_soil)) %>%
+  mutate(pct.change = (avg_soil - hist_avg)/hist_avg*100) %>%
+  dplyr::filter(Year >= 2025 & Year <= 2055)
+
+CSSM <- rename(CSSM)
+
+CSSM$me.col<-"b" # color of mean bar - because cannot see black on dark blue in CF 1
+CSSM$me.col[which(GSSM$GCM=="Climate Future 1")]<-"w"
+
+p <- ggplot(CSSM, aes(x=GCM, y=pct.change, colour=GCM)) + 
+  geom_boxplot(colour="black",aes(fill = factor(GCM)), outlier.shape=NA)+ 
+  geom_jitter(shape = 21, size = 5, aes(fill = factor(GCM),colour=factor(me.col)), position=position_jitter(0.2)) +
+  BarPlotTheme +
+  labs(title = "Percent Change in Cold Season Soil Moisture (Oct - April)", y = "Percent Change") +
+  scale_color_manual(name="",values = c("black","white"),guide=FALSE) +
+  scale_fill_manual(name="",values = colors5)
+dat<-ggplot_build(p)$data[[1]];dat1<-dat[1,]
+p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
+                                y=middle, yend=middle), colour="grey", size=1)
+
+ggsave("Cold Season Soil Moisture.png", path = "C:/Users/adillon/Documents/RSS/DINO", width = PlotWidth, height = PlotHeight)
+
+CSSM$Season <- "Cold Season"
+GSSM$Season <- "Growing Season"
+
+SM <- rbind(CSSM, GSSM)
+
+SM.me <- SM %>%
+  group_by(Season, GCM) %>%
+  summarise(meanPctChange = mean(pct.change)) %>%
+  dplyr::select(Season, GCM, meanPctChange) %>%
+  arrange(Season, GCM)
+
+write.xlsx(SM.me, file = "plot_data_soil_moisture.xlsx", col.names = TRUE)
+
+```
+
+
+
+```
+
+
+
+
+
