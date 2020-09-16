@@ -28,7 +28,7 @@ setwd("C:/Users/msears/Documents/RSS/Mammoth_Cave/MACA/Figs MACA/Warm Wet_Hot Dr
 load("MACA_37.19758_-86.130895_Final_Environment.RData")
 
 
-################ INITIALS ##########################33
+################ INITIALS ##########################
 
 # Need to check all the subsets
 ### NEED TO CHANGE LINE 72 for ordering scenarios on plots
