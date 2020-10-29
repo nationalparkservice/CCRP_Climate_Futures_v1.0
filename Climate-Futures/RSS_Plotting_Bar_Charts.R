@@ -24,15 +24,15 @@ library(reshape2)
 library(openxlsx)
 
 rm(list=ls())
-setwd("C:/Users/msears/Documents/RSS/Mammoth_Cave/MACA/Figs MACA/Warm Wet_Hot Dry/")
-load("MACA_37.19758_-86.130895_Final_Environment.RData")
+setwd("C:/Users/adillon/Documents/RSS/CONG/MACA/Figs MACA")
+load("CONG_33.791868_-80.748665_Final_Environment.RData")
 
 
 ################ INITIALS ##########################
 
 # Need to check all the subsets
 ### NEED TO CHANGE LINE 72 for ordering scenarios on plots
-FutureSubset <- c("Warm Wet","Hot Dry")          # Select two scenarios from the CFs vector specified in CMIP5_Parsing script. Names must match.
+FutureSubset <- c("Hot Wet","Warm Damp")          # Select two scenarios from the CFs vector specified in CMIP5_Parsing script. Names must match.
 Scenario1<-FutureSubset[1]
 Scenario2<-FutureSubset[2]
 
@@ -92,7 +92,7 @@ Season_delta$season<-factor(Season_delta$season,levels=c("Winter","Spring","Summ
 H<-H_annual[,-c(1:2)]
 Hist_annual<-aggregate(.~Year,data=H,mean);rm(H)
 Hist_annual$CF<-"Historical"
-Hist_annual<-Hist_annual[,c("Year","CF",names(Hist_annual[,2:23]))]
+Hist_annual<-Hist_annual[,c("Year","CF",names(Hist_annual[,2:22]))] 
 F_annual<-subset(F_annual, CF %in% FutureSubset,select= -c(GCM))
 Fut_annual<-aggregate(.~Year+CF,F_annual,mean)
 Annual<-rbind(Hist_annual,Fut_annual)
