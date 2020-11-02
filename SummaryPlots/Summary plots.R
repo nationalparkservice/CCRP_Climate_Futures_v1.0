@@ -3,13 +3,14 @@ library(ggplot2)
 library(zoo)
 library(gridExtra)
 library(grid)
+library(lubridate)
 
-setwd("C:/Users/msears/Documents/RSS/Mammoth_Cave")
+setwd("C:/Users/adillon/Documents/RSS/CONG")
 
-load("PRISM/MACA_37.19758_-86.130895_PRISM_PptTminTmax_IntermediateFiles.RData")
-load("MACA/Figs MACA/MACA_37.19758_-86.130895_Final_Environment.RData")
+load("PRISM/CONG_33.791868_-80.748665_PRISM_PptTminTmax_IntermediateFiles.RData")
+load("MACA/Figs MACA/CONG_33.791868_-80.748665_Final_Environment.RData")
 Future_all<-merge(ALL_FUTURE,CF_GCM,by="GCM")
-grid<-read.csv("GridMet.csv",header=T)
+grid<-read.csv("GridMET/GridMet.csv",header=T)
 
 BC.min = 1979 #Bias correction range
 BC.max = 2018 # GridMET now goes through 2018
@@ -22,8 +23,8 @@ col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
 ############################################ Format Gridmet data ####################################################
 head(grid)
 grid$tmean<-(grid$tmax+grid$tmin)/2
-grid$Date = as.Date(grid$Date, "%m/%d/%Y")
-grid$year = strftime(grid$Date, "%Y")
+grid$Date = ymd(grid$Date) # changed AKD 11/1/2020
+grid$year = year(grid$Date)
 grid.yrAvgs = aggregate(tmean ~ year, data=grid, FUN=mean)
 
 ppt.yrAvgs = aggregate(precip~year, data=grid, FUN=sum)
