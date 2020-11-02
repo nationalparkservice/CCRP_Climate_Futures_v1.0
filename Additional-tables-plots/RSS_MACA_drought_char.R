@@ -15,15 +15,15 @@ library(SPEI) # Make sure to install this pkg!
 
 ################################ USER INPUTS #################################################
 rm(list=ls())
-setwd("C:/Users/msears/Documents/RSS/Mammoth_Cave")
+setwd("C:/Users/adillon/Documents/RSS/CONG")
 
 # Load input data
-load("C:/Users/msears/Documents/RSS/Mammoth_Cave/MACA/Figs MACA/MACA_37.19758_-86.130895_Final_Environment.RData")
+load("MACA/Figs MACA/CONG_33.791868_-80.748665_Final_Environment.RData")
 rm(list=setdiff(ls(), c("ALL_HIST","ALL_FUTURE","CF_GCM","Lat","SiteID")))
 
 GCMs = c("CNRM-CM5.rcp45","HadGEM2-ES365.rcp85") # per teams chat 6/23/20 with AR
 CFs<- c("Warm Wet", "Hot Dry")
-Gridmet<-read.csv("GridMet.csv",header=T)
+Gridmet<-read.csv("GridMET/GridMet.csv",header=T)
 
 ## SPEI variables
 SPEI_per<-6 # This is the value for the period SPEI is aggregated. 6-months is standard but could change if want. 
@@ -37,13 +37,13 @@ colors2<- c("#9A9EE5","#E10720")  # WarmWet/HotDry
 colors3<-c("white",colors2)
 
 # Set wd for saving plots
-OutDir<-("C:/Users/msears/Documents/RSS/Mammoth_Cave/Drought")
+OutDir<-("C:/Users/adillon/Documents/RSS/CONG/Drought")
 setwd(OutDir)
 ################################ END USER INPUTS #############################################
 
 ############################### FORMAT DATAFRAMES  ############################################
 # Gridmet
-Gridmet$Date<-as.Date(Gridmet$Date,format="%m/%d/%Y")
+Gridmet$Date<-ymd(Gridmet$Date)
 Gridmet$Month<-format(Gridmet$Date,format="%m")
 Gridmet$Year<-format(Gridmet$Date,format="%Y")
 Gridmet$TmeanC<-(((Gridmet$tmax+Gridmet$tmin)/2)-32)*5/9

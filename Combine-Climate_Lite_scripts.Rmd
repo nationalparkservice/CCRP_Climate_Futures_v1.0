@@ -60,5 +60,12 @@ source(here::here("SummaryPlots/Summary WB plots.R")) # Outputs to RSS/PARK fold
 
 ```{r}
 
+# Have not annotated
+
+source(here::here("Additional-tables-plots/RSS_MACA_drought_char.R"))
+
+source(here::here("Additional-tables-plots/FLI FBI phenology plots.R"))
+
+source(here::here("Additional-tables-plots/RSS Audubon summary.R"))
 ```
 
