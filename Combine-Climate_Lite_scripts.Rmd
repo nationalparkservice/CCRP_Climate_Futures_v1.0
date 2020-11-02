@@ -38,7 +38,21 @@ source(here::here("Climate-Futures/RSS_MACA_Plot_Table_Creation.R")) # Requires 
 source(here::here("Climate-Futures/RSS_MACA_Scatter and diagnostic.R")) # Creates scatter and diagnostic plots. Outputs to Figs MACA folder. 
 
 
-source(here::here("Climate-Futures/RSS_Plotting_Bar_Charts.R"))
+source(here::here("Climate-Futures/RSS_Plotting_Bar_Charts.R")) # Requires "PARK_lat_long_Final_Environment.RData". Outputs plots and Excel Workbook to Figs MACA folder.
 
+```
+
+# Water Balance
+
+```{r}
+source(here::here("WaterBalance/Daily_WB_batch_v2.R")) # Requires "PARK_lat_long_Final_Environment.RData", "PARK_Site_characteristics.csv", and "D_AET_points.csv". Outputs to WB folder. 
+```
+
+# Summary Plots
+
+```{r}
+source(here::here("Summary plots.R"))
+
+source(here::here("Summary WB plots.R"))
 ```
 
