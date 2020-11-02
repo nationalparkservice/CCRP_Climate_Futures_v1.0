@@ -53,6 +53,12 @@ source(here::here("WaterBalance/Daily_WB_batch_v2.R")) # Requires "PARK_lat_long
 ```{r}
 source(here::here("SummaryPlots/Summary plots.R")) # Requires "PARK_lat_long_PRISM_PptTminTmax_IntermediateFiles.RData",  "PARK_lat_long_Final_Environment.RData", and "GridMet.csv". Outputs to RSS/PARK folder (this should be changed)
 
-source(here::here("Summary WB plots.R"))
+source(here::here("SummaryPlots/Summary WB plots.R")) # Outputs to RSS/PARK folder (should be changed).
+```
+
+# Additional Tables and Plots
+
+```{r}
+
 ```
 

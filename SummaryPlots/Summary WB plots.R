@@ -8,15 +8,15 @@ library(plyr)
 library(lubridate)
 library(dplyr)
 
-setwd("C:/Users/msears/Documents/RSS/Mammoth_Cave")
+setwd("C:/Users/adillon/Documents/RSS/CONG")
 
-load("MACA/Figs MACA/MACA_37.19758_-86.130895_Final_Environment.RData")
+load("MACA/Figs MACA/CONG_33.791868_-80.748665_Final_Environment.RData")
 PARK<-SiteID
 ALL_FUTURE<-merge(ALL_FUTURE,CF_GCM,by="GCM")
 rm(list=setdiff(ls(), c("ALL_FUTURE","PARK","CF_GCM")))
 
-load("PRISM/MACA_37.19758_-86.130895_PRISM_PptTminTmax_IntermediateFiles.RData")
-grid<-read.csv("GridMet.csv",header=T)
+load("PRISM/CONG_33.791868_-80.748665_PRISM_PptTminTmax_IntermediateFiles.RData")
+grid<-read.csv("GridMET/GridMet.csv",header=T)
 
 BC.min = 1979 #Bias correction range
 BC.max = 2018 
@@ -26,7 +26,7 @@ col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
 #col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
 
 #Site characteristics 
-Sites = read.csv("C:/Users/msears/Documents/RSS/Mammoth_Cave/WB/MACA_site_characteristics.csv")
+Sites = read.csv("WB/CONG_site_characteristics.csv")
 Sites <- Sites[1:10,]  # If there are NA's in df, make sure they are deleted
 
 #CSV file containing properties for all sites
@@ -53,9 +53,9 @@ GCMs = unique(ALL_FUTURE$GCM[which(ALL_FUTURE$CF %in% CF.sub)])
 ############################################ Format Gridmet data ####################################################
 head(grid)
 grid$tmean<-(grid$tmax+grid$tmin)/2
-grid$Date = as.Date(grid$Date, "%m/%d/%Y")
-grid$month = strftime(grid$Date, "%m")
-grid$year = strftime(grid$Date, "%Y")
+grid$Date = ymd(grid$Date) # changed AKD 11/1/2020
+grid$month = month(grid$Date) # changed AKD 11/1/2020
+grid$year = year(grid$Date) # changed AKD 11/1/2020
 grid.yrMAvgs = aggregate(tmean ~ year+month, data=grid, FUN=mean)
 
 ppt.yrMAvgs = aggregate(precip~year+month, data=grid, FUN=sum)
