@@ -32,7 +32,7 @@ load("CONG_33.791868_-80.748665_Final_Environment.RData")
 
 # Need to check all the subsets
 ### NEED TO CHANGE LINE 72 for ordering scenarios on plots
-FutureSubset <- c("Hot Wet","Warm Damp")          # Select two scenarios from the CFs vector specified in CMIP5_Parsing script. Names must match.
+FutureSubset <- c("Warm Wet","Hot Dry")          # Select two scenarios from the CFs vector specified in CMIP5_Parsing script. Names must match.
 Scenario1<-FutureSubset[1]
 Scenario2<-FutureSubset[2]
 
@@ -92,8 +92,8 @@ Season_delta$season<-factor(Season_delta$season,levels=c("Winter","Spring","Summ
 H<-H_annual[,-c(1:2)]
 Hist_annual<-aggregate(.~Year,data=H,mean);rm(H)
 Hist_annual$CF<-"Historical"
-Hist_annual<-Hist_annual[,c("Year","CF",names(Hist_annual[,2:22]))] 
-F_annual<-subset(F_annual, CF %in% FutureSubset,select= -c(GCM))
+Hist_annual<-Hist_annual[,c("Year","CF",names(Hist_annual[,2:23]))] 
+F_annual<-subset(F_annual, CF %in% FutureSubset ,select= -c(GCM)) 
 Fut_annual<-aggregate(.~Year+CF,F_annual,mean)
 Annual<-rbind(Hist_annual,Fut_annual)
 Annual$CF<-factor(Annual$CF,levels=c("Historical",Scenario1, Scenario2), ordered=is.ordered(Annual$CF))
@@ -169,6 +169,23 @@ scatter + geom_point(aes(color=emissions),size=4) +
   geom_point(aes(x=mean(DeltaTavg[which(CF==Scenario2)]), y=mean(365*DeltaPr[which(CF==Scenario2)])), shape=23, size=10, fill='black', colour='black') +
   scale_x_continuous(limits=c(0, max(Future_Means$DeltaTavg)+.25))
 
+
+
+##Line Plot of change in MinTemp by CF/Month
+ggplot(Monthly_delta, aes(x=Month, y=TavgCustom, group=CF, colour = CF)) +
+  geom_line(size = 2, stat = "identity",colour="black") + 
+  geom_line(size = 1.5, stat = "identity") +
+  geom_point(colour= "black", size=4, aes(fill = factor(CF), shape = factor(CF))) +
+  PlotTheme +
+  labs(title = paste(SiteID, "- Change in avg. daily temperature in 2040 (2025-2055) vs 1950-1999"),
+       x = "Month", y = "Change in Temperature (Deg F)") +
+  scale_color_manual(name="",values = colors2) +
+  scale_fill_manual(name="",values = colors2) +
+  scale_shape_manual(name="",values = c(21,22)) +
+  scale_y_continuous(limits=c(0, ceiling(max(Monthly_delta$TavgCustom)))) +
+  scale_x_discrete(labels = MonthLabels)
+
+ggsave(sprintf("%s_%s_%s_Avg_Monthly_Tavg_Delta_Line.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
 ggsave(sprintf("%s_%s_%s_GCM_Scatter_CF_Averages_Plot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
 
 
@@ -227,23 +244,6 @@ ggplot(Monthly_delta, aes(x=Month, y=TminCustom, group=CF, colour = CF)) +
   scale_x_discrete(labels = MonthLabels)
 
 ggsave(sprintf("%s_%s_%s_Avg_Monthly_Tmin_Delta_Line.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
-
-
-##Line Plot of change in MinTemp by CF/Month
-ggplot(Monthly_delta, aes(x=Month, y=TavgCustom, group=CF, colour = CF)) +
-  geom_line(size = 2, stat = "identity",colour="black") + 
-  geom_line(size = 1.5, stat = "identity") +
-  geom_point(colour= "black", size=4, aes(fill = factor(CF), shape = factor(CF))) +
-  PlotTheme +
-  labs(title = paste(SiteID, "- Change in avg. daily temperature in 2040 (2025-2055) vs 1950-1999"),
-       x = "Month", y = "Change in Temperature (Deg F)") +
-  scale_color_manual(name="",values = colors2) +
-  scale_fill_manual(name="",values = colors2) +
-  scale_shape_manual(name="",values = c(21,22)) +
-  scale_y_continuous(limits=c(0, ceiling(max(Monthly_delta$TavgCustom)))) +
-  scale_x_discrete(labels = MonthLabels)
-
-ggsave(sprintf("%s_%s_%s_Avg_Monthly_Tavg_Delta_Line.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
 
 #Bar graph of change in average monthly RHmean by CF
 ggplot(Monthly_delta, aes(x=Month,y=RHmean,fill=CF)) +
@@ -615,20 +615,21 @@ ggsave(sprintf("%s_%s_%s_Freeze-thaw-Boxplot.png", SiteID, Lat, Lon), width = Pl
 # 
 
 ####################
-#Total number of days/year with spring frost (GDD==T, Tmin<32)
+
+# Total number of days/year with spring frost (GDD==T, Tmin<32)
 var<-"Sp.Frost"
 At<-aggregate(eval(parse(text=var))~CF,Annual,mean);
 names(At)<-c("CF",var)
 ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
   geom_bar(stat="identity",position="dodge",colour="black") +
   BarPlotTheme +
-  # coord_cartesian(ylim=c(0, 40)) +
+   coord_cartesian(ylim=c(0, 40)) +
   labs(title = paste(SiteID, " - Average annual spring frost days in ", Year, sep=""), 
        y = "Days/Yr", colour = "Climate Future")  +
   scale_fill_manual(name="",values = colors3) +
   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
 
-ggsave(sprintf("%s_%s_%s_Spring_frost.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+#ggsave(sprintf("%s_%s_%s_Spring_frost.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
 
 # Boxplot
 p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) + 
@@ -738,7 +739,7 @@ ggsave(sprintf("%s_%s_%s_Heat-index-danger-Boxplot.png", SiteID, Lat, Lon), widt
 
 
 ############################################### PRINT TABLES #################################################################
-A<-aggregate(.~CF,Annual[,2:24],mean)
+A<-aggregate(.~CF,Annual[,2:24],mean) # Columns changed from 24 to 23 AKD 11/1/2020 - elimination of Sp.Frost variable
 write.xlsx(list("Means"=A,"Annual"=Annual,"Season"=Season,"D_Season"=Season_delta,"Monthly"=Monthly,"Monthly_delta"=Monthly_delta), 
            file=("Plot_data.xlsx"),col.names=TRUE)
 
