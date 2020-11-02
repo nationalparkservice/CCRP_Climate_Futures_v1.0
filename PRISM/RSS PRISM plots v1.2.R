@@ -18,17 +18,18 @@ library(ggplot2)
 library(grid)
 library(cowplot)
 library(reshape2)
+library(raster)
 
 rm(list=ls())
-setwd('C:/Users/msears/Documents/RSS/Mammoth_Cave/PRISM') 
+setwd('C:/Users/adillon/Documents/RSS/CONG/PRISM') 
     #  Load data file ONLY if not following previous script
-RDataFile <- "MACA_37.19758_-86.130895_PRISM_PptTminTmax_IntermediateFiles.RData"
+RDataFile <- "CONG_33.791868_-80.748665_PRISM_PptTminTmax_IntermediateFiles.RData"
 #################################################
 # DataDir = location of .RData file
 # OFDir   = location where output (plots) files will be written. End with /
 
-WinDataDir <- "C:/Users/msears/Documents/RSS/Mammoth_Cave/PRISM"
-WinOFDir <- "C:/Users/msears/Documents/RSS/Mammoth_Cave/PRISM"
+WinDataDir <- 'C:/Users/adillon/Documents/RSS/CONG/PRISM'
+WinOFDir <- 'C:/Users/adillon/Documents/RSS/CONG/PRISM'
 
 # MacDataDir <- "/Volumes/Seagate1_Blue2TB/CHOH RSS/Figs PRISM/"
 # MacOFDir <-  "/Volumes/Seagate1_Blue2TB/CHOH RSS/Figs PRISM/"
