@@ -20,8 +20,8 @@ rm(list=ls())
 SiteID = "MACA"
 
 #Directory and RData file where daily data series is stored
-DataDir = "C:/Users/msears/Documents/RSS/Mammoth_Cave/MACA"
-DataFile = "MACA_init_parsed.RData"
+DataDir = "C:/Users/adillon/Documents/RSS/CONG/MACA"
+DataFile = "CONG_init_parsed.RData"
 
 #Year range for summarizing future climate (Year - Range/2) to (Year + Range/2)
 Year = 2040 #Central year

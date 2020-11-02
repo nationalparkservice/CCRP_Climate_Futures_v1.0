@@ -32,9 +32,11 @@ source(here::here("PRISM/RSS PRISM plots v1.2.R")) # Creates PRISM plots. Output
 
 #source(here::here("Gridmet-Parse.R")) # Parse GridMET data. Output = "GridMet.csv". Outputs to Gridmet folder.
 
+source(here::here("Climate-Futures/RSS_MACA_Plot_Table_Creation.R")) # Requires "PARK_init_parsed.RData"; Output = "PARK_lat_long_Final_Environment.RData". Outputs to Figs MACA folder
+
+
 source(here::here("Climate-Futures/RSS_MACA_Scatter and diagnostic.R")) # Creates scatter and diagnostic plots. Outputs to Figs MACA folder. 
 
-source(here::here("Climate-Futures/RSS_MACA_Plot_Table_Creation_T1-2.R")) # Output = "PARK_lat_long_Final_Environment.RData". Outputs to Figs MACA folder
 
 source(here::here("Climate-Futures/RSS_Plotting_Bar_Charts.R"))
 
