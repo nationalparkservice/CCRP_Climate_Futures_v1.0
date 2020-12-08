@@ -12,27 +12,7 @@
 #  v1.0. 30 Oct 2015 - No known errors. Runs top to bottom.
   #   conversion to in and deg F; to read rdata file as input, modified some plots, directories
 
-library(plotrix)
-library(zoo)		# for rollmean
-library(ggplot2)
-library(grid)
-library(cowplot)
-library(reshape2)
-library(raster)
-
-rm(list=ls())
-setwd('C:/Users/adillon/Documents/RSS/CONG/PRISM') 
-    #  Load data file ONLY if not following previous script
-RDataFile <- "CONG_33.791868_-80.748665_PRISM_PptTminTmax_IntermediateFiles.RData"
 #################################################
-# DataDir = location of .RData file
-# OFDir   = location where output (plots) files will be written. End with /
-
-WinDataDir <- 'C:/Users/adillon/Documents/RSS/CONG/PRISM'
-WinOFDir <- 'C:/Users/adillon/Documents/RSS/CONG/PRISM'
-
-# MacDataDir <- "/Volumes/Seagate1_Blue2TB/CHOH RSS/Figs PRISM/"
-# MacOFDir <-  "/Volumes/Seagate1_Blue2TB/CHOH RSS/Figs PRISM/"
 
 doP1 <- "YES"  # Should a separate regression be calculated for the reference period (default 1900-1970)? 
 doP2 <- "YES"  # Should a separate regression be calculate for the period after the reference period (default 1971-present)? 
@@ -66,19 +46,6 @@ TitleSize = theme_get()$plot.title$size  ##Needed for cowplot layouts
 
 #################   End of Initials  ##########################  
 
-if(.Platform$OS.type=="windows"){   
-  DataDirInit <- WinDataDir
-  OFDirI <- WinOFDir}
-
-if(.Platform$OS.type=="unix"){     # does not distinguish MacOS from others
-  DataDirInit <- MacDataDir
-  OFDirI <- MacOFDir}
-
-load(paste(DataDirInit,"/", RDataFile, sep=''))
-DataDir <- DataDirInit  # cludge because loaded file has defined DataDir
-OFDir <- OFDirI
-rm(DataDirInit, OFDirI)
-
 DoYrMon <- function(YrMon){    #  YrMon = char vector of year mon as 189501.  Return vector of decimal year like 1895.42
   year <- as.numeric(substr(YrMon, 1,4))
   mon <- as.numeric(substr(YrMon, 5,6))
@@ -88,11 +55,9 @@ DoYrMon <- function(YrMon){    #  YrMon = char vector of year mon as 189501.  Re
   return(YRMON)
 }
 
-#setwd(DataDir)
 dte = Sys.Date()
     # clean up trashy namespace
-rm(WinDataDir, WinOFDir, MacDataDir, MacOFDir)
-    #baseData is foundational dataset for most plots
+
 yrMons<- data.frame(DoYrMon(PptMeans$YearMon))
 baseData <- cbind(yrMons, seas=PptMeans$Season, tmin=TminMeans$TminF, tmax=TmaxMeans$TmaxF, 
                   tmean=(TminMeans$TminF+TmaxMeans$TmaxF)/2, ppt=PptMeans$PptIn)
@@ -279,7 +244,7 @@ p3 = add_sub(p2, paste("Gray shaded area around regression lines = standard erro
              y=0.5, hjust=0.5, vjust=0.5, size=12)
 ggdraw(p3)
 
-OFName = paste(OFDir, "/PRISM ", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
+OFName = paste("./PRISM ", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
 ggsave(OFName, width=6.5, height=8.5, dpi=dpi)
 
 ##########################
