@@ -6,7 +6,6 @@
 #  v1.4 - Revised monthly average Tmax/Tmin/Ppt plots. Uses separate axes to improve visibility of ppt bar plot, 
 #         added std. dev. bars to ppt bar plot, and changed x-axis labels to month abbreviations. 
 #  v1.3 - Includes PRISM data up to 2016, edited code to easily change data end year (May 2017)
-#  v1.2 - png outputs; standardized out file names; revised regr table (16 Nov 2015)
 #  v1.1 - minor fixes to red-blue plot, 10-yr running mean
   #  need to deal with outfile directories - use info from RData file and get rid of code here
 #  v1.0. 30 Oct 2015 - No known errors. Runs top to bottom.
@@ -143,9 +142,11 @@ for(i in 1:12){
 }
 
 PlotName <- "Avg Monthly Tmin Tmax Ppt"
-OFName <- paste(OFDir, "/PRISM ", PlotName, " ", SiteID, " ", Lat, " ", Lon, sep = "")		 
+OFName <- paste(PlotName, " ", SiteID, " ", Lat, " ", Lon, sep = "")	
+plot1 <- paste('./figures/', OFName)
 
-png(paste(OFName, ".png", sep=""), width=6.5*dpi, height=4.5*dpi, res=dpi)
+png(paste(plot1, ".png", sep = ""), width=6.5*dpi, height=4.5*dpi, res=dpi)
+
 par(mfrow=c(1,1), mgp=c(0,.5,0), mar=c(4,3.75,2,3.75))
 attach(monAvg)
 Ppt = barplot(pptMon, names.arg=monNames,
@@ -180,7 +181,9 @@ mtext(side=1, line=2.75, paste("Dashed lines/error bars = 25th-75th percentile r
 legend("topleft", legend=c("Tmax", "Tmin"), col=c("red", "blue"), lwd=c(2,2), cex=0.75, bty="n")
 legend(.4, 103, legend=c("Precip"), fill=c("light blue"), border=c(NA), cex=0.75, bty="n")
 detach(monAvg)
-dev.off()							
+dev.off()	
+
+assign(OFName, Ppt, envir = .GlobalEnv)
 
 #-------------------------------------------------#
 ############  Running average plots   #############

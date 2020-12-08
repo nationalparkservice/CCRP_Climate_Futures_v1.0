@@ -1,26 +1,68 @@
 ---
 title: "Combine-climate-lite-scripts"
-author: "Annie Kellner"
-date: "10/28/2020"
+author: 
+- name: Annie Kellner Dillon^[U.S.National Park Service, Climate Change Response Program, Fort Collins, CO]
+-name: add additional authors as needed
+date: "`r format(Sys.time(), '%d %B %Y')`"
 output: html_document
+-- unsure whether the following info is needed -- 
+output:   
+  html_document:
+    df_print: paged
+    fig_caption: yes
+    number_sections: yes
+    toc: no
+  pdf_document:
+    fig_caption: yes
+    toc: no
+  word_document:
+    toc: no
+    fig_caption: true
+    reference_docx: 
+  bookdown::word_document2:
+    fig_caption: yes
+    toc: no
+editor_options: 
+chunk_output_type: inline
+keywords: keyword 1; keyword 2; keyword 3
+link-citations: yes
+bibliography: KLGOCWS_References.bib
+abstract: This script combines all scripts previously run under CCRP's Climate Lite protocol for Resource Stewardship Strategies (RSS). Source scripts written by John Gross and Amber Runyon. 
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, include = FALSE)
+knitr::opts_chunk$set(
+  echo = FALSE, 
+  collapse = TRUE,
+  warning = TRUE, # set to FALSE when done
+  message = TRUE, # set to FALSE when done
+  fig.path = "./figures/" # AK NPS stores figures within parent directory of repo
+)
 
 library(here) # Use here::here when package lubridate is used
-
-# NOTE: all directories within scripts must be changed as usual
+library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot); library(reshape2); library(raster)
 ```
 
 
 ## Historical Trends (PRISM)
 
-```{r PRISM, message=FALSE, warning=FALSE, echo=FALSE}
+```{r PRISM-parse, eval=FALSE, message=FALSE, warning=FALSE, echo=FALSE}
 
-#source(here::here("./PRISM/RSS PRISM AN81 4km summarize v01.1.R")) # Parses PRISM data. Output = "PARK_lat_long_PRISM_PptTminTmax_IntermediateFiles.RData"
+#source(here::here("./PRISM/RSS PRISM AN81 4km summarize v01.1.R")) # Parses PRISM data. Output = "PARK_lat_long_PRISM_PptTminTmax_IntermediateFiles.RData" # NOTE: Because this script is excluded, headers have not been changed
 
-source(here::here("PRISM/RSS PRISM plots v1.2.R")) # Creates PRISM plots. Output stored in folder "PRISM"
+```
+
+```{r PRISM-plots, results=hide}
+
+file <- list.files(path = './data', pattern = '.RData', full.names = TRUE) # will load all .RData files within directory
+load(file)
+
+source(here::here("PRISM", "RSS PRISM plots v1.2.R"),echo = FALSE)
+
+```
+
+
+
 
 ```
 
@@ -67,5 +109,9 @@ source(here::here("Additional-tables-plots/RSS_MACA_drought_char.R"))
 source(here::here("Additional-tables-plots/FLI FBI phenology plots.R"))
 
 source(here::here("Additional-tables-plots/RSS Audubon summary.R"))
+```
+
+```{r}
+sessionInfo() # Records package versions used
 ```
 
