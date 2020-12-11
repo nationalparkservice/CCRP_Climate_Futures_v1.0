@@ -5,3 +5,6 @@
 CCRP-RSS-plots.Rproj
 RSS-plots.Rproj
 Drt.all.csv
+*.csv
+figures/
+data/
