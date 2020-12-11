@@ -5,28 +5,6 @@ author:
 -name: add additional authors as needed
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output: html_document
--- unsure whether the following info is needed -- 
-output:   
-  html_document:
-    df_print: paged
-    fig_caption: yes
-    number_sections: yes
-    toc: no
-  pdf_document:
-    fig_caption: yes
-    toc: no
-  word_document:
-    toc: no
-    fig_caption: true
-    reference_docx: 
-  bookdown::word_document2:
-    fig_caption: yes
-    toc: no
-editor_options: 
-chunk_output_type: inline
-keywords: keyword 1; keyword 2; keyword 3
-link-citations: yes
-bibliography: KLGOCWS_References.bib
 abstract: This script combines all scripts previously run under CCRP's Climate Lite protocol for Resource Stewardship Strategies (RSS). Source scripts written by John Gross and Amber Runyon. 
 ---
 
@@ -36,13 +14,25 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   warning = TRUE, # set to FALSE when done
   message = TRUE, # set to FALSE when done
-  fig.path = "./figures/" # AK NPS stores figures within parent directory of repo
+  fig.path = "figures/" # Alaska: NPS stores figures within parent directory of repo
 )
 
 library(here) # Use here::here when package lubridate is used
 library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot); library(reshape2); library(raster)
 ```
 
+## TESTS 
+
+```{r fig.path='./figures/PRISM', eval = FALSE}
+
+file <- list.files(path = './data', pattern = '.RData', full.names = TRUE) # will load all .RData files within directory
+load(file)
+
+source(here::here("test.R"), local = knitr::knit_global())
+
+knitr::knit_exit()
+
+```
 
 ## Historical Trends (PRISM)
 
@@ -52,7 +42,8 @@ library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot
 
 ```
 
-```{r PRISM-plots, results=hide}
+```{r PRISM-plots, results=hide, fig.path='./PRISM', eval=FALSE} 
+# can add fig.path = './figures/PRISM when rewriting
 
 file <- list.files(path = './data', pattern = '.RData', full.names = TRUE) # will load all .RData files within directory
 load(file)
@@ -60,8 +51,6 @@ load(file)
 source(here::here("PRISM", "RSS PRISM plots v1.2.R"),echo = FALSE)
 
 ```
-
-
 
 
 ```
