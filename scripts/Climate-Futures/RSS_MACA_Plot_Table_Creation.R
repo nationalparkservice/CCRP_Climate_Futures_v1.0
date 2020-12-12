@@ -7,21 +7,21 @@
 
 # ACR - 01/02/2020 - Merged with A.Runyon code. Moved CF creation into this script. 
 
-library(ncdf4)
-library(reshape2)
-library(WriteXLS)
-library(data.table)
-library(zoo)
-
-rm(list=ls())
 
 ################################################## INITIALS ##################################################
 
-SiteID = "MACA"
+DataFile <- list.files(path = './data/RData', pattern = 'init_parsed.RData', full.names = TRUE) # Environment needs to be added if not parsing MACA data
+load(DataFile)
+
 
 #Directory and RData file where daily data series is stored
-DataDir = "C:/Users/adillon/Documents/RSS/CONG/MACA"
-DataFile = "CONG_init_parsed.RData"
+
+#Create output directory
+
+WD_data = './data/RData'
+if(dir.exists(WD_data) == FALSE){
+  dir.create(WD_data)
+}
 
 #Year range for summarizing future climate (Year - Range/2) to (Year + Range/2)
 Year = 2040 #Central year
@@ -45,15 +45,9 @@ months=factor(c("January","February","March","April","May","June","July","August
 seasons=factor(c("Winter", "Spring", "Summer", "Fall"))
 levels(seasons)=seasons
 
-#Create output directory
-WD_plots = paste(DataDir, "Figs MACA", sep="/")
-if(dir.exists(WD_plots) == FALSE){
-  dir.create(WD_plots)
-}
 
 ################################################### SUBSET TIME PERIOD ########################################
-setwd(DataDir)
-load(DataFile)
+
 
 Baseline_all$Date = strptime(Baseline_all$Date, "%Y-%m-%d")
 Future_all$Date = strptime(Future_all$Date, "%Y-%m-%d")
@@ -465,10 +459,7 @@ F_annual<-merge(F_annual,Sp.Frost,by=c("CF","GCM","Year"));rm(Sp.Frost)
 
 ######################################## END THRESHOLD CALCULATIONS ##############################
 
-#### SetWD and save
-setwd(WD_plots)
-
 ##### Save Current workspace environment
-save.image(sprintf("%s_%s_%s_Final_Environment.RData",SiteID, Lat, Lon))
+save.image(sprintf("./data/RData/%s_%s_%s_Final_Environment.RData",SiteID, Lat, Lon))
 
 #  EOF

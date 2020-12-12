@@ -7,20 +7,18 @@
 # v01 18 Oct 2015 - stable, writes to /figs.  Vertical plot scale issues not all sorted out.
 #                 - in 4-panel drought plot, all ref lines show on all plots (needs fixing)
 
-library(ggplot2)
-library(RColorBrewer)
-library(ggrepel)
-library(ncdf4)
-library(reshape2)
-library(WriteXLS)
-
-
-rm(list=ls())
-
-setwd("C:/Users/adillon/Documents/RSS/CONG/MACA/Figs MACA/")
-load("CONG_33.791868_-80.748665_Final_Environment.RData")
-
 ######### INITIALS #########
+
+#Create output directory for MACA figs
+
+DataFile <- list.files(path = './data/RData', pattern = 'Final_Environment.RData', full.names = TRUE) # Environment needs to be added if not parsing MACA data
+load(DataFile)
+
+
+WD_plots = './figures/MACA'
+if(dir.exists(WD_plots) == FALSE){
+  dir.create(WD_plots)
+}
 
 ##Color schemes
 
@@ -63,7 +61,8 @@ Future_Means$DeltaPr<-Future_Means$DeltaPr
 
 # No color
 dualscatter = ggplot(Future_Means, aes(DeltaTavg, DeltaPr*365, xmin=Tavg25, xmax=Tavg75, ymin=Pr25*365, ymax=Pr75*365))
-dualscatter  + geom_text_repel(aes(label=GCM)) +
+
+plot1 <- dualscatter  + geom_text_repel(aes(label=GCM)) +
   geom_point(colour="black",size=4) +
   theme(axis.text=element_text(size=18),
         axis.title.x=element_text(size=18,vjust=-0.2),
@@ -81,7 +80,7 @@ dualscatter  + geom_text_repel(aes(label=GCM)) +
   geom_hline(aes(yintercept=mean(DeltaPr*365)),linetype=2) + #change
   geom_vline(aes(xintercept=mean(DeltaTavg)),linetype=2) #change
 
-ggsave(paste(SiteID,"-Scatter-",x,"--",y,".png",sep=""), width = 15, height = 9)
+ggsave(paste(SiteID,"-Scatter-",x,"--",y,".png",sep=""), width = 15, height = 9, path = './figures/MACA', )
 
 ####### Scatterplot with CF color
 FM<-Future_Means
@@ -112,7 +111,7 @@ ggplot(FM, aes(DeltaTavg, DeltaPr*365, xmin=Tavg25, xmax=Tavg75, ymin=Pr25*365, 
   geom_hline(aes(yintercept=mean(FM$DeltaPr*365)),linetype=2) + #change
   geom_vline(aes(xintercept=mean(FM$DeltaTavg)),linetype=2)  #change
 
-ggsave(paste(SiteID, "Scatter BY SCENARIO-",x,"--",y,".png",sep=""), width = 15, height = 9)
+ggsave(paste(SiteID, "Scatter BY SCENARIO-",x,"--",y,".png",sep=""), width = 15, height = 9, path = './figures/MACA')
 
 #~~~~~~~~~~~~~~
 # Presetation only scatterplots
@@ -131,7 +130,7 @@ dualscatter  + geom_point(colour="black",size=4) +
             y = paste("Changes in ",Longy,sep="")) + #change
   theme(legend.position="none") +
   xlim(0, max(Future_Means$DeltaTavg))
-ggsave(paste(SiteID,"-Scatter-POINTS ONLY",x,"--",y,".png",sep=""), width = 15, height = 9)  
+ggsave(paste(SiteID,"-Scatter-POINTS ONLY",x,"--",y,".png",sep=""), width = 15, height = 9, path = './figures/MACA')  
 
 # Points only w/ box
 dualscatter = ggplot(Future_Means, aes(DeltaTavg, DeltaPr*365, xmin=Tavg25, xmax=Tavg75, ymin=Pr25*365, ymax=Pr75*365))
@@ -151,7 +150,7 @@ dualscatter  + geom_point(colour="black",size=4) +
   geom_rect(color = "black", alpha=0) + 
   geom_hline(aes(yintercept=mean(DeltaPr*365)),linetype=2) + #change
   geom_vline(aes(xintercept=mean(DeltaTavg)),linetype=2)  #change
-ggsave(paste(SiteID,"-Scatter-POINTS&BOX",x,"--",y,".png",sep=""), width = 15, height = 9)
+ggsave(paste(SiteID,"-Scatter-POINTS&BOX",x,"--",y,".png",sep=""), width = 15, height = 9, path = './figures/MACA')
 
 
 
@@ -172,7 +171,7 @@ scatter + geom_point(aes(color=emissions),size=4) +
   geom_vline(aes(xintercept=mean(Future_Means$DeltaTavg)),linetype=2)  
 #scale_y_continuous(limits=c(-3.75,3.75))
 
-ggsave(sprintf("%s_%s_%s_GCM_Scatter_Plot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_GCM_Scatter_Plot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight, path = './figures/MACA')
 
 ###Scatter plot showing delta precip and tavg, color by emissions scenario, x-axis scaled 0-max
 scatter = ggplot(Future_Means, aes(DeltaTavg, 365*DeltaPr, xmin=Tavg25, xmax=Tavg75, ymin=365*Pr25, ymax=365*Pr75))
@@ -186,11 +185,14 @@ scatter + geom_point(aes(color=emissions),size=4) +
   geom_point(aes(x=mean(DeltaTavg), y=mean(365*DeltaPr)), shape=23, size=10, fill='black', colour='black') +
   scale_x_continuous(limits=c(0, max(Future_Means$DeltaTavg)+.25))
 
-ggsave(sprintf("%s_%s_%s_GCM_Scatter_noBox_Plot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_GCM_Scatter_noBox_Plot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight, path = './figures/MACA')
 
 #  scatter plots with GCM name identifying points. For all, and separate 4.5 and 8.5 plots
 
-png(filename = sprintf("%s_%s_%s_GCM_Scatter_8.5-4.5 w GCM labels.png", SiteID, Lat, Lon), width = 1280, height = 1280)
+plot_name <- sprintf("%s_%s_%s_GCM_Scatter_8.5-4.5 w GCM labels.png", SiteID, Lat, Lon)
+OFName <- paste('./figures/MACA/', plot_name)
+
+png(filename = OFName, width = 1280, height = 1280)
 plot(Future_Means$DeltaTavg, 365*Future_Means$DeltaPr, pch=20, main=paste("RCP 4.5 & 8.5", Year), 
             xlab="Delta T Avg", ylab="Delta Prcip (in/yr)", cex.axis=1.5, cex.lab=1.5)
 text(365*DeltaPr ~ DeltaTavg,data=Future_Means,subset = emissions == "RCP 4.5", col="blue",
@@ -199,13 +201,20 @@ text(365*DeltaPr ~ DeltaTavg,data=Future_Means, subset = emissions == "RCP 8.5",
      labels=Future_Means$GCM, pos=3, cex=1.5)
 dev.off()
 
-png(filename = sprintf("%s_%s_%s_GCM_Scatter_4.5 w GCM labels.png", SiteID, Lat, Lon), width = 1280, height = 1280)
+
+plot_name <- sprintf("%s_%s_%s_GCM_Scatter_4.5 w GCM labels.png", SiteID, Lat, Lon)
+OFName <- paste('./figures/MACA/', plot_name)
+
+png(OFName, width = 1280, height = 1280)
 plot(365*DeltaPr ~ DeltaTavg, data=Future_Means, subset = emissions == "RCP 4.5", pch=20, main= paste("RCP 4.5", Year), 
      xlab="Delta T Avg", ylab="Delta Prcip (in/yr)", cex.axis=1.5, cex.lab=1.5)
 text(365*DeltaPr ~ DeltaTavg, data=Future_Means, subset = emissions == "RCP 4.5", label=GCM, pos=3, cex=1.5, col="blue")
 dev.off()
 
-png(filename = sprintf("%s_%s_%s_GCM_Scatter_8.5 w GCM labels.png", SiteID, Lat, Lon), width = 1280, height = 1280)
+plot_name <- sprintf("%s_%s_%s_GCM_Scatter_8.5 w GCM labels.png", SiteID, Lat, Lon)
+OFName <- paste('./figures/MACA/', plot_name)
+
+png(OFName, width = 1280, height = 1280)
 plot(365*DeltaPr ~ DeltaTavg, data=Future_Means, subset = emissions == "RCP 8.5",
      pch=20, main=paste("RCP 8.5", Year), xlab="Delta T Avg", ylab="Delta Prcip (in/yr)", cex.axis=1.5, cex.lab=1.5)
 text(365*DeltaPr ~ DeltaTavg, data=Future_Means, subset = emissions == "RCP 8.5", label=GCM, pos=3, cex=1.5, col="red")
@@ -223,7 +232,7 @@ ggplot(Monthly_delta, aes(x=Month,y=PrecipCustom,fill=CF)) +
   scale_fill_manual(name="Climate Future",values = colors5) + 
   scale_x_discrete(labels = MonthLabels)
 
-ggsave(sprintf("%s_%s_%s_Avg_Monthly_Precip_Delta_Bar.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Avg_Monthly_Precip_Delta_Bar.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight, path = './figures/MACA')
 
 #Bar graph of seasonal precip by CF
 ggplot(Season_delta, aes(x=season,y=PrecipCustom,fill=CF)) +
@@ -233,7 +242,7 @@ ggplot(Season_delta, aes(x=season,y=PrecipCustom,fill=CF)) +
             x = "Season", y = "Change in Precipitation (in)") +
   scale_fill_manual(name="Climate Future",values = colors5)
 
-ggsave(sprintf("%s_%s_%s_Avg_Seasonal_Precip_Delta_Bar.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Avg_Seasonal_Precip_Delta_Bar.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight, path = './figures/MACA')
 
 
 #Line plot of change in MaxTemp by CF/month
@@ -249,7 +258,7 @@ ggplot(Monthly_delta, aes(x=Month, y=TmaxCustom, group=CF, colour = CF)) +
   scale_y_continuous(limits=c(0, ceiling(max(Monthly_delta$TmaxCustom)))) + 
   scale_x_discrete(labels = MonthLabels)
 
-ggsave(sprintf("%s_%s_%s_Avg_Monthly_Tmax_Delta_Line.png", SiteID, Lat, Lon), width = PlotWidth, height =PlotHeight)
+ggsave(sprintf("%s_%s_%s_Avg_Monthly_Tmax_Delta_Line.png", SiteID, Lat, Lon), width = PlotWidth, height =PlotHeight, path = './figures/MACA')
 
 
 ####Line Plot of change in MinTemp by CF/Month
@@ -265,7 +274,7 @@ ggplot(Monthly_delta, aes(x=Month, y=TminCustom, group=CF, colour = CF)) +
   scale_y_continuous(limits=c(0, ceiling(max(Monthly_delta$TminCustom))))+ 
   scale_x_discrete(labels = MonthLabels)
 
-ggsave(sprintf("%s_%s_%s_Avg_Monthly_Tmin_Delta_Line.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Avg_Monthly_Tmin_Delta_Line.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight, path = './figures/MACA')
 
 
 ###PROGRAM COMPLETE###

@@ -13,10 +13,17 @@
 
 #################################################
 
-# Create directory for figures
+# Create output directories
 
-dir.create('./figures/PRISM') # Create directory for PRISM plots
-dir.create('./data/derived-data')
+WD_plots = './figures/PRISM' # for plots
+if(dir.exists(WD_plots) == FALSE){
+  dir.create(WD_plots)
+}
+
+WD_data = './data/derived-data' # for .csv's
+if(dir.exists(WD_data) == FALSE){
+  dir.create(WD_data)
+}
 
 doP1 <- "YES"  # Should a separate regression be calculated for the reference period (default 1900-1970)? 
 doP2 <- "YES"  # Should a separate regression be calculate for the period after the reference period (default 1971-present)? 
