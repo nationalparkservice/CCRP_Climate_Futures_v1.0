@@ -1,17 +1,10 @@
 ####### Batch water balance code #######
 # Update from Amanda batch code - to bring work from climate data 
-rm(list=ls())
-library("WaterBalance")
-library(ggplot2)
-library(plyr)
-library(lubridate)
-library(dplyr)
 
 ############################################################# USER INPUTS ##################################################################### 
 
 #Formatted input data as a daily time series. Needs to include the following columns: Date, ppt_mm, tmax_C, tmin_C, and tmean_C (temp.'s in deg. Celsius)
-setwd("C:/Users/adillon/Documents/RSS/CONG/MACA/Figs MACA")
-load("CONG_33.791868_-80.748665_Final_Environment.RData") # Load final environment
+
 PARK<-"CONG"
 rm(list=setdiff(ls(), c("ALL_HIST","ALL_FUTURE","PARK","CF_GCM")))
 
