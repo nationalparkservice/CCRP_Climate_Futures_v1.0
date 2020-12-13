@@ -15,17 +15,7 @@
 # Warm Dry, Central, & Hot Wet, color coding will have to be adjusted for each plot
 
 #setwd(WD_plots)
-library(ggplot2)
-library(plyr)
-library(lubridate)
-library(dplyr)
-library(forcats)
-library(reshape2)
-library(openxlsx)
 
-rm(list=ls())
-setwd("C:/Users/adillon/Documents/RSS/CONG/MACA/Figs MACA")
-load("CONG_33.791868_-80.748665_Final_Environment.RData")
 
 
 ################ INITIALS ##########################
@@ -185,8 +175,8 @@ ggplot(Monthly_delta, aes(x=Month, y=TavgCustom, group=CF, colour = CF)) +
   scale_y_continuous(limits=c(0, ceiling(max(Monthly_delta$TavgCustom)))) +
   scale_x_discrete(labels = MonthLabels)
 
-ggsave(sprintf("%s_%s_%s_Avg_Monthly_Tavg_Delta_Line.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
-ggsave(sprintf("%s_%s_%s_GCM_Scatter_CF_Averages_Plot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Avg_Monthly_Tavg_Delta_Line.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_GCM_Scatter_CF_Averages_Plot.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 
 #################################################### MONTHLY/SEASONAL DELTA PLOTS ###############################################################3
@@ -199,7 +189,7 @@ ggplot(Monthly_delta, aes(x=Month,y=PrecipCustom,fill=CF)) +
   scale_fill_manual(name="",values = colors2) +
   scale_x_discrete(labels = MonthLabels)
 
-ggsave(sprintf("%s_%s_%s_Avg_Monthly_Precip_Delta_Bar.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Avg_Monthly_Precip_Delta_Bar.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 #Bar graph of change in average seasonal precip by CF
 ggplot(Season_delta, aes(x=season,y=PrecipCustom,fill=CF)) +
@@ -209,7 +199,7 @@ ggplot(Season_delta, aes(x=season,y=PrecipCustom,fill=CF)) +
        x = "Season", y = "Change in Precipitation (in)") +
   scale_fill_manual(name="",values = colors2) 
 
-ggsave(sprintf("%s_%s_%s_Avg_Season_Precip_Delta_Bar.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Avg_Season_Precip_Delta_Bar.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 
 #Line plot of change in MaxTemp by CF/month
@@ -226,7 +216,7 @@ ggplot(Monthly_delta, aes(x=Month, y=TmaxCustom, group=CF, colour = CF)) +
   scale_y_continuous(limits=c(0, ceiling(max(Monthly_delta$TmaxCustom)))) + 
   scale_x_discrete(labels = MonthLabels)
 
-ggsave(sprintf("%s_%s_%s_Avg_Monthly_Tmax_Delta_Line.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Avg_Monthly_Tmax_Delta_Line.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 
 ##Line Plot of change in MinTemp by CF/Month
@@ -243,7 +233,7 @@ ggplot(Monthly_delta, aes(x=Month, y=TminCustom, group=CF, colour = CF)) +
   scale_y_continuous(limits=c(0, ceiling(max(Monthly_delta$TminCustom)))) +
   scale_x_discrete(labels = MonthLabels)
 
-ggsave(sprintf("%s_%s_%s_Avg_Monthly_Tmin_Delta_Line.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Avg_Monthly_Tmin_Delta_Line.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 #Bar graph of change in average monthly RHmean by CF
 ggplot(Monthly_delta, aes(x=Month,y=RHmean,fill=CF)) +
@@ -254,7 +244,7 @@ ggplot(Monthly_delta, aes(x=Month,y=RHmean,fill=CF)) +
   scale_fill_manual(name="",values = colors2) +
   scale_x_discrete(labels = MonthLabels)
 
-ggsave(sprintf("%s_%s_%s_Avg_Monthly_RHmean_Delta_Bar.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Avg_Monthly_RHmean_Delta_Bar.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 #Bar graph of change in average seasonal RHmean by CF
 ggplot(Season_delta, aes(x=season,y=RHmean,fill=CF)) +
@@ -264,7 +254,7 @@ ggplot(Season_delta, aes(x=season,y=RHmean,fill=CF)) +
        x = "Season", y = "Change in relative humidity (%)") +
   scale_fill_manual(name="",values = colors2) 
 
-ggsave(sprintf("%s_%s_%s_Avg_Season_RHmean_Delta_Bar.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Avg_Season_RHmean_Delta_Bar.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 ############################################### BAR PLOTS ######################################################################
 # create dataset for bar graph of total number of days/year over hot temperature threshold
@@ -283,7 +273,7 @@ ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
   scale_fill_manual(name="",values = colors3) +
   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
 
-ggsave(sprintf("%s_%s_%s_Days_Over_HotTemp.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Days_Over_HotTemp.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 # Boxplot
 p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) + 
@@ -297,7 +287,7 @@ p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) +
 dat<-ggplot_build(p)$data[[1]];dat1<-dat[3,]
 p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
                                 y=middle, yend=middle), colour="grey", size=1)
-ggsave(sprintf("%s_%s_%s_Days_Over_HotTemp-Boxplot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Days_Over_HotTemp-Boxplot.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 ####################
 #Total number of days/year under cold temperature threshold
@@ -313,7 +303,7 @@ ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
   scale_fill_manual(name="",values = colors3) +
   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
 
-ggsave(sprintf("%s_%s_%s_Days_Under_ColdTemp.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Days_Under_ColdTemp.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 DaysUnderCold <- At
 
@@ -329,7 +319,7 @@ p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) +
 dat<-ggplot_build(p)$data[[1]];dat1<-dat[3,]
 p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
                                 y=middle, yend=middle), colour="grey", size=1)
-ggsave(sprintf("%s_%s_%s_Days_Under_ColdTemp-Boxplot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Days_Under_ColdTemp-Boxplot.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 
 ####################
@@ -346,7 +336,7 @@ ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
   scale_fill_manual(name="",values = colors3) +
   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
 
-ggsave(sprintf("%s_%s_%s_Days_Under_5th.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Days_Under_5th.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 # Boxplot
 p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) + 
@@ -360,7 +350,7 @@ p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) +
 dat<-ggplot_build(p)$data[[1]];dat1<-dat[3,]
 p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
                                 y=middle, yend=middle), colour="grey", size=1)
-ggsave(sprintf("%s_%s_%s_Days_Under_5th-Boxplot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Days_Under_5th-Boxplot.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 ####################
 #Total number of days/year over 95th low temperature threshold
@@ -376,7 +366,7 @@ ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
   scale_fill_manual(name="",values = colors3) +
   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
 
-ggsave(sprintf("%s_%s_%s_Days_Over_95th.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Days_Over_95th.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 OverHighQ <- At
 
@@ -392,7 +382,7 @@ p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) +
 dat<-ggplot_build(p)$data[[1]];dat1<-dat[3,]
 p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
                                 y=middle, yend=middle), colour="grey", size=1)
-ggsave(sprintf("%s_%s_%s_Days_Over_95th-Boxplot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Days_Over_95th-Boxplot.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 
 ####################
@@ -409,7 +399,7 @@ ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
   scale_fill_manual(name="",values = colors3) +
   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
 
-ggsave(sprintf("%s_%s_%s_Days_Over_95th_Precip.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Days_Over_95th_Precip.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 Over95Pr <- At # summary for presentation
 
@@ -425,7 +415,7 @@ p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) +
 dat<-ggplot_build(p)$data[[1]];dat1<-dat[3,]
 p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
                                 y=middle, yend=middle), colour="grey", size=1)
-ggsave(sprintf("%s_%s_%s_Days_Over_95th_Precip-Boxplot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Days_Over_95th_Precip-Boxplot.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 
 ####################
@@ -442,7 +432,7 @@ ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
   scale_fill_manual(name="",values = colors3) +
   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
 
-ggsave(sprintf("%s_%s_%s_Days_Over_1_Precip.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Days_Over_1_Precip.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 # Boxplot
 p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) + 
@@ -456,7 +446,7 @@ p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) +
 dat<-ggplot_build(p)$data[[1]];dat1<-dat[3,]
 p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
                                 y=middle, yend=middle), colour="grey", size=1)
-ggsave(sprintf("%s_%s_%s_Days_Over_1_Precip-Boxplot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Days_Over_1_Precip-Boxplot.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 
 ####################
@@ -473,7 +463,7 @@ ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
   scale_fill_manual(name="",values = colors3) +
   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
 
-ggsave(sprintf("%s_%s_%s_Days_Over_2_Precip.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Days_Over_2_Precip.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 # Boxplot
 p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) + 
@@ -487,7 +477,7 @@ p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) +
 dat<-ggplot_build(p)$data[[1]];dat1<-dat[3,]
 p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
                                 y=middle, yend=middle), colour="grey", size=1)
-ggsave(sprintf("%s_%s_%s_Days_Over_2_Precip-Boxplot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Days_Over_2_Precip-Boxplot.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 
 ####################
@@ -504,7 +494,7 @@ ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
   scale_fill_manual(name="",values = colors3) +
   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
 
-ggsave(sprintf("%s_%s_%s_Freeze-thaw.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Freeze-thaw.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 # Boxplot
 p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) + 
@@ -518,7 +508,7 @@ p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) +
 dat<-ggplot_build(p)$data[[1]];dat1<-dat[3,]
 p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
                                 y=middle, yend=middle), colour="grey", size=1)
-ggsave(sprintf("%s_%s_%s_Freeze-thaw-Boxplot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Freeze-thaw-Boxplot.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 # ####################
 # #Total number of Growing degree days/year (Tavg >41F)
@@ -534,7 +524,7 @@ ggsave(sprintf("%s_%s_%s_Freeze-thaw-Boxplot.png", SiteID, Lat, Lon), width = Pl
 #   scale_fill_manual(name="",values = colors3) +
 #   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
 # 
-# ggsave(sprintf("%s_%s_%s_Growing-day.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+# ggsave(sprintf("%s_%s_%s_Growing-day.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 # 
 # # Boxplot
 # p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) +
@@ -548,7 +538,7 @@ ggsave(sprintf("%s_%s_%s_Freeze-thaw-Boxplot.png", SiteID, Lat, Lon), width = Pl
 # dat<-ggplot_build(p)$data[[1]];dat1<-dat[3,]
 # p + geom_segment(data=dat1, aes(x=xmin, xend=xmax,
 #                                 y=middle, yend=middle), colour="grey", size=1)
-# ggsave(sprintf("%s_%s_%s_Growing-day-Boxplot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+# ggsave(sprintf("%s_%s_%s_Growing-day-Boxplot.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 
 # ####################
@@ -566,7 +556,7 @@ ggsave(sprintf("%s_%s_%s_Freeze-thaw-Boxplot.png", SiteID, Lat, Lon), width = Pl
 #   scale_fill_manual(name="",values = colors3) +
 #   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
 # 
-# ggsave(sprintf("%s_%s_%s_Growing-season.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+# ggsave(sprintf("%s_%s_%s_Growing-season.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 # 
 # # Boxplot
 # p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) + 
@@ -580,7 +570,7 @@ ggsave(sprintf("%s_%s_%s_Freeze-thaw-Boxplot.png", SiteID, Lat, Lon), width = Pl
 # dat<-ggplot_build(p)$data[[1]];dat1<-dat[3,]
 # p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
 #                                 y=middle, yend=middle), colour="grey", size=1)
-# ggsave(sprintf("%s_%s_%s_Growing-season-Boxplot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+# ggsave(sprintf("%s_%s_%s_Growing-season-Boxplot.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 # 
 
 # ####################
@@ -597,7 +587,7 @@ ggsave(sprintf("%s_%s_%s_Freeze-thaw-Boxplot.png", SiteID, Lat, Lon), width = Pl
 #   scale_fill_manual(name="",values = colors3) +
 #   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
 # 
-# ggsave(sprintf("%s_%s_%s_Green-up.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+# ggsave(sprintf("%s_%s_%s_Green-up.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 # 
 # # Boxplot
 # p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) + 
@@ -611,7 +601,7 @@ ggsave(sprintf("%s_%s_%s_Freeze-thaw-Boxplot.png", SiteID, Lat, Lon), width = Pl
 # dat<-ggplot_build(p)$data[[1]];dat1<-dat[3,]
 # p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
 #                                 y=middle, yend=middle), colour="grey", size=1)
-# ggsave(sprintf("%s_%s_%s_Green-up-Boxplot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+# ggsave(sprintf("%s_%s_%s_Green-up-Boxplot.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 # 
 
 ####################
@@ -629,7 +619,7 @@ ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
   scale_fill_manual(name="",values = colors3) +
   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
 
-#ggsave(sprintf("%s_%s_%s_Spring_frost.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+#ggsave(sprintf("%s_%s_%s_Spring_frost.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 # Boxplot
 p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) + 
@@ -643,7 +633,7 @@ p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) +
 dat<-ggplot_build(p)$data[[1]];dat1<-dat[3,]
 p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
                                 y=middle, yend=middle), colour="grey", size=1)
-ggsave(sprintf("%s_%s_%s_Spring_frost-Boxplot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Spring_frost-Boxplot.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 
 ####################
@@ -660,7 +650,7 @@ ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
   scale_fill_manual(name="",values = colors3) +
   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
 
-ggsave(sprintf("%s_%s_%s_Heat-index-danger.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Heat-index-danger.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 # Boxplot
 p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) + 
@@ -674,7 +664,7 @@ p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) +
 dat<-ggplot_build(p)$data[[1]];dat1<-dat[3,]
 p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
                                 y=middle, yend=middle), colour="grey", size=1)
-ggsave(sprintf("%s_%s_%s_Heat-index-danger-Boxplot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Heat-index-danger-Boxplot.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 
 ####################
@@ -691,7 +681,7 @@ ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
   scale_fill_manual(name="",values = colors3) +
   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
 
-ggsave(sprintf("%s_%s_%s_Average-temp.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Average-temp.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 # Boxplot
 p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) + 
@@ -705,7 +695,7 @@ p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) +
 dat<-ggplot_build(p)$data[[1]];dat1<-dat[3,]
 p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
                                 y=middle, yend=middle), colour="grey", size=1)
-ggsave(sprintf("%s_%s_%s_Heat-index-danger-Boxplot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Heat-index-danger-Boxplot.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 ####################
 #Annual Precip
@@ -721,7 +711,7 @@ ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
   scale_fill_manual(name="",values = colors3) +
   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
 
-ggsave(sprintf("%s_%s_%s_Average-temp.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Average-temp.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 # Boxplot
 p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) + 
@@ -735,11 +725,11 @@ p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) +
 dat<-ggplot_build(p)$data[[1]];dat1<-dat[3,]
 p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
                                 y=middle, yend=middle), colour="grey", size=1)
-ggsave(sprintf("%s_%s_%s_Heat-index-danger-Boxplot.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight)
+ggsave(sprintf("%s_%s_%s_Heat-index-danger-Boxplot.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
 
 ############################################### PRINT TABLES #################################################################
 A<-aggregate(.~CF,Annual[,2:24],mean) # Columns changed from 24 to 23 AKD 11/1/2020 - elimination of Sp.Frost variable
 write.xlsx(list("Means"=A,"Annual"=Annual,"Season"=Season,"D_Season"=Season_delta,"Monthly"=Monthly,"Monthly_delta"=Monthly_delta), 
-           file=("Plot_data.xlsx"),col.names=TRUE)
+           file=("./data/derived-data/Plot_data.xlsx"),col.names=TRUE)
 
