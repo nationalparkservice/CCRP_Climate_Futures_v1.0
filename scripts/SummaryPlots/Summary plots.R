@@ -1,16 +1,24 @@
-rm(list=ls())
-library(ggplot2)
-library(zoo)
-library(gridExtra)
-library(grid)
-library(lubridate)
 
-setwd("C:/Users/adillon/Documents/RSS/CONG")
+# Load files if not running scripts sequentially
 
-load("PRISM/CONG_33.791868_-80.748665_PRISM_PptTminTmax_IntermediateFiles.RData")
-load("MACA/Figs MACA/CONG_33.791868_-80.748665_Final_Environment.RData")
+
+file1 <- list.files(path = './data/RData', pattern = 'IntermediateFiles.RData', full.names = TRUE) 
+load(file1)
+
+file2 <- list.files(path = './data/RData', pattern = 'Final_Environment.RData', full.names = TRUE) 
+load(file2)
+
+grid<-read.csv("data/raw-data/GridMet.csv",header=T)
+
+if(dir.exists('./figures/summary-plots') == FALSE){
+  dir.create('./figures/summary-plots')
+}
+
+
+###################################################################################################################
+
 Future_all<-merge(ALL_FUTURE,CF_GCM,by="GCM")
-grid<-read.csv("GridMET/GridMet.csv",header=T)
+
 
 BC.min = 1979 #Bias correction range
 BC.max = 2018 # GridMET now goes through 2018
@@ -127,7 +135,7 @@ ggplot(yrAvgs.sub, aes(x=as.numeric(as.character(year)), y=Tavg.mean, col=CF, fi
   labs(x="Year", y=expression("Mean annual temperature "~(degree~F))) +
   scale_color_manual(name="Climate Future",values=col) +
   scale_fill_manual(name="Climate Future",values=col) + PlotTheme
-ggsave(paste(SiteID,"-tmean.png",sep=""), height=PlotHeight, width=PlotWidth)
+ggsave(paste(SiteID,"-tmean.png",sep=""), path = './figures/summary-plots', height=PlotHeight, width=PlotWidth)
 
 # Precip
 ggplot(yrAvgs.sub, aes(x=as.numeric(as.character(year)), y=Precip.mean, col=CF, fill=CF)) + 
@@ -140,7 +148,7 @@ ggplot(yrAvgs.sub, aes(x=as.numeric(as.character(year)), y=Precip.mean, col=CF, 
   labs( x="Year", y="Mean annual precipitation (in/year)") +
   scale_color_manual(name="Climate Future",values=col) +
   scale_fill_manual(name="Climate Future",values=col) + PlotTheme
-ggsave(paste(SiteID,"-precip.png",sep=""), height=PlotHeight, width=PlotWidth)
+ggsave(paste(SiteID,"-precip.png",sep=""), path = './figures/summary-plots', height=PlotHeight, width=PlotWidth)
 
 #Panel plot
 t<-ggplot(yrAvgs.sub, aes(x=as.numeric(as.character(year)), y=Tavg.mean, col=CF, fill=CF)) + 
@@ -192,4 +200,4 @@ p
 grid.arrange(t,p, nrow=2)
 
 g <- arrangeGrob(t,p, nrow=2)
-ggsave("Long-term_panel-gridmet.png", g,width = 15, height = 15)
+ggsave("Long-term_panel-gridmet.png", g, path = './figures/summary-plots', width = 15, height = 15)

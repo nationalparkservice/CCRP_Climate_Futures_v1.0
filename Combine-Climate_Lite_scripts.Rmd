@@ -95,7 +95,7 @@ source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts.R")) # 
 
 # Water Balance
 
-```{r Get-Params, message=FALSE, warning=FALSE, Get-Params fig.path='./figures/maps', results=HIDE}
+```{r Water-Balance, message=FALSE, warning=FALSE, echo = FALSE, results=HIDE}
 
 source(here::here("scripts", "WaterBalance", "get_params.R"))
 
