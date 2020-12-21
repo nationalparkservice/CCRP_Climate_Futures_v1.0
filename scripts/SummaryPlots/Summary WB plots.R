@@ -1,22 +1,8 @@
 # Working off the regular summary plots, perform bias correction, then run R WB model for PRISM and all GCMs in CFs using
 # Plot
 
-rm(list=ls())
-library("WaterBalance")
-library(ggplot2)
-library(plyr)
-library(lubridate)
-library(dplyr)
-
-setwd("C:/Users/adillon/Documents/RSS/CONG")
-
-load("MACA/Figs MACA/CONG_33.791868_-80.748665_Final_Environment.RData")
 PARK<-SiteID
 ALL_FUTURE<-merge(ALL_FUTURE,CF_GCM,by="GCM")
-rm(list=setdiff(ls(), c("ALL_FUTURE","PARK","CF_GCM")))
-
-load("PRISM/CONG_33.791868_-80.748665_PRISM_PptTminTmax_IntermediateFiles.RData")
-grid<-read.csv("GridMET/GridMet.csv",header=T)
 
 BC.min = 1979 #Bias correction range
 BC.max = 2018 
@@ -25,12 +11,9 @@ CF.sub = c("Historical", "Warm Wet", "Hot Dry") #CFs using
 col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
 #col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
 
-#Site characteristics 
-Sites = read.csv("WB/CONG_site_characteristics.csv")
-Sites <- Sites[1:10,]  # If there are NA's in df, make sure they are deleted
 
 #CSV file containing properties for all sites
-n<-nrow(Sites)
+n<-nrow(sites)
 #Threshold temperature (deg C) for growing degree-days calculation
 T.Base = 0 
 
@@ -42,7 +25,7 @@ Method = "Thornthwaite"  #Thornthwaite is default method for monthly PRISM and M
 DateFormat = "%m/%d/%Y"
 
 #Output directory
-OutDir = getwd()
+OutDir = './figures/summary-plots'
 
 #Select GCMs - Include RCP
 GCMs = unique(ALL_FUTURE$GCM[which(ALL_FUTURE$CF %in% CF.sub)]) 
@@ -97,18 +80,18 @@ PRISM.BC$tmean_C <- 5/9*(PRISM.BC$Tavg.mean -32)
 PRISM.BC$Date<-as.Date(paste(PRISM.BC$year,PRISM.BC$month,"1",sep="-"),format="%Y-%m-%d")
 
 AllMonthlyWB<-list()
-for(i in 1:nrow(Sites)){
-  SiteID = Sites$SiteID[i]
-  Lat = Sites$Lat[i]
-  Lon = Sites$Lon[i]
-  Elev = Sites$Elevation[i]
-  Aspect = Sites$Aspect[i]
-  Slope = Sites$Slope[i]
-  SWC.Max = Sites$SWC.Max[i]
-  Wind = Sites$Wind[i]
-  Snowpack.Init = Sites$Snowpack.Init[i]
-  Soil.Init = Sites$Soil.Init[i]
-  Shade.Coeff = Sites$Shade.Coeff[i]
+for(i in 1:nrow(sites)){
+  SiteID = sites$SiteID[i]
+  Lat = sites$Lat[i]
+  Lon = sites$Lon[i]
+  Elev = sites$Elevation[i]
+  Aspect = sites$Aspect[i]
+  Slope = sites$Slope[i]
+  SWC.Max = sites$SWC.Max[i]
+  Wind = sites$Wind[i]
+  Snowpack.Init = sites$Snowpack.Init[i]
+  Soil.Init = sites$Soil.Init[i]
+  Shade.Coeff = sites$Shade.Coeff[i]
   
   MonthlyWB = PRISM.BC
   MonthlyWB$site = SiteID
@@ -175,18 +158,18 @@ AllMonthlyWB<-list()
 for (j in 1:length(GCMs)){
   gcm = GCMs[j]
   MonthlyWB = subset(MACA.Avgs,GCM == gcm)
-  for(i in 1:nrow(Sites)){
-    SiteID = Sites$SiteID[i]
-    Lat = Sites$Lat[i]
-    Lon = Sites$Lon[i]
-    Elev = Sites$Elevation[i]
-    Aspect = Sites$Aspect[i]
-    Slope = Sites$Slope[i]
-    SWC.Max = Sites$SWC.Max[i]
-    Wind = Sites$Wind[i]
-    Snowpack.Init = Sites$Snowpack.Init[i]
-    Soil.Init = Sites$Soil.Init[i]
-    Shade.Coeff = Sites$Shade.Coeff[i]
+  for(i in 1:nrow(sites)){
+    SiteID = sites$SiteID[i]
+    Lat = sites$Lat[i]
+    Lon = sites$Lon[i]
+    Elev = sites$Elevation[i]
+    Aspect = sites$Aspect[i]
+    Slope = sites$Slope[i]
+    SWC.Max = sites$SWC.Max[i]
+    Wind = sites$Wind[i]
+    Snowpack.Init = sites$Snowpack.Init[i]
+    Soil.Init = sites$Soil.Init[i]
+    Shade.Coeff = sites$Shade.Coeff[i]
 
     MonthlyWB$site = SiteID
     MonthlyWB$daylength = get_daylength(MonthlyWB$Date, Lat)
@@ -276,6 +259,6 @@ ggplot(yrAvgs.sub, aes(x=as.numeric(as.character(year)), y=D.mean, col=CF, fill=
   labs(x="Year", y="Mean annual climatic water deficit (in/year)") +
   scale_color_manual(name="Climate Future",values=col) +
   scale_fill_manual(name="Climate Future",values=col) + PlotTheme
-ggsave(paste(PARK,"-Deficit.png",sep=""), height=PlotHeight, width=PlotWidth)
+ggsave(paste(PARK,"-Deficit.png",sep=""), path = './figures/summary-plots', height=PlotHeight, width=PlotWidth)
 
 
