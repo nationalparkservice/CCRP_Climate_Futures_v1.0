@@ -98,10 +98,8 @@ source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts.R")) # 
 ```{r Get-Params, message=FALSE, warning=FALSE, Get-Params fig.path='./figures/maps', results=HIDE}
 
 source(here::here("scripts", "WaterBalance", "get_params.R"))
-```
 
-
-source(here::here("WaterBalance/Daily_WB_batch_v2.R")) # Requires "PARK_lat_long_Final_Environment.RData", "PARK_Site_characteristics.csv", and "D_AET_points.csv". Outputs to WB folder. 
+source(here::here("scripts", "WaterBalance", "Daily_WB_batch_v2.R")) 
 ```
 
 # Summary Plots

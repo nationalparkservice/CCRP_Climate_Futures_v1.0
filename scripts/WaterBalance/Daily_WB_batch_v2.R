@@ -5,12 +5,17 @@
 
 #Formatted input data as a daily time series. Needs to include the following columns: Date, ppt_mm, tmax_C, tmin_C, and tmean_C (temp.'s in deg. Celsius)
 
-PARK<-"CONG"
-rm(list=setdiff(ls(), c("ALL_HIST","ALL_FUTURE","PARK","CF_GCM")))
+DataFile <- list.files(path = './data/RData', pattern = 'Final_Environment.RData', full.names = TRUE) # Environment needs to be added if not parsing MACA data
+load(DataFile)
+
+
+#rm(list=setdiff(ls(), c("ALL_HIST","ALL_FUTURE","site","CF_GCM")))
+
+site<-"CONG"
 
 #Site characteristics 
-Sites = read.csv("C:/Users/adillon/Documents/RSS/CONG/WB/CONG_site_characteristics.csv") #CSV file containing properties for all sites
-n<-nrow(Sites)
+#sites = read.csv("C:/Users/adillon/Documents/RSS/CONG/WB/CONG_site_characteristics.csv") #CSV file containing properties for all sites
+n<-nrow(sites)
 #Threshold temperature (deg C) for growing degree-days calculation
 T.Base = 0 
 
@@ -21,7 +26,7 @@ Method = "Hamon"  #Hamon is default method for daily PRISM and MACA data (contai
 DateFormat = "%m/%d/%Y"
 
 #Output directory
-OutDir = "C:/Users/adillon/Documents/RSS/CONG/WB"
+OutDir = "./figures/water-balance"
 
 
 #Select GCMs - Include RCP
@@ -55,7 +60,7 @@ ALL_FUTURE$tmean_C <- (ALL_FUTURE$tmax_C + ALL_FUTURE$tmin_C)/2
 if(dir.exists(OutDir) == FALSE){
   dir.create(OutDir)
 }
-setwd(OutDir)
+
 ClimData<-data.frame(Date=as.numeric(),ppt_mm=as.numeric(),tmean_C=as.numeric(),GCM=as.character())
 # Loop through selected GCMs
 for(i in 1:length(GCMs)){
@@ -74,18 +79,18 @@ AllDailyWB<-list()
 for (j in 1:length(GCMs)){
   gcm = GCMs[j]
   DailyWB = subset(ClimData,GCM=gcm)
-  for(i in 1:nrow(Sites)){
-    SiteID = Sites$SiteID[i]
-    Lat = Sites$Lat[i]
-    Lon = Sites$Lon[i]
-    Elev = Sites$Elevation[i]
-    Aspect = Sites$Aspect[i]
-    Slope = Sites$Slope[i]
-    SWC.Max = Sites$SWC.Max[i]
-    Wind = Sites$Wind[i]
-    Snowpack.Init = Sites$Snowpack.Init[i]
-    Soil.Init = Sites$Soil.Init[i]
-    Shade.Coeff = Sites$Shade.Coeff[i]
+  for(i in 1:nrow(sites)){
+    SiteID = sites$SiteID[i]
+    Lat = sites$Lat[i]
+    Lon = sites$Lon[i]
+    Elev = sites$Elevation[i]
+    Aspect = sites$Aspect[i]
+    Slope = sites$Slope[i]
+    SWC.Max = sites$SWC.Max[i]
+    Wind = sites$Wind[i]
+    Snowpack.Init = sites$Snowpack.Init[i]
+    Soil.Init = sites$Soil.Init[i]
+    Shade.Coeff = sites$Shade.Coeff[i]
     
     #Calculate daily water balance variables 
     DailyWB$SiteID = SiteID
@@ -159,8 +164,8 @@ AnnualWB$sum_w_et_dsoil = aggregate(W_ET_DSOIL ~ year+GCM, data=aggregate(W_ET_D
 AnnualWB$sum_d = aggregate(D ~ year+GCM, data=aggregate(D~year+GCM+SiteID,data=WBData,sum), mean)[,3]
 AnnualWB$sum_gdd = aggregate(GDD ~ year+GCM, data=aggregate(GDD~year+GCM+SiteID,data=WBData,sum), mean)[,3]
 
-write.csv(MonthlyWB,"MonthlyWB.csv",row.names=F)
-write.csv(AnnualWB,"AnnualWB.csv",row.names=F)
+write.csv(MonthlyWB,"./data/derived-data/MonthlyWB.csv",row.names=F)
+write.csv(AnnualWB,"./data/derived-data/AnnualWB.csv",row.names=F)
 
 
 #######################################################################################################################
@@ -199,13 +204,13 @@ ggplot(Annual, aes(x=deficit, y=AET, colour=CF)) + geom_point(size=3)+ geom_smoo
     y = "Annual Actual Evapotranspiration (in)",
     x = "Annual moisture deficit (in)",
     colour = "GCM",
-    title = paste("Water Balance for ",PARK,sep="")  
+    title = paste("Water Balance for ",site,sep="")  
   ) + theme(plot.title = element_text(hjust = 0.5)) + #+ geom_vline(xintercept=mean(Historical.wb$deficit), colour="black") +geom_vline(xintercept=mean(Future.wb$deficit), colour="blue")
   # size is pts
   theme(axis.text = element_text(size=20), axis.title = element_text(size=20), legend.text=element_text(size=14),
         plot.title=element_text(size=22)) #+xlim(20,45)+ylim(2,16)
 
-ggsave(paste("Water Balance-",PARK,".png",sep=""), width = 15, height = 9)
+ggsave(paste("Water Balance-",site,".png",sep=""), path = OutDir, width = 15, height = 9)
 
 ggplot(Annual, aes(x=deficit, colour=CF,fill=CF,linetype=CF),show.legend=F) +geom_density(alpha=0.3,size=1.5) +
   scale_colour_manual(values=colors3) +
@@ -213,11 +218,11 @@ ggplot(Annual, aes(x=deficit, colour=CF,fill=CF,linetype=CF),show.legend=F) +geo
   scale_linetype_manual(values=seq(1,length(unique(Annual$CF)),1)) +
   labs(y = "Density",
        x = "Annual moisture deficit (in)",
-       title = paste(PARK,"  Water Deficit for GCMs (2025-2055) and Historical Period (1895-1999)",sep=" ")) +
+       title = paste(site,"  Water Deficit for GCMs (2025-2055) and Historical Period (1895-1999)",sep=" ")) +
   theme(axis.text = element_text(size=20), axis.title = element_text(size=20), legend.text=element_text(size=20), legend.background=element_rect(fill = "White", size = 0.5),
         plot.title=element_text(size=22, hjust=0),legend.position = c(.8,.8)) 
 
-ggsave(paste(PARK,"-Deficit_density_panel.png",sep=""), width = 15, height = 9)
+ggsave(paste(site,"-Deficit_density_panel.png",sep=""), path = OutDir, width = 15, height = 9)
 
 ggplot(Annual, aes(x=SOIL_in, colour=CF,fill=CF,linetype=CF),show.legend=F) +geom_density(alpha=0.3,size=1.5) +
   scale_colour_manual(values=colors3) +
@@ -225,16 +230,16 @@ ggplot(Annual, aes(x=SOIL_in, colour=CF,fill=CF,linetype=CF),show.legend=F) +geo
   scale_linetype_manual(values=seq(1,length(unique(Annual$CF)),1)) +
   labs(y = "Density",
        x = "Annual soil moisture (in)",
-       title = paste(PARK,"  Soil Moisture for GCMs (2025-2055) and Historical Period (1895-1999)",sep=" ")) +
+       title = paste(site,"  Soil Moisture for GCMs (2025-2055) and Historical Period (1895-1999)",sep=" ")) +
   theme(axis.text = element_text(size=20), axis.title = element_text(size=20), legend.text=element_text(size=14),
         plot.title=element_text(size=22, hjust=0),legend.position = c(.8,.8)) 
 
-ggsave(paste(PARK,"-SOIL_in_density_panel.png",sep=""), width = 15, height = 9)
+ggsave(paste(site,"-SOIL_in_density_panel.png",sep=""), path = OutDir, width = 15, height = 9)
 
 
 ########################
 # biome plots
-biome<-read.csv("C:/Users/adillon/Documents/RSS/D_AET_points.csv",header=T)
+biome<-read.csv("./data/raw-data/D_AET_points.csv",header=T)
 head(biome)
 color<-as.character(unique(biome$color,ordered=T))
 
@@ -262,14 +267,14 @@ plot_1 <- ggplot() +
                     breaks = names(color),
                     labels = names(color),
                     values = color) + 
-  labs(title=paste(PARK, " water balance effects on biome",sep=""),
+  labs(title=paste(site, " water balance effects on biome",sep=""),
        y = "Annual Evapotranspiration (mm)", x = "Annual moisture deficit (mm)") 
 plot_1
 
 plot_1 + geom_point(data=Annual, aes(x=sum_d, y=sum_aet, colour=CF), size=3) + 
   geom_smooth(data=Annual, aes(x=sum_d, y=sum_aet, colour=CF),method="lm", se=FALSE, size=2) + 
   scale_colour_manual("Scenario",values=colors3)
-ggsave(paste(PARK,"-WB-biome effects.png",sep=""), width = 15, height = 9)
+ggsave(paste(site,"-WB-biome effects.png",sep=""), path = OutDir, width = 15, height = 9)
 
 ### Monthly
 MonthlyWB$year<-as.numeric(substr(MonthlyWB$yrmon, 1, 4))
@@ -311,7 +316,7 @@ ggplot(data, aes(x=mon, y=SOIL_IN, group=CF, colour = CF)) +
   scale_fill_manual(name="",values = colors2) +
   scale_shape_manual(name="",values = c(21,22))
 
-ggsave("MonthlySoil Moisture.png", width = 15, height = 9)
+ggsave("MonthlySoil Moisture.png", path = OutDir, width = 15, height = 9)
 
 ggplot(data, aes(x=mon, y=deficit, group=CF, colour = CF)) +
   geom_line(colour = "black",size=2.5, stat = "identity") + # adds black outline
@@ -329,6 +334,6 @@ ggplot(data, aes(x=mon, y=deficit, group=CF, colour = CF)) +
   scale_fill_manual(name="",values = colors2) +
   scale_shape_manual(name="",values = c(21,22))
 
-ggsave("Monthly Deficit.png", width = 15, height = 9)
+ggsave("Monthly Deficit.png", path = OutDir, width = 15, height = 9)
 
 
