@@ -13,6 +13,8 @@ abstract: This script combines all scripts previously run under CCRP's Climate L
 # Environments (.RData) that need to be loaded manually include 1) IntermediateFiles and 2) init_parsed
 # Raw data that needs to be loaded is GridMet.csv
 
+rm(list = ls())
+
 SiteID = "CONG"
 site <- "CONG"
 state <- "South Carolina"
@@ -36,7 +38,7 @@ knitr::opts_chunk$set(
 )
 
 library(here); library(plyr); # Use here::here when package lubridate is used
-library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot); library(reshape2); library(raster); library(ncdf4); library(reshape2); library(WriteXLS); library(data.table); library(RColorBrewer); library(ggrepel);library(plyr); library(lubridate); library(dplyr); library(forcats); library(openxlsx); library("WaterBalance"); library(sf); library(raster); library(rgdal)
+library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot); library(reshape2); library(raster); library(ncdf4); library(reshape2); library(WriteXLS); library(data.table); library(RColorBrewer); library(ggrepel);library(plyr); library(lubridate); library(dplyr); library(forcats); library(openxlsx); library("WaterBalance"); library(sf); library(raster); library(rgdal);
 library(tmap); library(tmaptools); library(rJava); library(OpenStreetMap); library(gridExtra); library(SPEI) 
 
 
@@ -47,22 +49,9 @@ library(tmap); library(tmaptools); library(rJava); library(OpenStreetMap); libra
 ```
 
 
-## TESTS 
-
-```{r fig.path='./figures/MACA', eval = FALSE}
-
-file <- list.files(path = './data', pattern = 'IntermediateFiles.RData', full.names = TRUE) # will load all .RData files within directory
-load(file)
-
-source(here::here("test.R"), local = knitr::knit_global())
-
-knitr::knit_exit()
-
-```
-
 ## Historical Trends (PRISM)
 
-```{r PRISM-parse, eval=FALSE, message=FALSE, warning=FALSE, echo=FALSE}
+```{r PRISM-parse, eval = FALSE, message=FALSE, warning=FALSE, echo=FALSE}
 
 #source(here::here("./PRISM/RSS PRISM AN81 4km summarize v01.1.R")) # Parses PRISM data. Output = "PARK_lat_long_PRISM_PptTminTmax_IntermediateFiles.RData" # NOTE: Because this script is excluded, headers have not been changed
 
@@ -71,9 +60,6 @@ knitr::knit_exit()
 ```{r PRISM-plots, results=hide, fig.path='./PRISM', eval=FALSE} 
 # can add fig.path = './figures/PRISM when rewriting
 
-file <- list.files(path = './data', pattern = 'IntermediateFiles.RData', full.names = TRUE) # will load all .RData files within directory
-load(file)
-
 source(here::here("PRISM", "RSS PRISM plots v1.2.R"),echo = FALSE)
 
 ```
@@ -81,7 +67,7 @@ source(here::here("PRISM", "RSS PRISM plots v1.2.R"),echo = FALSE)
 
 ## Climate Futures (MACA)
 
-```{r Climate-Futures, echo=FALSE, fig.path='./figures/MACA', message=FALSE, warning=FALSE}
+```{r Climate-Futures, echo=FALSE, fig.path='./figures/MACA', message=FALSE, warning=FALSE, results=HIDE}
 
 # source(here::here("RSS_MACA_Parsing.R")) # Parse MACA data. Output = "_init_parsed.RData". Outputs to MACA folder.
 
@@ -90,6 +76,7 @@ source(here::here("PRISM", "RSS PRISM plots v1.2.R"),echo = FALSE)
 source(here::here("scripts", "Climate-Futures", "RSS_MACA_Plot_Table_Creation.R"), local = knitr::knit_global()) # Requires "PARK_init_parsed.RData"; Output = "PARK_lat_long_Final_Environment.RData". 
 
 source(here::here("scripts", "Climate-Futures", "RSS_MACA_Scatter and diagnostic.R"), local = knitr::knit_global()) # Creates scatter and diagnostic plots. Outputs to Figs MACA folder. 
+
 source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts.R")) # Requires "PARK_lat_long_Final_Environment.RData". Outputs plots and Excel Workbook to Figs MACA folder.
 
 ```
@@ -106,24 +93,20 @@ source(here::here("scripts", "WaterBalance", "Daily_WB_batch_v2.R"))
 # Summary Plots
 
 ```{r Summary-Plots, message=FALSE, warning=FALSE, echo = FALSE, results=HIDE}
-source(here::here("SummaryPlots/Summary plots.R"))
+source(here::here("scripts", "SummaryPlots", "Summary plots.R"))
 
-source(here::here("SummaryPlots/Summary WB plots.R")) 
+source(here::here("scripts", "SummaryPlots", "Summary WB plots.R")) 
 ```
 
 # Additional Tables and Plots
 
-```{r}
+```{r Additional-plots-and-tables, message= FALSE, warning=FALSE, echo=FALSE, results=HIDE}
 
-# Have not annotated
+source(here::here("scripts", "Additional-tables-plots", "RSS_MACA_drought_char.R"))
 
-source(here::here("Additional-tables-plots/RSS_MACA_drought_char.R"))
+source(here::here("scripts", "Additional-tables-plots", "FLI FBI phenology plots.R"))
 
-## START HERE ###
-
-source(here::here("Additional-tables-plots/FLI FBI phenology plots.R"))
-
-source(here::here("Additional-tables-plots/RSS Audubon summary.R"))
+source(here::here("scripts", "Additional-tables-plots", "RSS Audubon summary.R"))
 ```
 
 ```{r}

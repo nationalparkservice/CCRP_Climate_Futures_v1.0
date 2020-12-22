@@ -8,14 +8,14 @@
 # FBI_max_delta FLI_rate FBI_rate"    
 
 rm(list=ls())
-DataDirName <- "C:/Users/adillon/Documents/RSS/"
+DataDirName <- "./data/raw-data/"
+OutDirName <- './figures/additional/'
 
 pCode <- "CONG"
 # print plots to screen or to file in working directory?
 outDevice <- "file"
 # outDevice <- "screen"    # use ONLY "screen" or "file"
 
-setwd(DataDirName)
 inFile <- paste(DataDirName, "FLI FBI table.csv", sep="")
 
 dec2century <-  10   # days/decade to days/century
@@ -36,7 +36,7 @@ lData <- pData[order(pData$FLI_rate),]
 FLI <- lData$FLI_rate * dec2century
 yFLI <- which(lData$Pcode==pCode)        # value of y axis of park
 
-if(outDevice == "file")png(filename= paste(pCode, "FLI.png"))
+if(outDevice == "file")png(filename= paste(OutDirName, pCode, "FLI.png"))
 
 plot(FLI, pNum, col = "light green", ylab = "", xlab="Days/century", main="First Leaf", bty="n", yaxt = "n", xlim = c(-25, 5), cex.axis=1.5, cex.lab=1.5)
 points(FLI[yFLI],yFLI, col="dark green", pch=19, cex = 1.5)
@@ -52,7 +52,7 @@ bData <- pData[order(pData$FBI_rate),]
 FBI <- bData$FBI_rate * dec2century
 yFBI <- which(bData$Pcode==pCode)
 
-if(outDevice == "file") png(filename= paste(pCode, "FBI.png"))
+if(outDevice == "file") png(filename= paste(OutDirName, pCode, "FBI.png"))
 
 plot(FBI, pNum, col = "pink", ylab = "", xlab="Days/century", main="First Bloom", bty="n", yaxt = "n", xlim = c(-25, 5), cex.axis=1.5, cex.lab=1.5)
 points(FBI[yFBI],yFBI, col="purple", pch=19, cex = 1.5)
@@ -62,4 +62,5 @@ abline(v=0, lty=3)
 
 if(outDevice == "file")dev.off()
 cat(yFBI, FBI[yFBI])
-pData[which(pData$Pcode == pCode),]
+x <- pData[which(pData$Pcode == pCode),]
+write.table(x, file = './data/derived-data/FLI FBI data.txt')

@@ -1,11 +1,9 @@
-library(plyr)
-library(reshape2)
 
 #### INITIALS ####
 
-AudubonDataPath = "C:/Users/adillon/Documents/Repos/CCRP_Climate_Futures_dev/Additional-tables-plots/Audubon-NPS_study-all_species_trends_filtered.csv"
-ParkCode = "CONG"
-OutDir = "C:/Users/adillon/Documents/RSS/CONG"
+AudubonDataPath = "./data/raw-data/Audubon-NPS_study-all_species_trends_filtered.csv"
+ParkCode = pCode
+OutDir = "./data/derived-data"
 
 #### END INITIALS ####
 

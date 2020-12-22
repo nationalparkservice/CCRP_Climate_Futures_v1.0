@@ -15,6 +15,9 @@
 
 # Create output directories
 
+file <- list.files(path = './data', pattern = 'IntermediateFiles.RData', full.names = TRUE) # will load all .RData files within directory
+load(file)
+
 WD_plots = './figures/PRISM' # for plots
 if(dir.exists(WD_plots) == FALSE){
   dir.create(WD_plots)
