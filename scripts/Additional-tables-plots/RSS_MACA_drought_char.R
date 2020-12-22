@@ -3,27 +3,20 @@
 # Using WB PET so able to use Hamon equation
 # Methodology taken from: Runyon (2019);Thilakarathne & Sridhar (2017);Yang et al. (2009);Shiau (2006);Shiau & Shen (2001)...
 
-library(ggplot2)
-library(plyr)
-library(lubridate)
-library(dplyr)
-library(forcats)
-library(reshape2)
-library(zoo)
-library(SPEI) # Make sure to install this pkg!
 
 
 ################################ USER INPUTS #################################################
-rm(list=ls())
-setwd("C:/Users/adillon/Documents/RSS/CONG")
+
+Gridmet <- read.csv("data/raw-data/GridMet.csv",header=T)
+
+file <- list.files(path = './data/RData', pattern = 'Final_Environment.RData', full.names = TRUE) 
+load(file)
+
 
 # Load input data
-load("MACA/Figs MACA/CONG_33.791868_-80.748665_Final_Environment.RData")
-rm(list=setdiff(ls(), c("ALL_HIST","ALL_FUTURE","CF_GCM","Lat","SiteID")))
 
 GCMs = c("CNRM-CM5.rcp45","HadGEM2-ES365.rcp85") # per teams chat 6/23/20 with AR
 CFs<- c("Warm Wet", "Hot Dry")
-Gridmet<-read.csv("GridMET/GridMet.csv",header=T)
 
 ## SPEI variables
 SPEI_per<-6 # This is the value for the period SPEI is aggregated. 6-months is standard but could change if want. 
@@ -36,9 +29,12 @@ colors2<- c("#9A9EE5","#E10720")  # WarmWet/HotDry
 
 colors3<-c("white",colors2)
 
-# Set wd for saving plots
-OutDir<-("C:/Users/adillon/Documents/RSS/CONG/Drought")
-setwd(OutDir)
+if(dir.exists('./figures/additional') == FALSE){
+  dir.create('./figures/additional')
+}
+
+OutDir<-("./figures/additional")
+
 ################################ END USER INPUTS #############################################
 
 ############################### FORMAT DATAFRAMES  ############################################
@@ -58,7 +54,10 @@ drt$PET<-thornthwaite(drt$TmeanC,lat = Lat)
 tp<-ts(drt$Pr_mm,frequency=12,start=c(1979,1))
 tpet<-ts(drt$PET,frequency=12,start=c(1979,1))
 SPEI<-spei(tp - tpet, SPEI_per)
-jpeg("Gridmet-SPEI.jpg", width = 350, height = 350)
+PlotName <- "Gridmet-SPEI"
+plot1 <- paste('./figures/additional/', PlotName)
+jpeg(paste(plot1, ".jpg", sep = ""), width = 350, height = 350)
+
 plot(x=SPEI,main="Gridmet") #eventually prob want to figure out how to make x-axis date
 dev.off()
 
@@ -100,7 +99,8 @@ for (i in 1:length(CF.split)){
   SPEI<-spei(tp-tpet,SPEI_per,ref.start=c(1950,1),ref.end=c(1999,12))
   CF.split[[i]]$SPEI <- SPEI$fitted[1:length(SPEI$fitted)]
   # Plot each CF
-  jpeg(paste(name,"-SPEI.jpg",sep=""), width = 350, height = 350)
+  plot <- paste('./figures/additional/', name)
+  jpeg(paste(plot,"-SPEI.jpg",sep=""), width = 350, height = 350)
   plot(x=SPEI,main=name) #eventually prob want to figure out how to make x-axis date
   dev.off()
 }
@@ -148,7 +148,7 @@ ggplot(data = drt3, aes(x=as.numeric(as.character(Year)), y=SPEI,fill = col)) +
   labs(title = "SPEI values for Historical Period (gridMET)", 
        x = "Date", y = "SPEI") +
   guides(color=guide_legend(override.aes = list(size=7))) + PlotTheme
-ggsave("Recent Drought.png", width = 18, height = 9)
+ggsave("Recent Drought.png", path = './figures/additional', width = 18, height = 9)
 
 # MACA prep dataframe
 all3$col[all3$SPEI>=0]<-"wet"
@@ -171,7 +171,7 @@ ggplot(data = subset(CF1,Year>=2025&Year<2056), aes(x=as.numeric(as.character(Ye
   labs(title = paste("SPEI values for", CFs[1], "climate future", sep = " " ), 
        x = "Date", y = "SPEI") +
   guides(color=guide_legend(override.aes = list(size=7))) + PlotTheme
-ggsave(paste(CFs[1], "Drought.png",sep=" "), width = 18, height = 9)
+ggsave(paste(CFs[1], "Drought.png",sep=" "), path = './figures/additional', width = 18, height = 9)
 
 ggplot(data = grid.append, aes(x=as.numeric(as.character(Year)), y=SPEI,fill = col)) + 
   geom_rect(xmin=2025, xmax=2055, ymin=-Inf, ymax=Inf, alpha=0.1, fill="darkgray", col="darkgray") +
@@ -181,7 +181,7 @@ ggplot(data = grid.append, aes(x=as.numeric(as.character(Year)), y=SPEI,fill = c
   labs(title = paste("SPEI values for", CFs[1], "(Gridmet + MACA)", sep = " " ), 
        x = "Date", y = "SPEI") +
   guides(color=guide_legend(override.aes = list(size=7))) + PlotTheme
-ggsave(paste(CFs[1], "Drought+Gridmet.png",sep=" "), width = 18, height = 9)
+ggsave(paste(CFs[1], "Drought+Gridmet.png",sep=" "), path = './figures/additional', width = 18, height = 9)
 
 # CF 2
 
@@ -198,7 +198,7 @@ ggplot(data = subset(CF2,Year>=2025&Year<2056), aes(x=as.numeric(as.character(Ye
   labs(title = paste("SPEI values for", CFs[2], "climate future", sep = " " ), 
        x = "Date", y = "SPEI") +
   guides(color=guide_legend(override.aes = list(size=7))) + PlotTheme
-ggsave(paste(CFs[2], "Drought.png",sep=" "), width = 18, height = 9)
+ggsave(paste(CFs[2], "Drought.png",sep=" "), path = './figures/additional', width = 18, height = 9)
 
 ggplot(data = grid.append, aes(x=as.numeric(as.character(Year)), y=SPEI,fill = col)) + 
   geom_rect(xmin=2025, xmax=2055, ymin=-Inf, ymax=Inf, alpha=0.1, fill="darkgray", col="darkgray") +
@@ -208,7 +208,7 @@ ggplot(data = grid.append, aes(x=as.numeric(as.character(Year)), y=SPEI,fill = c
   labs(title = paste("SPEI values for", CFs[2], "(Gridmet + MACA)", sep = " " ), 
        x = "Date", y = "SPEI") +
   guides(color=guide_legend(override.aes = list(size=7))) + PlotTheme
-ggsave(paste(CFs[2], "Drought+Gridmet.png",sep=" "), width = 18, height = 9)
+ggsave(paste(CFs[2], "Drought+Gridmet.png",sep=" "), path = './figures/additional', width = 18, height = 9)
 
 
 # Split into periods
@@ -351,7 +351,7 @@ for (i in 1:length(CF.split)){
 head(HistoricalDrought)
 head(FutureDrought)
 Drought<-rbind(HistoricalDrought,FutureDrought)
-write.csv(Drought,"Drt.all.csv",row.names=FALSE)  # csv with all drought events
+write.csv(Drought,"./data/derived-data/Drt.all.csv",row.names=FALSE)  # csv with all drought events
 
 Hist_char<-setNames(data.frame(matrix(ncol=6,nrow=length(levels(HistoricalDrought$CF)))),c("CF","per","Duration","Severity","Intensity","Frequency"))
 Hist_char$CF<-levels(HistoricalDrought$CF)
@@ -379,7 +379,7 @@ for (i in 1:length(Drought_char$CF)){
 Drought_char<-rbind(Hist_char,Drought_char) 
 
 # csv for averages for each CF for hist and future periods
-write.csv(Drought_char,"Drought_char.csv",row.names=FALSE)
+write.csv(Drought_char,"./data/derived-data/Drought_char.csv",row.names=FALSE)
 ########################################### BAR PLOTS ###############################################
 #Drought duration barplot
 Drought_char_H = subset(Drought_char, per == "H")
@@ -406,7 +406,7 @@ ggplot(Drought_all, aes(x=CF, y=as.numeric(Duration), fill=CF)) + geom_bar(stat=
        title=paste(SiteID, "- Average Drought Duration")) + 
   scale_fill_manual(values = colors3) + 
   BarPlotTheme
-ggsave(paste(SiteID, "Duration.png"), height=PlotHeight, width=PlotWidth, dpi=600)
+ggsave(paste(SiteID, "Duration.png"), path = './figures/additional', height=PlotHeight, width=PlotWidth, dpi=600)
 
 #Drought severity barplot
 ggplot(Drought_all, aes(x=CF, y=as.numeric(Severity), fill=CF)) + geom_bar(stat="identity", col="black") + 
@@ -415,7 +415,7 @@ ggplot(Drought_all, aes(x=CF, y=as.numeric(Severity), fill=CF)) + geom_bar(stat=
        title=paste(SiteID, "- Average Drought Severity")) + 
   scale_fill_manual(values = colors3) + 
   BarPlotTheme
-ggsave(paste(SiteID, "Severity.png"), height=PlotHeight, width=PlotWidth, dpi=600)
+ggsave(paste(SiteID, "Severity.png"), path = './figures/additional', height=PlotHeight, width=PlotWidth, dpi=600)
 
 #Drought intensity barplot
 ggplot(Drought_all, aes(x=CF, y=as.numeric(Intensity), fill=CF)) + geom_bar(stat="identity", col="black") + 
@@ -424,7 +424,7 @@ ggplot(Drought_all, aes(x=CF, y=as.numeric(Intensity), fill=CF)) + geom_bar(stat
        title=paste(SiteID, "- Average Drought Intensity")) + 
   scale_fill_manual(values = colors3) + 
   BarPlotTheme
-ggsave(paste(SiteID, "Intensity.png"), height=PlotHeight, width=PlotWidth, dpi=600)
+ggsave(paste(SiteID, "Intensity.png"), path = './figures/additional', height=PlotHeight, width=PlotWidth, dpi=600)
 
 #Drought-free interval barplot
 ggplot(Drought_all, aes(x=CF, y=as.numeric(Frequency), fill=CF)) + geom_bar(stat="identity", col="black") + 
@@ -433,5 +433,5 @@ ggplot(Drought_all, aes(x=CF, y=as.numeric(Frequency), fill=CF)) + geom_bar(stat
        title=paste(SiteID, "- Average Drought-Free Interval")) + 
   scale_fill_manual(values = colors3) + 
   BarPlotTheme
-ggsave(paste(SiteID, "Frequency.png"), height=PlotHeight, width=PlotWidth, dpi=600)
+ggsave(paste(SiteID, "Frequency.png"), path = './figures/additional', height=PlotHeight, width=PlotWidth, dpi=600)
 
