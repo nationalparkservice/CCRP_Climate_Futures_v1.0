@@ -26,7 +26,7 @@ Maintained by: Annie Kellner Dillon
     - Select 'Ignore'
     - A window will appear that shows the contents of your .gitignore text file. Press 'save'
     
-**Step 3: Create a new folder for data and tell GitHub to ignore it**
+**Step 3: Create a new folder for data and make sure GitHub ignores it**
 
 The parsing scripts are not functional in version 1 (due to remote work) so data must be parsed and placed appropriately before running the .Rmd script
 
@@ -35,10 +35,14 @@ The parsing scripts are not functional in version 1 (due to remote work) so data
     - Create a folders within your repo for data by clicking on the 'New Folder' button at the top left of the lower right window. 
     - Create a new folder called 'data'. If it is incorrectly named the script will not run. 
     - Select the 'Git' tab in the upper right window of RStudio
+    - Make sure your new 'data' folder does not appear
+    
+    IF IT DOES: 
     - Check the white box to 'stage' the new data folder you  have just created
     - Right-click on the blue box beneath the 'status' bar
     - Select 'ignore'
     - Save. Git will now ignore all contents of the '/data' folder including subfolders
+    - Contact Annie at anne_dillon@nps.gov because this means something is amiss
 
 **Step 4: Leave RStudio and use File Explorer to create data subfolders and add necessary data files**
 *To request parsed data, see Amber Runyon. To request other files see Annie Kellner Dillon (anne_dillon@nps.gov) or Amber Runyon (amber_runyon@nps.gov)*
