@@ -16,6 +16,12 @@ SiteID = "CONG"
 site <- "CONG"
 state <- "South Carolina"
 
+# For copying repo files to a local directory
+
+project_root_dir <- 'C:/Users/adillon/Documents/Repos/CCRP_Climate_Futures_dev' # local directory where your repo is stored
+local_rss_dir <- 'C:/Users/adillon/Documents/RSS/CONG/Test'
+
+
 # The following needs to be inputted if the park centroid will not be used to select the MACA grid cell for the water balance model:
 
 #MACA_lat <- 40.4465 
@@ -30,9 +36,10 @@ knitr::opts_chunk$set(
   echo = FALSE, 
   collapse = TRUE,
   warning = TRUE, # set to FALSE when done
-  message = TRUE, # set to FALSE when done
-  fig.path = "figures/" # Alaska: NPS stores figures within parent directory of repo
+  message = TRUE # set to FALSE when done
 )
+
+#packrat::init(options = list(local.repos = c('./local-repos/WaterBalance')))
 
 library(here); library(plyr); # Use here::here when package lubridate is used
 library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot); library(reshape2); library(raster); library(ncdf4); library(reshape2); library(WriteXLS); library(data.table); library(RColorBrewer); library(ggrepel);library(plyr); library(lubridate); library(dplyr); library(forcats); library(openxlsx); library("WaterBalance"); library(sf); library(raster); library(rgdal);
@@ -49,8 +56,7 @@ library(tmap); library(tmaptools); library(rJava); library(OpenStreetMap); libra
 
 ```
 
-```{r PRISM-plots, results=hide, fig.path='./PRISM', eval=FALSE} 
-# can add fig.path = './figures/PRISM when rewriting
+```{r PRISM-plots, results=hide, eval=FALSE} 
 
 source(here::here("PRISM", "RSS PRISM plots v1.2.R"),echo = FALSE)
 
@@ -59,7 +65,7 @@ source(here::here("PRISM", "RSS PRISM plots v1.2.R"),echo = FALSE)
 
 ## Climate Futures (MACA)
 
-```{r Climate-Futures, echo=FALSE, fig.path='./figures/MACA', message=FALSE, warning=FALSE, results=HIDE}
+```{r Climate-Futures, echo=FALSE, message=FALSE, warning=FALSE, results=HIDE}
 
 # source(here::here("RSS_MACA_Parsing.R")) # Parse MACA data. Output = "_init_parsed.RData". Outputs to MACA folder.
 
@@ -101,6 +107,18 @@ source(here::here("scripts", "Additional-tables-plots", "FLI FBI phenology plots
 
 source(here::here("scripts", "Additional-tables-plots", "RSS Audubon summary.R"))
 ```
+
+```{r Copy-and-delete-files, eval=FALSE}
+
+# RProj and .Rmd files
+
+rfile_list <- list.files(project_root_dir, pattern = '.R') 
+file.copy(file.path(project_root_dir, rfile_list), local_rss_dir)
+
+
+
+```
+
 
 ```{r}
 sessionInfo() # Records package versions used

@@ -95,6 +95,12 @@ File names must be spelled exactly as they are written here or the scripts will 
     - Run the script! Select Run --> Run All or press Ctrl+Alt+R
     - The script will create all the necessary files and folders from here on out. You can find derived data in the ./data/derived-data folder, and figures in the ./figures folder
 
+**Step 8 : Leave RStudio and create a backup copy of repo (optional)**
+
+    - Navigate to the local copy of your repo
+    - Compress entire repo into a zip file with the name of the park and the date
+    - Store the copy wherever appropriate (e.g., on your local machine, shared drive or cloud)
+
 ## End instructions for running Combine-Climate_Lite_scripts.Rmd
     
 
