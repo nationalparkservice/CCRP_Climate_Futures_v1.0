@@ -8,3 +8,4 @@ Drt.all.csv
 *.csv
 figures/
 data/
+packrat/lib*/
