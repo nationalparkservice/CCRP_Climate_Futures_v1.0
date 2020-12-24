@@ -1,6 +1,11 @@
+
+
 ### Instructions for running Combine-Climate_Lite_scripts.Rmd
 
-*Please use R version >= 4.0.2 and RStudio version >= 1.3.1056*
+Maintained by: Annie Kellner Dillon
+                anne_dillon@nps.gov
+
+*This script was created using R version >= 4.0.2 and RStudio version >= 1.3.1056*
 *These instructions assume the user has already connected RStudio to GitHub*
 
 **Step 1. Clone CCRP_Climate_Futures_dev into your local repository folder and connect to RStudio**
@@ -24,7 +29,6 @@
 **Step 3: Create a new folder for data and tell GitHub to ignore it**
 
 The parsing scripts are not functional in version 1 (due to remote work) so data must be parsed and placed appropriately before running the .Rmd script
-
 
 *A note on file structure: The notation './' is used to refer to the project root directory. This is where your .RProj file is located.*
 
@@ -72,7 +76,7 @@ File names must be spelled exactly as they are written here or the scripts will 
     - Enter park data into the user-input chunk in the .Rmd script
     - Run the script! Select Run --> Run All or press Ctrl+Alt+R
 
-## End instructions for running Version 1 of the RCF project
+## End instructions for running Combine-Climate_Lite_scripts.Rmd
     
 
 ## The following describes the set of functions to parse historical (PRISM and GridMET) data and CMIP5 (MACA) projections, create data tables, and plot visualizations.
