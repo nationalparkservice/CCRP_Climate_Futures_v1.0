@@ -93,6 +93,7 @@ File names must be spelled exactly as they are written here or the scripts will 
     - Make sure your new files and folders do not appear beneath the 'Git' tab
     - Enter park data into the user-input chunk in the .Rmd script
     - Run the script! Select Run --> Run All or press Ctrl+Alt+R
+    - The script will create all the necessary files and folders from here on out. You can find derived data in the ./data/derived-data folder, and figures in the ./figures folder
 
 ## End instructions for running Combine-Climate_Lite_scripts.Rmd
     
