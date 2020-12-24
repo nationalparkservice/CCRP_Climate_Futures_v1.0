@@ -1,27 +1,82 @@
 ### Instructions for running Combine-Climate_Lite_scripts.Rmd
 
 *Please use R version >= 4.0.2 and RStudio version >= 1.3.1056*
+*These instructions assume the user has already connected RStudio to GitHub*
 
 **Step 1. Clone CCRP_Climate_Futures_dev into your local repository folder and connect to RStudio**
 
-    - Go to [GitHub] (https://github.com) and sign in using your credentials
-    - Navigate to [nationalparkservice/CCRP_Climate_Futures_dev] (https://github.com/nationalparkservice/CCRP_Climate_Futures_dev)
-    - Select the green 'code' button and copy the HTTPS website to your clipboard
-    - In RStudio, click on File --> New Project. Select 
+    - In RStudio, click on File --> New Project. Select 'Version Control' and then 'Git'.
+    - Enter the URL for the repo [CCRP_Climate_Futures_dev] (https://github.com/nationalparkservice/CCRP_Climate_Futures_dev.git)
+    - Enter the name of the repo for the Project directory name (CCRP_Climate_Futures_dev)
+    - Create the project as a subdirectory of the local folder in which you store your respositories (example: ~/Documents/Repos)
+    - Select Create Project. 
+    - In the lower right window of RStudio, you should see the files and folders from the repo under the 'Files' tab. 
+        - These should be the same files and folders found on (https://github.com/nationalparkservice/CCRP_Climate_Futures_dev)
+
+**Step 2: Tell GitHub to ignore R Project files**
+
+    - Navigate to the 'Git' tab in the upper right window
+    - Place check mark in the white box ('staged') next to the .RProj file
+    - Right-click the colored symbol beneath the 'status' bar 
+    - Select 'Ignore'
+    - A window will appear that shows the contents of your .gitignore text file. Press 'save'
+    
+**Step 3: Create a new folder for data and tell GitHub to ignore it**
+
+The parsing scripts are not functional in version 1 (due to remote work) so data must be parsed and placed appropriately before running the .Rmd script
+
+
+*A note on file structure: The notation './' is used to refer to the project root directory. This is where your .RProj file is located.*
+
+    - Create a folders within your repo for data by clicking on the 'New Folder' button at the top left of the lower right window. 
+    - Create a new folder called 'data'. If it is incorrectly named the script will not run. 
+    - Select the 'Git' tab in the upper right window of RStudio
+    - Check the white box to 'stage' the new data folder you  have just created
+    - Right-click on the blue box beneath the 'status' bar
+    - Select 'ignore'
+    - Save. Git will now ignore all contents of the '/data' folder including subfolders
+
+**Step 4: Leave RStudio and use File Explorer to create data subfolders and add necessary data files**
+*To request parsed data, see Amber Runyon. To request other files see Annie Kellner Dillon (anne_dillon@nps.gov) or Amber Runyon (amber_runyon@nps.gov)*
+
+File names must be spelled exactly as they are written here or the scripts will not work. The notation '/' refers to a folder with multiple files (i.e. the .shp, .dbf, .prj etc. that comprise an ESRI shapefile)
+    
+    - Create the following subfolders within the ./data folder:
+        - spatial-data ('./data/spatial-data')
+        - RData ('./data/RData')
+        - raw-data ('./data/raw-data)
+        - derived-data (./data/derived-data')
+        
+    - Place the following files in folders as follows (PARK is a placeholder for the four-letter park code - i.e., CONG):
+        - './data/RData':
+            - PARK_init_parsed.RData
+            - PARK_PRISM_PptTminTmax_IntermediateFiles.RData (this file is normally created by the PRISM parsing script)
+        - './data/raw-data:
+            - GridMet.csv
+            - FLI FBI table.csv
+            - D_AET_points.csv
+            - Audubon-NPS_study-all_species_trends_filtered.csv
+        - './data/spatial-data
+            - water_storage.tif 
+            - elevation_cropped.tif
+            - /US_Counties 
+            - /State_Shapefile
+            - /nps_boundary
+            - /nps_boundary_centroids
+            - /Climate_grid
+            
+
+**Step 5: Return to RStudio and run script**
+
+    - Make sure your new files and folders do not appear beneath the 'Git' tab
+    - Enter park data into the user-input chunk in the .Rmd script
+    - Run the script! Select Run --> Run All or press Ctrl+Alt+R
+
+## End instructions for running Version 1 of the RCF project
     
 
+## The following describes the set of functions to parse historical (PRISM and GridMET) data and CMIP5 (MACA) projections, create data tables, and plot visualizations.
 
-
-
-The parsing scripts are not functional during remote work, so please begin the Climate Lite process with already-parsed data. The following files will need to be copied into the following folders:
-
-*./data/RData*
-
-
-
-Set of functions to parse historical (PRISM and GridMET) data and CMIP5 (MACA) projections, create data tables, and plot visualizations.
-
-## Steps of analysis are in different folders:
 **1. Historical trends (PRISM)**
 
     - Script for parsing data; script for plotting data
@@ -41,4 +96,3 @@ Set of functions to parse historical (PRISM and GridMET) data and CMIP5 (MACA) p
     - Forest vulnerability - (FLI FBI plots) - These only cover eastern parks
     - Audubon - most parks included
 
-Create branch for conducting analyses on a new park. If make generalizable improvements to script (e.g., bias correction improvements, new plots), commit to master. If embellishments that are specific or one-off, add to Variations repo. 
