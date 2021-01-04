@@ -151,20 +151,15 @@ unlink(spatial_dir, recursive = TRUE)
 
 # Rmd file
 
+rmd <- list.files(project_root_dir, pattern = '.Rmd') 
+file.copy(file.path(project_root_dir, rmd), local_rss_dir)
 
+# Remove figures and derived data from repo
 
+deriv_data <- paste(data_repo_dir, "derived-data", sep = '/')
 
-
-rfile_list <- list.files(project_root_dir, pattern = '.Rmd') 
-
-scripts <- paste(project_root_dir, "scripts", sep = "/")
-
-# Create folder structure that mimics 
-
-scripts_list <- list.files(paste(project_root_dir, "scripts", sep = "/"), pattern = '.R', recursive = TRUE, include.dirs = TRUE)
-file.copy(file.path(project_root_dir, rfile_list), local_rss_dir)
-
-
+unlink(deriv_data, recursive = TRUE)
+unlink(figs_repo_dir, recursive = TRUE)
 
 ```
 
