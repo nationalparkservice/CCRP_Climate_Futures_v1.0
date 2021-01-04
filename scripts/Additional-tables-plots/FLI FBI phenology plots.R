@@ -7,7 +7,7 @@
 # variable names changed to:  Park.Name Pcode FLI_day FBI_day FLI_pct FBI_pct FLI_max_delta
 # FBI_max_delta FLI_rate FBI_rate"    
 
-rm(list=ls())
+#rm(list=ls())
 DataDirName <- "./data/raw-data/"
 OutDirName <- './figures/additional/'
 

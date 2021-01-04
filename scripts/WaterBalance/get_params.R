@@ -120,10 +120,10 @@ latlong <- st_transform(latlong, crs = 4326) # project to lat/long
 
 sites <- as.data.frame(st_coordinates(latlong)) # begin new dataframe for sites
 
-sites[,3] <- extract(dem, points)
-sites[,4] <- extract(aspect, points)
-sites[,5] <- extract(slope, points)
-sites[,6] <- extract(soil, points)
+sites[,3] <- raster::extract(dem, points)
+sites[,4] <- raster::extract(aspect, points)
+sites[,5] <- raster::extract(slope, points)
+sites[,6] <- raster::extract(soil, points)
 sites[,7] <- seq.int(nrow(sites))
 sites[,8] <- 5 # default value for wind
 sites[,9] <- 0 # default value for snowpack
