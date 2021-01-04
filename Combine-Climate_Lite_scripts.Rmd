@@ -42,7 +42,7 @@ knitr::opts_chunk$set(
 #packrat::init(options = list(local.repos = c('./local-repos/WaterBalance')))
 
 library(here); library(plyr); # Use here::here when package lubridate is used
-library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot); library(reshape2); library(raster); library(ncdf4); library(reshape2); library(WriteXLS); library(data.table); library(RColorBrewer); library(ggrepel);library(plyr); library(lubridate); library(dplyr); library(forcats); library(openxlsx); library("WaterBalance"); library(sf); library(raster); library(rgdal); library(R.utils); library(tmap); library(tmaptools); library(rJava); library(OpenStreetMap); library(gridExtra); library(SPEI) 
+library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot); library(reshape2); library(raster); library(ncdf4); library(reshape2); library(WriteXLS); library(data.table); library(RColorBrewer); library(ggrepel);library(plyr); library(lubridate); library(dplyr); library(forcats); library(openxlsx); library("WaterBalance"); library(sf); library(raster); library(rgdal); library(R.utils); library(tmap); library(tmaptools); library(rJava); library(OpenStreetMap); library(gridExtra); library(SPEI); 
 
 ```
 
@@ -55,7 +55,7 @@ library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot
 
 ```
 
-```{r PRISM-plots, results=hide, eval=FALSE} 
+```{r PRISM-plots, results=hide, eval=TRUE} 
 
 source(here::here("scripts", "PRISM", "RSS PRISM plots v1.2.R"),echo = FALSE)
 
@@ -107,7 +107,7 @@ source(here::here("scripts", "Additional-tables-plots", "FLI FBI phenology plots
 source(here::here("scripts", "Additional-tables-plots", "RSS Audubon summary.R"))
 ```
 
-```{r Copy-and-delete-files, eval=FALSE}
+```{r Copy-and-delete-files, message=FALSE, warning=FALSE}
 
 # Create folder structure locally
 
