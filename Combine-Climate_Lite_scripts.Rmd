@@ -107,6 +107,52 @@ source(here::here("scripts", "Additional-tables-plots", "FLI FBI phenology plots
 source(here::here("scripts", "Additional-tables-plots", "RSS Audubon summary.R"))
 ```
 
+```{r Testing}
+
+# Final Environment created in this script
+
+file <- list.files(path = './data/RData', pattern = 'Final_Environment.RData', full.names = TRUE) 
+load(file)
+
+final <- rbind(H_annual, F_annual)
+
+summary <- final %>%
+  group_by(CF) %>%
+  summarise(across(ends_with("Custom"), list(min = min, mean = mean, max = max, sd = sd))) 
+
+summary2 <- final %>%
+  group_by(CF) %>%
+  summarize(across(starts_with("Over"), list(min = min, mean = mean, max = max, sd = sd)))
+
+summary3 <- full_join(summary, summary2)
+  
+# Final Environment created using old system
+
+old <- list.files(path = './data/RData/old', pattern = 'Final_Environment.RData', full.names = TRUE)
+load(old)
+
+final_old <- rbind(H_annual, F_annual)
+
+summary_old <- final_old %>%
+  group_by(CF) %>%
+  summarise(across(ends_with("Custom"), list(min = min, mean = mean, max = max, sd = sd))) 
+
+summary2_old <- final_old %>%
+  group_by(CF) %>%
+  summarize(across(starts_with("Over"), list(min = min, mean = mean, max = max, sd = sd)))
+
+summary3_old <- full_join(summary, summary2)
+
+# Compare
+
+m1 <- data.matrix(summary3)
+m2 <- data.matrix(summary3_old)
+
+m1-m2
+
+```
+
+
 ```{r Copy-and-delete-files, message=FALSE, warning=FALSE}
 
 # Create folder structure locally
