@@ -415,7 +415,7 @@ colnames(lmTable) <- c("Var", "Period", "YrCoeff(degF(in)/100yrs)", "seSlope", "
 
 print(lmTable, row.names = F)
 
-write.csv(lmTable, paste('./data/derived-data', SiteID, " Regression Table test ", Sys.Date(), ".csv", 
+write.csv(lmTable, paste('./data/derived-data/', SiteID, " Regression Table test ", Sys.Date(), ".csv", 
       sep=""), row.names=FALSE)
 
 rm(lmPpt,lmPptP1,lmPptP2,lmTmax,lmTmaxP1,lmTmaxP2,lmTmin,lmTminP1,lmTminP2,lmTmean,lmTmeanP1,lmTmeanP2)

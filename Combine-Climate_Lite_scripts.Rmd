@@ -42,7 +42,7 @@ knitr::opts_chunk$set(
 #packrat::init(options = list(local.repos = c('./local-repos/WaterBalance')))
 
 library(here); library(plyr); # Use here::here when package lubridate is used
-library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot); library(reshape2); library(raster); library(ncdf4); library(reshape2); library(WriteXLS); library(data.table); library(RColorBrewer); library(ggrepel);library(plyr); library(lubridate); library(dplyr); library(forcats); library(openxlsx); library("WaterBalance"); library(sf); library(raster); library(rgdal); library(R.utils); library(tmap); library(tmaptools); library(rJava); library(OpenStreetMap); library(gridExtra); library(SPEI); 
+library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot); library(reshape2); library(raster); library(ncdf4); library(reshape2); library(WriteXLS); library(data.table); library(RColorBrewer); library(ggrepel);library(plyr); library(lubridate); library(dplyr); library(forcats); library(openxlsx); library("WaterBalance"); library(sf); library(raster); library(rgdal); library(R.utils); library(tmap); library(tmaptools); library(rJava); library(OpenStreetMap); library(gridExtra); library(SPEI); library(tidyr)
 
 ```
 
@@ -114,18 +114,14 @@ source(here::here("scripts", "Additional-tables-plots", "RSS Audubon summary.R")
 file <- list.files(path = './data/RData', pattern = 'Final_Environment.RData', full.names = TRUE) 
 load(file)
 
-final <- rbind(H_annual, F_annual)
+final_new <- rbind(H_annual, F_annual)
 
-summary <- final %>%
+summary_new <- final_new %>%
   group_by(CF) %>%
-  summarise(across(ends_with("Custom"), list(min = min, mean = mean, max = max, sd = sd))) 
+  skim() %>%
+  yank("numeric") %>%
+  select(-c(n_missing, complete_rate, hist))
 
-summary2 <- final %>%
-  group_by(CF) %>%
-  summarize(across(starts_with("Over"), list(min = min, mean = mean, max = max, sd = sd)))
-
-summary3 <- full_join(summary, summary2)
-  
 # Final Environment created using old system
 
 old <- list.files(path = './data/RData/old', pattern = 'Final_Environment.RData', full.names = TRUE)
@@ -135,20 +131,23 @@ final_old <- rbind(H_annual, F_annual)
 
 summary_old <- final_old %>%
   group_by(CF) %>%
-  summarise(across(ends_with("Custom"), list(min = min, mean = mean, max = max, sd = sd))) 
-
-summary2_old <- final_old %>%
-  group_by(CF) %>%
-  summarize(across(starts_with("Over"), list(min = min, mean = mean, max = max, sd = sd)))
-
-summary3_old <- full_join(summary, summary2)
+  skim() %>%
+  yank("numeric") %>%
+  select(-c(n_missing, complete_rate, hist))
 
 # Compare
 
-m1 <- data.matrix(summary3)
-m2 <- data.matrix(summary3_old)
+diff <- summary_new %>%
+  dplyr::select(skim_variable, CF)
 
-m1-m2
+diff[,3] <- summary_new[,3] - summary_old[,3]
+diff[,4] <- summary_new[,4] - summary_old[,4]
+diff[,5] <- summary_new[,5] - summary_old[,5]
+diff[,6] <- summary_new[,6] - summary_old[,6]
+diff[,7] <- summary_new[,7] - summary_old[,7]
+diff[,8] <- summary_new[,8] - summary_old[,8]
+diff[,9] <- summary_new[,9] - summary_old[,9]
+  
 
 ```
 
