@@ -2,8 +2,8 @@
 
 ### Instructions for running Combine-Climate_Lite_scripts.Rmd
 
-Maintained by: Annie Kellner Dillon
-                anne_dillon@nps.gov
+Maintained by: Annie Kellner Dillon & Amber Runyon
+                anne_dillon@nps.gov ; amber_runyon@nps.gov
 
 *This script was created using R version >= 4.0.2 and RStudio version >= 1.3.1056*
 *These instructions assume the user has already connected RStudio to GitHub*
