@@ -1,8 +1,5 @@
 ---
 title: "Combine-climate-lite-scripts"
-author: 
-- name: Annie Kellner Dillon^[U.S.National Park Service, Climate Change Response Program, Fort Collins, CO]
--name: add additional authors as needed
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output: html_document
 abstract: This script combines all scripts previously run under CCRP's Climate Lite protocol for Resource Stewardship Strategies (RSS). 
