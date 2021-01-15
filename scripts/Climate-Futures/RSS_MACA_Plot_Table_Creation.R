@@ -1,12 +1,4 @@
 # RSS_Plot_Table_Creation vxx.R
-# v02.1 - added Future_Means to xlsx output.
-# v02 STABLE - 22 Oct 2015 - days below ColdTemp added and debugged.
-
-# AC - 07/03/2018 - Altered delta formulas to calculate difference from a standard averaged historical value, rather than by comparing CFs from Baseline_all data frame. 
-#   This is needed to make script compatible with MACA 
-
-# ACR - 01/02/2020 - Merged with A.Runyon code. Moved CF creation into this script. 
-
 
 ################################################## INITIALS ##################################################
 
