@@ -1,11 +1,4 @@
-# RSS_Plotting vxx.R
-
-# v01.4 Fixed missing line plots for Avg_Monthly_Tmin_Delta and Avg_Monthly_Tmax_Delta by removing fill parameter on geom_line. Line color is already specified by aes(colour=CF)
-# v01.3 Added GCM scatter w/ GCMs labelled. Revised plot titles to read Year.
-# v01.2 Added a scatter w/o box, darker/larger axis labels
-# v01.1 STABLE 22 Oct 2016 - added plots for below cold. Ref lines fixed. Scales OK, SiteID to plot titles & file names
-# v01 18 Oct 2015 - stable, writes to /figs.  Vertical plot scale issues not all sorted out.
-#                 - in 4-panel drought plot, all ref lines show on all plots (needs fixing)
+# RSS_MACA_Scatter and diagnostic.R
 
 ######### INITIALS #########
 
