@@ -1,10 +1,6 @@
 #####################################################################
 ###   Pulling Site Parameters for D. Thoma Water Balance Model ######
 #####################################################################
-
-# Annie Kellner Dillon 
-# 2020-12-10
-
 # Create output directory for maps
 
 maps = './figures/maps'
