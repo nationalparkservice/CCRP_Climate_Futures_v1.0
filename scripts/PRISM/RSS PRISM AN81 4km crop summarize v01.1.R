@@ -1,14 +1,4 @@
 #   PRISM_AN81_4km_crop_summarize vxx.R
-#   John Gross
-#   30 Oct 2015
-
-#   Input is single point, same as for extracting projection data.
-#   This code buffers the point. Default is one cell buffer (e.g. averaged over 3x3 grid)
-
-#  v01.1 - minor changes to variable names, cleaned up namespace.  16 Nov. Runs without error.
-#  v01 - Robust and running
-
-# Run time: iMac ~ 15 min w/ USB3 external drive; office PC: ~ 20 min w/ USB 2.0 (same drive)
 
 library(rgdal)
 library(raster)
