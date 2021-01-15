@@ -1,16 +1,5 @@
 #####
-# Note to ACR - Need to rename var in bcc-csm1-1-m and add it back into GCMs list
-
-
-
-#######################################################################################
-# Script for extracting historic and future projection data from daily CONUS MACAv2 dataset
-# Inputs: lat/lon coordinates, directory of .ncdf4 MACA data files, selected GCMs, and historical/future start and end years
-# Outputs: List of data frames containing all daily values for each scenario and variable, with data columns separated by GCM 
-#   Converts mm to inches and Kelvins to degrees F
-#######################################################################################
-
-#v01 - Running - Possible embellishment to include multiple grid cell parsing
+# RSS_MACA_Parsing.R
 
 library(ncdf4)
 library(reshape2)
