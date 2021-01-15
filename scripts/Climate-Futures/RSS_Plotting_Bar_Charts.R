@@ -1,22 +1,4 @@
-# RSS_Plotting vxx.R
-
-# _JEG v02.1 - moved subset of futures into variable. revised 30 March 2016
-# _JEG v02 - fixed error in subsetting future data.
-# _JEG v01 - modifed to read RData file; added SiteID, Lat, Lon to output file names. Input and output directories are the same.  18 Nov 2015.
-# modified version of v01 (22 Oct 2016) that expresses all but the by-season 4-panel drought chart as bar charts instead of box plots
-# (by-season 4-panel drought simply dropped from this version)
-# this version also allows the user to set the site name and the cold and hot temp thresholds implicit in the associated input files
-# related to number of days in which conditions are above or below a temp threshold (graph titles incorporate this input)
-# note also that the input csv files for the days-above the hot temp threshold and days below the cold temp threshold should be named
-# "TotalOverHotTemp" and "TotalUnderColdTemp", respectively
-
-# Note: the subset of scenarios for graphing are identified individually for each graph in lines 39-59; we could instead have a single
-# place to identify the subset and then adjust the coding for each plot to follow that choice (but note that unless the subset is
-# Warm Dry, Central, & Hot Wet, color coding will have to be adjusted for each plot
-
-#setwd(WD_plots)
-
-
+# RSS_Plotting_Bar_Charts.R
 
 ################ INITIALS ##########################
 
