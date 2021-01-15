@@ -1,3 +1,4 @@
+# Gridmet-parse.R
 # Extract GridMET NetCDF files
 # Convert to imperial units (inches,Fahrenheit)
 # Write to csv
