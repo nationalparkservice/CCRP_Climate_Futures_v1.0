@@ -1,15 +1,4 @@
-##  PRISM_3 seas_ann_avgs_plots vxx.R
-#   John Gross   
-#   Inputs:  rData output from RSS parse script
-
-#  v1.5 - Converted all plots to ggplot except for Avg Monthly Tmin Tmax Precip, updated plot titles and captions.
-#  v1.4 - Revised monthly average Tmax/Tmin/Ppt plots. Uses separate axes to improve visibility of ppt bar plot, 
-#         added std. dev. bars to ppt bar plot, and changed x-axis labels to month abbreviations. 
-#  v1.3 - Includes PRISM data up to 2016, edited code to easily change data end year (May 2017)
-#  v1.1 - minor fixes to red-blue plot, 10-yr running mean
-  #  need to deal with outfile directories - use info from RData file and get rid of code here
-#  v1.0. 30 Oct 2015 - No known errors. Runs top to bottom.
-  #   conversion to in and deg F; to read rdata file as input, modified some plots, directories
+##  RSS PRISM plots vxxx.R
 
 #################################################
 
