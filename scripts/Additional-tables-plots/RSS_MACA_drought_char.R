@@ -1,9 +1,3 @@
-############################
-# Revise drought calcs - Based on BIBE calcs, updated to only use drought years
-# Using WB PET so able to use Hamon equation
-# Methodology taken from: Runyon (2019);Thilakarathne & Sridhar (2017);Yang et al. (2009);Shiau (2006);Shiau & Shen (2001)...
-
-
 
 ################################ USER INPUTS #################################################
 
