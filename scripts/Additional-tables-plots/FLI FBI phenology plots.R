@@ -1,5 +1,4 @@
 #  FLI FBI phenology plots v0x.R  
-# 2018_04_05
 
 #  plot data from Monahan et al. early flowering in parks Ecosphere 
 #  plot all parks, and highlight a specific park
