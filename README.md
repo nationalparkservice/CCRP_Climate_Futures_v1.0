@@ -17,15 +17,8 @@ Maintained by: Climate Change Response Program
     - In the lower right window of RStudio, you should see the files and folders from the repo under the 'Files' tab. 
         - These should be the same files and folders found on (https://github.com/nationalparkservice/CCRP_Climate_Futures_dev)
 
-**Step 2: Tell GitHub to ignore R Project files**
-
-    - Navigate to the 'Git' tab in the upper right window
-    - Place check mark in the white box ('staged') next to the .RProj file
-    - Right-click the colored symbol beneath the 'status' bar 
-    - Select 'Ignore'
-    - A window will appear that shows the contents of your .gitignore text file. Press 'save'
     
-**Step 3: Create a new folder for data and make sure GitHub ignores it**
+**Step 2: Create a new folder for data and make sure GitHub ignores it**
 
 The parsing scripts are not functional in version 1 (due to remote work) so data must be parsed and placed appropriately before running the .Rmd script
 
@@ -41,10 +34,10 @@ The parsing scripts are not functional in version 1 (due to remote work) so data
     - Right-click on the blue box beneath the 'status' bar
     - Select 'ignore'
     - Save. Git will now ignore all contents of the '/data' folder including subfolders
-    - Contact Annie at anne_dillon@nps.gov because this means something is amiss
+    - Contact Annie at anne_dillon@nps.gov or Amber at amber_runyon@nps.gov because this means something is amiss
 
 **Step 4: Leave RStudio and use File Explorer to create data subfolders and add necessary data files**
-*To request parsed data, see Amber Runyon. To request other files see Annie Kellner Dillon (anne_dillon@nps.gov) or Amber Runyon (amber_runyon@nps.gov)*
+*To request parsed data, see Amber Runyon at amber_runyon@nps.gov. To request other files see Annie Kellner Dillon (anne_dillon@nps.gov) or Amber Runyon*
 
 File names must be spelled exactly as they are written here or the scripts will not work. The notation '/' refers to a folder with multiple files (i.e. the .shp, .dbf, .prj etc. that comprise an ESRI shapefile)
     
@@ -57,8 +50,8 @@ File names must be spelled exactly as they are written here or the scripts will 
     - Place the following files in folders as follows (PARK is a placeholder for the four-letter park code - i.e., CONG):
         - './data/RData':
             - PARK_init_parsed.RData
-            - PARK_PRISM_PptTminTmax_IntermediateFiles.RData (this file is normally created by the PRISM parsing script)
-        - './data/raw-data:
+            - PARK_PRISM_PptTminTmax_IntermediateFiles.RData (this file is normally created by the PRISM parsing script: './scripts/PRISM/RSS PRISM AN81 4km crop summarize v01.1.R)
+        - './data/raw-data: 
             - GridMet.csv
             - FLI FBI table.csv
             - D_AET_points.csv

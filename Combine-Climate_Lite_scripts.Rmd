@@ -144,6 +144,8 @@ diff[,6] <- summary_new[,6] - summary_old[,6]
 diff[,7] <- summary_new[,7] - summary_old[,7]
 diff[,8] <- summary_new[,8] - summary_old[,8]
 diff[,9] <- summary_new[,9] - summary_old[,9]
+
+diff
   
 
 ```
