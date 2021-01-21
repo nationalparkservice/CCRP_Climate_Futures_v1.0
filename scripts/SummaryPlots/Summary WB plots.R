@@ -36,9 +36,9 @@ GCMs = unique(ALL_FUTURE$GCM[which(ALL_FUTURE$CF %in% CF.sub)])
 ############################################ Format Gridmet data ####################################################
 head(grid)
 grid$tmean<-(grid$tmax+grid$tmin)/2
-grid$Date = ymd(grid$Date) # changed AKD 11/1/2020
-grid$month = month(grid$Date) # changed AKD 11/1/2020
-grid$year = year(grid$Date) # changed AKD 11/1/2020
+grid$Date = as.Date(grid$Date, "%m/%d/%Y")
+grid$month = strftime(grid$Date, "%m")
+grid$year = strftime(grid$Date, "%Y")
 grid.yrMAvgs = aggregate(tmean ~ year+month, data=grid, FUN=mean)
 
 ppt.yrMAvgs = aggregate(precip~year+month, data=grid, FUN=sum)

@@ -31,8 +31,8 @@ col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
 ############################################ Format Gridmet data ####################################################
 head(grid)
 grid$tmean<-(grid$tmax+grid$tmin)/2
-grid$Date = ymd(grid$Date) # changed AKD 11/1/2020
-grid$year = year(grid$Date)
+grid$Date = as.Date(grid$Date, "%m/%d/%Y")
+grid$year = strftime(grid$Date, "%Y")
 grid.yrAvgs = aggregate(tmean ~ year, data=grid, FUN=mean)
 
 ppt.yrAvgs = aggregate(precip~year, data=grid, FUN=sum)
