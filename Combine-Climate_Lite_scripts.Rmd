@@ -19,9 +19,12 @@ state <- "South Carolina"
 project_root_dir <- 'C:/Users/adillon/Documents/Repos/CCRP_Climate_Futures_dev' # local directory where your repo is stored
 local_rss_dir <- 'C:/Users/adillon/Documents/RSS/CONG/Test' # local directory where you want this repo copied. Should be something like 'C:/Users/adillon/Documents/RSS/CONG'
 
-# Input Climate Futures
+# Specify Climate Futures and Models
 
 FutureSubset <- c("Warm Wet","Hot Dry") # Pick pair of climate futures.
+#CFs<- c("Warm Wet", "Hot Dry")
+
+#GCMs = c("CNRM-CM5.rcp45","HadGEM2-ES365.rcp85") 
 
 # The following needs to be inputted if the park centroid will not be used to select the MACA grid cell for the water balance model:
 
@@ -29,7 +32,6 @@ FutureSubset <- c("Warm Wet","Hot Dry") # Pick pair of climate futures.
 #MACA_lon <- -108.7651
 
 ```
-
 
 
 ```{r setup, include=FALSE}
@@ -53,7 +55,7 @@ library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot
 
 ```{r PRISM-parse, eval = FALSE, message=FALSE, warning=FALSE, echo=FALSE}
 
-#source(here::here("./PRISM/RSS PRISM AN81 4km summarize v01.1.R")) # Parses PRISM data. Output = "PARK_lat_long_PRISM_PptTminTmax_IntermediateFiles.RData" # NOTE: Because this script is excluded, headers have not been changed
+#source(here::here("./PRISM/PRISM_4k_parse.R")) # Parses PRISM data. Output = "PARK_lat_long_PRISM_PptTminTmax_IntermediateFiles.RData" # NOTE: This script is excluded and has not been adapted to the new process
 
 ```
 
@@ -77,16 +79,11 @@ source(here::here("scripts", "Climate-Futures", "RSS_MACA_Plot_Table_Creation.R"
 source(here::here("scripts", "Climate-Futures", "RSS_MACA_Scatter and diagnostic.R"), local = knitr::knit_global()) # Creates scatter and diagnostic plots. Outputs to Figs MACA folder. 
 ```
 
-```{r Input-Climate-Futures}
+```{r CF-plots}
 
 if (exists("FutureSubset") == FALSE) stop("Please specify Climate Futures")
 
 source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts.R")) # Requires "PARK_lat_long_Final_Environment.RData". Outputs plots and Excel Workbook to Figs MACA folder.
-
-```
-
-
-
 
 ```
 
@@ -95,9 +92,16 @@ source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts.R")) # 
 ```{r Water-Balance, message=FALSE, warning=FALSE, echo = FALSE, results=HIDE}
 
 source(here::here("scripts", "WaterBalance", "get_params.R"))
+```
+
+```{r}
+
+if (exists("GCMs") == FALSE) stop("Please specify GCMs")
 
 source(here::here("scripts", "WaterBalance", "Daily_WB_batch_v2.R")) 
+
 ```
+
 
 # Summary Plots
 
@@ -127,6 +131,7 @@ file <- list.files(path = './data/RData', pattern = 'Final_Environment.RData', f
 load(file)
 
 final_new <- rbind(H_annual, F_annual)
+final_new <- dplyr::select(final_new, -c(EndGrow:Sp.Frost))
 
 summary_new <- final_new %>%
   group_by(CF) %>%
