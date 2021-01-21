@@ -4,7 +4,7 @@
 
 # Need to check all the subsets
 ### NEED TO CHANGE LINE 72 for ordering scenarios on plots
-FutureSubset <- c("Warm Wet","Hot Dry")          # Select two scenarios from the CFs vector specified in CMIP5_Parsing script. Names must match.
+
 Scenario1<-FutureSubset[1]
 Scenario2<-FutureSubset[2]
 
@@ -64,8 +64,8 @@ Season_delta$season<-factor(Season_delta$season,levels=c("Winter","Spring","Summ
 H<-H_annual[,-c(1:2)]
 Hist_annual<-aggregate(.~Year,data=H,mean);rm(H)
 Hist_annual$CF<-"Historical"
-Hist_annual<-Hist_annual[,c("Year","CF",names(Hist_annual[,2:23]))] 
-F_annual<-subset(F_annual, CF %in% FutureSubset, select= -c(GCM)) 
+Hist_annual<-Hist_annual[,c("Year","CF",names(Hist_annual[,2:26]))] 
+F_annual<-subset(F_annual, CF %in% FutureSubset, select = -c(GCM))
 Fut_annual<-aggregate(.~Year+CF,F_annual,mean)
 Annual<-rbind(Hist_annual,Fut_annual)
 Annual$CF<-factor(Annual$CF,levels=c("Historical",Scenario1, Scenario2), ordered=is.ordered(Annual$CF))
