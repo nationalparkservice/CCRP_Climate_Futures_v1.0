@@ -13,11 +13,15 @@ SiteID = "CONG"
 site <- "CONG"
 state <- "South Carolina"
 
+
 # When this document has finished running, the files will be copied to a local directory and all newly created files (e.g., figures) will be deleted from the repo
 
 project_root_dir <- 'C:/Users/adillon/Documents/Repos/CCRP_Climate_Futures_dev' # local directory where your repo is stored
 local_rss_dir <- 'C:/Users/adillon/Documents/RSS/CONG/Test' # local directory where you want this repo copied. Should be something like 'C:/Users/adillon/Documents/RSS/CONG'
 
+# Input Climate Futures
+
+FutureSubset <- c("Warm Wet","Hot Dry") # Pick pair of climate futures.
 
 # The following needs to be inputted if the park centroid will not be used to select the MACA grid cell for the water balance model:
 
@@ -36,10 +40,11 @@ knitr::opts_chunk$set(
   message = TRUE # set to FALSE when done
 )
 
-#packrat::init(options = list(local.repos = c('./local-repos/WaterBalance')))
+#packrat::init(options = list(local.repos = c('./local-repos/WaterBalance'))) # This should only have to be entered once
 
 library(here); library(plyr); # Use here::here when package lubridate is used
-library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot); library(reshape2); library(raster); library(ncdf4); library(reshape2); library(WriteXLS); library(data.table); library(RColorBrewer); library(ggrepel);library(plyr); library(lubridate); library(dplyr); library(forcats); library(openxlsx); library("WaterBalance"); library(sf); library(raster); library(rgdal); library(R.utils); library(tmap); library(tmaptools); library(rJava); library(OpenStreetMap); library(gridExtra); library(SPEI); library(tidyr)
+library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot); library(reshape2); library(raster); library(ncdf4); library(reshape2); library(WriteXLS); library(data.table); library(RColorBrewer); library(ggrepel);library(plyr); library(lubridate); library(dplyr); library(forcats); library(openxlsx); library("WaterBalance"); library(sf); library(raster); library(rgdal); library(R.utils); library(tmap); library(tmaptools); library(rJava); library(OpenStreetMap); library(gridExtra); library(SPEI); library(tidyr); library(tibble); library(sp); #library(cft)
+
 
 ```
 
@@ -70,8 +75,18 @@ source(here::here("scripts", "PRISM", "RSS PRISM plots v1.2.R"),echo = FALSE)
 source(here::here("scripts", "Climate-Futures", "RSS_MACA_Plot_Table_Creation.R"), local = knitr::knit_global()) # Requires "PARK_init_parsed.RData"; Output = "PARK_lat_long_Final_Environment.RData". 
 
 source(here::here("scripts", "Climate-Futures", "RSS_MACA_Scatter and diagnostic.R"), local = knitr::knit_global()) # Creates scatter and diagnostic plots. Outputs to Figs MACA folder. 
+```
+
+```{r Input-Climate-Futures}
+
+if (exists("FutureSubset") == FALSE) stop("Please specify Climate Futures")
 
 source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts.R")) # Requires "PARK_lat_long_Final_Environment.RData". Outputs plots and Excel Workbook to Figs MACA folder.
+
+```
+
+
+
 
 ```
 
