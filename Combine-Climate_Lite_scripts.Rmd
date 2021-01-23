@@ -22,9 +22,9 @@ local_rss_dir <- 'C:/Users/adillon/Documents/RSS/CONG/Test' # local directory wh
 # Specify Climate Futures and Models
 
 FutureSubset <- c("Warm Wet","Hot Dry") # Pick pair of climate futures.
-#CFs<- c("Warm Wet", "Hot Dry")
+CFs<- c("Warm Wet", "Hot Dry")
 
-#GCMs = c("CNRM-CM5.rcp45","HadGEM2-ES365.rcp85") 
+WB_GCMs = c("CNRM-CM5.rcp45","HadGEM2-ES365.rcp85") 
 
 # The following needs to be inputted if the park centroid will not be used to select the MACA grid cell for the water balance model:
 
@@ -81,7 +81,7 @@ source(here::here("scripts", "Climate-Futures", "RSS_MACA_Scatter and diagnostic
 
 ```{r CF-plots}
 
-if (exists("FutureSubset") == FALSE) stop("Please specify Climate Futures")
+if (exists("FutureSubset") == FALSE) stop("Please specify Climate Futures") # At the top of the script, please enter a combination of futures, e.g. Warm Wet/Hot Dry
 
 source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts.R")) # Requires "PARK_lat_long_Final_Environment.RData". Outputs plots and Excel Workbook to Figs MACA folder.
 

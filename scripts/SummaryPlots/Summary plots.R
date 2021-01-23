@@ -172,7 +172,7 @@ t<-ggplot(yrAvgs.sub, aes(x=as.numeric(as.character(year)), y=Tavg.mean, col=CF,
         axis.line = element_line(colour = "black"), #Add axis lines
         panel.background = element_blank(), #Background white
         panel.grid.major = element_line("light grey",0.3)) #add grid back
-t
+
 
 p<-ggplot(yrAvgs.sub, aes(x=as.numeric(as.character(year)), y=Precip.mean, col=CF, fill=CF)) + 
   geom_rect(xmin=2025, xmax=2055, ymin=0, ymax=100, alpha=0.1, fill="lightgray", col="lightgray") +
@@ -194,7 +194,6 @@ p<-ggplot(yrAvgs.sub, aes(x=as.numeric(as.character(year)), y=Precip.mean, col=C
         axis.line = element_line(colour = "black"), #Add axis lines
         panel.background = element_blank(), #Background white
         panel.grid.major = element_line("light grey",0.3)) #add grid back
-p
 
 
 grid.arrange(t,p, nrow=2)
