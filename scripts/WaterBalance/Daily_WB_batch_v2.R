@@ -31,8 +31,7 @@ OutDir = "./figures/water-balance"
 
 #Select GCMs - Include RCP
 unique(ALL_FUTURE$GCM)
-GCMs = c("CNRM-CM5.rcp45", "HadGEM2-ES365.rcp85") # MACA model selection - WW/HD
-CFs = c("Warm Wet", "Hot Dry")
+
 
 colors2<- c("#9A9EE5","#E10720")  # WarmWet/HotDry
 #colors2<- c("#F3D3CB","#12045C")  # HotWet/WarmDry
@@ -63,21 +62,21 @@ if(dir.exists(OutDir) == FALSE){
 
 ClimData<-data.frame(Date=as.numeric(),ppt_mm=as.numeric(),tmean_C=as.numeric(),GCM=as.character())
 # Loop through selected GCMs
-for(i in 1:length(GCMs)){
-  gcm <- GCMs[i]
+for(i in 1:length(WB_GCMs)){
+  gcm <- WB_GCMs[i]
   x<-subset(ALL_HIST,GCM == gcm, select=c("Date","ppt_mm","tmean_C","GCM"))
   y<-subset(ALL_FUTURE,GCM == gcm, select=c("Date","ppt_mm","tmean_C","GCM"))
   ClimData = rbind(ClimData,x,y)
 }
-ClimData$GCM<-factor(ClimData$GCM,levels=GCMs)
+ClimData$GCM<-factor(ClimData$GCM,levels=WB_GCMs)
 ######################################################### END CLIMATE INPUTS ####################################################################
 
 
 ######################################################### CALCULATE WB VARIABLES ################################################################
 AllDailyWB<-list()
 
-for (j in 1:length(GCMs)){
-  gcm = GCMs[j]
+for (j in 1:length(WB_GCMs)){
+  gcm = WB_GCMs[j]
   DailyWB = subset(ClimData,GCM=gcm)
   for(i in 1:nrow(sites)){
     SiteID = sites$SiteID[i]
