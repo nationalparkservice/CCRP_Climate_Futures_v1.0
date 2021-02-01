@@ -1,21 +1,22 @@
 
 
-### Instructions for running Combine-Climate_Lite_scripts.Rmd
+### Instructions for running CCRP_Climate_Futures.Rmd
 
 Maintained by: Climate Change Response Program
 
 *This script was created using R version >= 4.0.2 and RStudio version >= 1.3.1056*
 *These instructions assume the user has already connected RStudio to GitHub*
 
-**Step 1. Clone CCRP_Climate_Futures_dev into your local repository folder and connect to RStudio**
+**Step 1. Clone CCRP_Climate_Futures into your local repository folder and connect to RStudio**
 
     - In RStudio, click on File --> New Project. Select 'Version Control' and then 'Git'.
-    - Enter the URL for the repo [CCRP_Climate_Futures_dev] (https://github.com/nationalparkservice/CCRP_Climate_Futures_dev.git)
-    - Enter the name of the repo for the Project directory name (CCRP_Climate_Futures_dev)
+    - Enter the URL for the repo. Connect using SSH. [CCRP_Climate_Futures] (git@github.com:nationalparkservice/CCRP_Climate_Futures.git)
+    - Enter the name of the repo for the Project directory name (CCRP_Climate_Futures)
     - Create the project as a subdirectory of the local folder in which you store your respositories (example: ~/Documents/Repos)
     - Select Create Project. 
     - In the lower right window of RStudio, you should see the files and folders from the repo under the 'Files' tab. 
-        - These should be the same files and folders found on (https://github.com/nationalparkservice/CCRP_Climate_Futures_dev)
+        - These should be the same files and folders found on 
+[CCRP_Climate_Futures](https://github.com/nationalparkservice/CCRP_Climate_Futures)
 
     
 **Step 2: Create a new folder for data and make sure GitHub ignores it**
@@ -39,7 +40,7 @@ The parsing scripts are not functional in version 1 (due to remote work) so data
 **Step 4: Leave RStudio and use File Explorer to create data subfolders and add necessary data files**
 *To request parsed data, see Amber Runyon at amber_runyon@nps.gov. To request other files see Annie Kellner Dillon (anne_dillon@nps.gov) or Amber Runyon*
 
-*A zipped folder of all data located at [Link](https://doimspp.sharepoint.com/sites/NPS-CCRP-FCScienceAdaptation/Shared%20Documents/Forms/AllItems.aspx?viewid=54c972dc%2D7b2e%2D4eb7%2Da737%2D42792988c0b3&id=%2Fsites%2FNPS%2DCCRP%2DFCScienceAdaptation%2FShared%20Documents%2FRCF%2Fscript%20rewrites)
+*A zipped folder of all data located at [CCRP_Climate_Futures_Data](https://doimspp.sharepoint.com/sites/NPS-CCRP-FCScienceAdaptation/Shared%20Documents/Forms/AllItems.aspx?viewid=54c972dc%2D7b2e%2D4eb7%2Da737%2D42792988c0b3&id=%2Fsites%2FNPS%2DCCRP%2DFCScienceAdaptation%2FShared%20Documents%2FRCF%2Fscript%20rewrites)
 
 File names must be spelled exactly as they are written here or the scripts will not work. The notation '/' refers to a folder with multiple files (i.e. the .shp, .dbf, .prj etc. that comprise an ESRI shapefile)
     
@@ -95,12 +96,12 @@ File names must be spelled exactly as they are written here or the scripts will 
     - Compress entire repo into a zip file with the name of the park and the date
     - Store the copy wherever appropriate (e.g., on your local machine, shared drive or cloud)
 
-## End instructions for running Combine-Climate_Lite_scripts.Rmd
+## End instructions for running CCRP_Climate_Futures.Rmd
     
 
 ## The following describes the set of functions to parse historical (PRISM and GridMET) data and CMIP5 (MACA) projections, create data tables, and plot visualizations.
 
-**1. Historical trends (PRISM)**
+**1. Historical trends**
 
     - Script for parsing data; script for plotting data
 **2. Climate Futures**
