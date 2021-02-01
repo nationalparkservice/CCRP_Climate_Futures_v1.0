@@ -45,7 +45,7 @@ knitr::opts_chunk$set(
 #packrat::init(options = list(local.repos = c('./local-repos/WaterBalance'))) # This should only have to be entered once
 
 library(here); library(plyr); # Use here::here when package lubridate is used
-library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot); library(reshape2); library(raster); library(ncdf4); library(reshape2); library(WriteXLS); library(data.table); library(RColorBrewer); library(ggrepel);library(plyr); library(lubridate); library(dplyr); library(forcats); library(openxlsx); library("WaterBalance"); library(sf); library(raster); library(rgdal); library(R.utils); library(tmap); library(tmaptools); library(rJava); library(OpenStreetMap); library(gridExtra); library(SPEI); library(tidyr); library(tibble); library(sp); #library(cft)
+library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot); library(reshape2); library(raster); library(ncdf4); library(reshape2); library(WriteXLS); library(data.table); library(RColorBrewer); library(ggrepel);library(plyr); library(lubridate); library(dplyr); library(forcats); library(openxlsx); library("WaterBalance"); library(sf); library(raster); library(rgdal); library(R.utils); library(tmap); library(tmaptools); library(rJava); library(OpenStreetMap); library(gridExtra); library(SPEI); library(tidyr); library(tibble); library(sp); library(skimr) #library(cft)
 
 
 ```
@@ -123,7 +123,7 @@ source(here::here("scripts", "Additional-tables-plots", "FLI FBI phenology plots
 source(here::here("scripts", "Additional-tables-plots", "RSS Audubon summary.R"))
 ```
 
-```{r Testing}
+```{r Testing, eval = FALSE}
 
 # Final Environment created in this script
 
@@ -167,7 +167,6 @@ diff[,9] <- summary_new[,9] - summary_old[,9]
 
 diff
   
-
 ```
 
 
