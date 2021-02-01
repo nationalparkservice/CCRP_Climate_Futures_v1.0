@@ -1,4 +1,4 @@
-##  RSS PRISM plots vxxx.R
+##  RSS Historical-trends plots vxxx.R
 
 #################################################
 
@@ -12,7 +12,7 @@ if(dir.exists(figs) == FALSE){
   dir.create(figs)
 }
 
-WD_plots = './figures/PRISM' # for plots
+WD_plots = './figures/Historical-trends' # for plots
 if(dir.exists(WD_plots) == FALSE){
   dir.create(WD_plots)
 }
@@ -73,7 +73,7 @@ names(baseData)[1:3] <- c("yr", "mon","yrmon")
 
 refData<-baseData[baseData$yr >= beginRefYr & baseData$yr <= endRefYr,]
 
-	# maybe should use PRISM year avgs instead i.e. month 14
+	# maybe should use Historical-trends year avgs instead i.e. month 14
 pptAvg = with(baseData, tapply(ppt, yr, mean))  * 12  # xx/mo ->: xx/yr
 tminAvg = with(baseData, tapply(tmin, yr, mean))
 tmaxAvg = with(baseData, tapply(tmax, yr, mean))
@@ -84,7 +84,7 @@ yrAvgs <- data.frame(cYr, pptAvg, tminAvg, tmaxAvg, tmeanAvg)
 yrAvgs$tAvg <- (yrAvgs$tminAvg+yrAvgs$tmaxAvg)/2
 
 
-  ## interesting to compare PRISM vs calcuated Tmean
+  ## interesting to compare Historical-trends vs calcuated Tmean
 
 pptRef <- data.frame(yrAvgs[yrAvgs$cYr >= beginRefYr & yrAvgs$cYr <= endRefYr, 2])
 names(pptRef) <- "ppt"
@@ -152,7 +152,7 @@ for(i in 1:12){
 
 PlotName <- "Avg Monthly Tmin Tmax Ppt"
 OFName <- paste(PlotName, " ", SiteID, " ", Lat, " ", Lon, sep = "")	
-plot1 <- paste('./figures/PRISM/', OFName)
+plot1 <- paste('./figures/Historical-trends/', OFName)
 
 png(paste(plot1, ".png", sep = ""), width=6.5*dpi, height=4.5*dpi, res=dpi)
 
@@ -256,7 +256,7 @@ p3 = add_sub(p2, paste("Gray shaded area around regression lines = standard erro
              y=0.5, hjust=0.5, vjust=0.5, size=12)
 ggdraw(p3)
 
-OFName = paste("./figures/PRISM/", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
+OFName = paste("./figures/Historical-trends/", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
 ggsave(OFName, width=6.5, height=8.5, dpi=dpi)
 
 ##########################
@@ -323,7 +323,7 @@ p3 = add_sub(p2, paste("Gray shaded area around regression lines = standard erro
              y=.5, hjust=0.5, vjust=0.5, size=12)
 ggdraw(p3)
 
-OFName <- paste("./figures/PRISM/", PlotName, " 4-panel ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
+OFName <- paste("./figures/Historical-trends/", PlotName, " 4-panel ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
 ggsave(OFName, width=6.5, height=8.5, dpi=dpi)
 
 #2-panel Tmax/Tmin plot
@@ -333,7 +333,7 @@ p3 = add_sub(p2, paste("Gray shaded area around regression lines = standard erro
              y=.5, hjust=0.5, vjust=0.5, size=12)
 ggdraw(p3)
 
-OFName <- paste('./figures/PRISM/', PlotName, " Tmin Tmax ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
+OFName <- paste('./figures/Historical-trends/', PlotName, " Tmin Tmax ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
 ggsave(OFName, width=6.5, height=6.5, dpi=dpi)
 
 #2-panel Tmean/Precip plot
@@ -343,7 +343,7 @@ p3 = add_sub(p2, paste("Gray shaded area around regression lines = standard erro
              y=.5, hjust=0.5, vjust=0.5, size=12)
 ggdraw(p3)
 
-OFName <- paste('./figures/PRISM/', PlotName, " Tmean Precip ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
+OFName <- paste('./figures/Historical-trends/', PlotName, " Tmean Precip ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
 ggsave(OFName, width=6.5, height=6.5, dpi=dpi)
 
 		# regressions for trends
@@ -525,7 +525,7 @@ p2 = plot_grid(title, p1, legend, ncol=1, rel_heights = c(0.05, 1, 0.05))
 p3 = add_sub(p2, paste("Anomaly = (Mean decadal value) - (mean of all decades) \n Decadal ranges = ", stepYrs, "-year steps from ", BeginYr, " to ", max(seasStepAvgs$startYr)+9, sep=""), y=0.5, hjust=0.5, size=12)
 ggdraw(p3)
 
-OFName <- paste('./figures/PRISM/', PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
+OFName <- paste('./figures/Historical-trends/', PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
 ggsave(OFName, width=6.5, height=8.5, dpi=dpi)
 
 
@@ -592,7 +592,7 @@ p2 = plot_grid(title, p1, legend, ncol=1, rel_heights = c(0.1, 1, 0.05))
 p3 = add_sub(p2, paste("Anomaly = (Mean annual value) - (mean of all years) \n Decadal ranges = ", stepYrs, "-year steps from ", BeginYr, " to ", max(tmaxDecadeSeasons$Decade+4), sep=""), y=0.5, hjust=0.5, size=12)
 ggdraw(p3)
 
-OFName <- paste("./figures/PRISM/", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
+OFName <- paste("./figures/Historical-trends/", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
 ggsave(OFName, width=8, height=6, dpi=dpi)
 
 PlotName <- "Seas Decadal Tmean Ppt Anomaly Box"
@@ -604,7 +604,7 @@ p2 = plot_grid(title, p1, legend, ncol=1, rel_heights = c(0.1, 1, 0.05))
 p3 = add_sub(p2, paste("Anomaly = (Mean annual value) - (Mean of all years) \n Decadal ranges = ", stepYrs, "-year steps from ", BeginYr, " to ", max(tmaxDecadeSeasons$Decade+4), sep=""), y=0.5, hjust=0.5, size=12)
 ggdraw(p3)
 
-OFName <- paste("./figures/PRISM/", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
+OFName <- paste("./figures/Historical-trends/", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
 ggsave(OFName, width=8, height=6, dpi=dpi)
 
 	
@@ -644,7 +644,7 @@ title = ggdraw() + draw_label(paste(SiteID, "- Annual Climate Means By Decade"),
 p2 = plot_grid(title, p1, ncol=1, rel_heights = c(0.05, 1)) 
 p3 = add_sub(p2, paste("Decadal ranges = ", stepYrs, "-year steps from ", BeginYr, " to ", max(tmaxDecadeSeasons$Decade+4), sep=""), y=0.5, hjust=0.5, size=12)
 ggdraw(p3)
-OFName = paste("./figures/PRISM/", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
+OFName = paste("./figures/Historical-trends/", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
 ggsave(OFName, width=8.5, height=8.5)
 
 
@@ -660,7 +660,7 @@ p1 = ggplot(tmaxDecadeSeasons, aes(x=as.character(Decade), y=Var, fill=Season)) 
   scale_x_discrete(breaks=c("1900", "1920", "1940", "1960", "1980", "2000"))
 p2 = add_sub(p1, paste("Anomaly = (Mean annual value) - (Mean of all years) \n Decadal ranges = ", stepYrs, "-year steps from ", BeginYr, " to ", max(tmaxDecadeSeasons$Decade+4), sep=""), y=0.5, hjust=0.5, size=12)
 ggdraw(p2)
-OFName = paste("./figures/PRISM/", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
+OFName = paste("./figures/Historical-trends/", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
 ggsave(OFName, width=8.5, height=8.5)
 
 PlotName = "Decadal Seasonal Tmin Box"
@@ -672,7 +672,7 @@ p1 = ggplot(tminDecadeSeasons, aes(x=as.character(Decade), y=Var, fill=Season)) 
   scale_x_discrete(breaks=c("1900", "1920", "1940", "1960", "1980", "2000"))
 p2 = add_sub(p1, paste("Anomaly = (Mean annual value) - (Mean of all years) \n Decadal ranges = ", stepYrs, "-year steps from ", BeginYr, " to ", max(tmaxDecadeSeasons$Decade+4), sep=""), y=0.5, hjust=0.5, size=12)
 ggdraw(p2)
-OFName = paste("figures/PRISM/", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
+OFName = paste("figures/Historical-trends/", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
 ggsave(OFName, width=8.5, height=8.5)
 
 PlotName = "Decadal Seasonal Tmean Box"
@@ -684,7 +684,7 @@ p1 = ggplot(tmeanDecadeSeasons, aes(x=as.character(Decade), y=Var, fill=Season))
   scale_x_discrete(breaks=c("1900", "1920", "1940", "1960", "1980", "2000"))
 p2 = add_sub(p1, paste("Anomaly = (Mean annual value) - (Mean of all years) \n Decadal ranges = ", stepYrs, "-year steps from ", BeginYr, " to ", max(tmaxDecadeSeasons$Decade+4), sep=""), y=0.5, hjust=0.5, size=12)
 ggdraw(p2)
-OFName = paste("figures/PRISM/", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
+OFName = paste("figures/Historical-trends/", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
 ggsave(OFName, width=8.5, height=8.5)
 
 PlotName = "Decadal Seasonal Ppt Box"
@@ -696,7 +696,7 @@ p1 = ggplot(pptDecadeSeasons, aes(x=as.character(Decade), y=Var, fill=Season)) +
   scale_x_discrete(breaks=c("1900", "1920", "1940", "1960", "1980", "2000"))
 p2 = add_sub(p1, paste("Anomaly = (Mean annual value) - (Mean of all years) \n Decadal ranges = ", stepYrs, "-year steps from ", BeginYr, " to ", max(tmaxDecadeSeasons$Decade+4), sep=""), y=0.5, hjust=0.5, size=12)
 ggdraw(p2)
-OFName = paste("figures/PRISM/", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
+OFName = paste("figures/Historical-trends/", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
 ggsave(OFName, width=8.5, height=8.5)
 
 
@@ -725,7 +725,7 @@ Annual.Anomaly$aTmean.col = ifelse(Annual.Anomaly$aTmean > 0, "red", "blue")
 Annual.Anomaly$aPpt.col = ifelse(Annual.Anomaly$aPpt > 0, "green", "brown")
 
 PlotName <- "Red-Blue Anomaly Bar plot"
-  OFName <- paste(OFDir, "/PRISM ", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
+  OFName <- paste(OFDir, "/Historical-trends ", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
 
   # Tmax
 a = ggplot(Annual.Anomaly, aes(x=cYr, y=aTmax, fill=aTmax.col)) + 
@@ -761,7 +761,7 @@ title = ggdraw() + draw_label(paste(SiteID, "- Annual Climate Anomalies"),
 p2 = plot_grid(title, p1, ncol=1, rel_heights = c(0.05, 1)) 
 p3 = add_sub(p2, paste("Anomaly = (Annual value) - (Mean of all years) \nData range = ", BeginYr, "-", EndYr, sep=""), y=0.5, hjust=0.5, size=12)
 ggdraw(p3)
-OFName = paste("figures/PRISM/", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
+OFName = paste("figures/Historical-trends/", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
 ggsave(OFName, width=6.5, height=8.5)
 
 #-------------------------------------------------#
@@ -787,7 +787,7 @@ DecDat$Atmin.col = ifelse(DecDat$Atmin > 0, "red", "blue")
 DecDat$Atmean.col = ifelse(DecDat$Atmean > 0, "red", "blue")
 DecDat$Appt.col = ifelse(DecDat$Appt > 0, "green", "brown")
 
-PLOT<-"PRISM Decadal barplot - "
+PLOT<-"Historical-trends Decadal barplot - "
 # Tmax
 ggplot(DecDat, aes(x=decade, y=Atmax, fill=Atmax.col)) + 
   geom_bar(stat="identity") +
@@ -795,7 +795,7 @@ ggplot(DecDat, aes(x=decade, y=Atmax, fill=Atmax.col)) +
   labs(title="Average Decadal Max Temperature Climate Anomaly",x="", y=expression(paste("Tmax (", degree*F,")", sep=""))) + 
   scale_x_continuous(breaks=c(1900, 1920, 1940, 1960, 1980, 2000)) 
 
-ggsave(paste(PLOT,"Tmax.png",sep=""), path = './figures/PRISM', width = 15, height = 9)
+ggsave(paste(PLOT,"Tmax.png",sep=""), path = './figures/Historical-trends', width = 15, height = 9)
 
 #Tmin
 ggplot(DecDat, aes(x=decade, y=Atmin, fill=Atmin.col)) +
@@ -803,7 +803,7 @@ ggplot(DecDat, aes(x=decade, y=Atmin, fill=Atmin.col)) +
   scale_fill_manual(values=c("blue", "red")) +
   labs(title="Average Decadal Min Temperature Climate Anomaly",x="", y=expression(paste("Tmin (", degree*F,")", sep=""))) +  
   scale_x_continuous(breaks=c(1900, 1920, 1940, 1960, 1980, 2000))
-ggsave(paste(PLOT,"Tmin.png",sep=""), path = './figures/PRISM', width = 15, height = 9)
+ggsave(paste(PLOT,"Tmin.png",sep=""), path = './figures/Historical-trends', width = 15, height = 9)
 
 #Tmean 
 ggplot(DecDat, aes(x=decade, y=Atmean, fill=Atmean.col)) +
@@ -811,7 +811,7 @@ ggplot(DecDat, aes(x=decade, y=Atmean, fill=Atmean.col)) +
   scale_fill_manual(values=c("blue", "red")) +
   labs(title="Average Decadal Mean Temperature Climate Anomaly",x="", y=expression(paste("Tmean (", degree*F,")", sep=""))) +
   scale_x_continuous(breaks=c(1900, 1920, 1940, 1960, 1980, 2000))
-ggsave(paste(PLOT,"Tmean.png",sep=""), path = './figures/PRISM', width = 15, height = 9)
+ggsave(paste(PLOT,"Tmean.png",sep=""), path = './figures/Historical-trends', width = 15, height = 9)
 
 #Precip
 ggplot(DecDat, aes(x=decade, y=Appt, fill=Appt.col)) + 
@@ -819,7 +819,7 @@ ggplot(DecDat, aes(x=decade, y=Appt, fill=Appt.col)) +
   scale_fill_manual(values=c("brown", "dark green")) +
   labs(title="Average Decadal Annual Precipitation Climate Anomaly",x="", y="Precip (in/yr)") +
   scale_x_continuous(breaks=c(1900, 1920, 1940, 1960, 1980, 2000))
-ggsave(paste(PLOT,"Ppt.png",sep=""), path = './figures/PRISM', width = 15, height = 9)
+ggsave(paste(PLOT,"Ppt.png",sep=""), path = './figures/Historical-trends', width = 15, height = 9)
 
 
 ###### SPEI calculations
@@ -852,7 +852,7 @@ ggplot(data = spei, aes(x = date, y = SPEI,fill = col)) +
        x = "Date", y = "SPEI") +
   guides(color=guide_legend(override.aes = list(size=7))) + 
   scale_y_continuous(limits=c(min(spei$SPEI)-.5, max(spei$SPEI)+1)) #warning message that 11 rows are removed will occur due to the rolling mean, ignore warning
-ggsave("Historical SPEI.png", path = './figures/PRISM', width = 15, height = 9)
+ggsave("Historical SPEI.png", path = './figures/Historical-trends', width = 15, height = 9)
 
 
 ### EOF ###

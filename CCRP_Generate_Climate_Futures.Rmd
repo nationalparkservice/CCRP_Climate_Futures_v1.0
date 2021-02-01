@@ -16,7 +16,7 @@ state <- "South Carolina"
 
 # When this document has finished running, the files will be copied to a local directory and all newly created files (e.g., figures) will be deleted from the repo
 
-project_root_dir <- 'C:/Users/adillon/Documents/Repos/CCRP_Climate_Futures_dev' # local directory where your repo is stored
+project_root_dir <- 'C:/Users/adillon/Documents/Repos/CCRP_Climate_Futures' # local directory where your repo is stored
 local_rss_dir <- 'C:/Users/adillon/Documents/RSS/CONG/Test' # local directory where you want this repo copied. Should be something like 'C:/Users/adillon/Documents/RSS/CONG'
 
 # Specify Climate Futures and Models
@@ -51,7 +51,7 @@ library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot
 ```
 
 
-## Historical Trends (PRISM)
+## Historical Trends
 
 ```{r PRISM-parse, eval = FALSE, message=FALSE, warning=FALSE, echo=FALSE}
 
@@ -59,9 +59,9 @@ library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot
 
 ```
 
-```{r PRISM-plots, results=hide, eval=TRUE} 
+```{r Historical-trends-plots, results=hide, eval=TRUE} 
 
-source(here::here("scripts", "PRISM", "RSS PRISM plots v1.2.R"),echo = FALSE)
+source(here::here("scripts", "Historical-trends", "RSS PRISM plots v1.2.R"),echo = FALSE)
 
 ```
 
