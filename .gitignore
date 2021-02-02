@@ -7,5 +7,7 @@ RSS-plots.Rproj
 Drt.all.csv
 *.csv
 figures/
-data/
 packrat/lib*/
+data/spatial-data/
+data/park-specific-data/
+
