@@ -5,7 +5,7 @@
 Maintained by: Climate Change Response Program
 
 *This script was created using R version >= 4.0.2 and RStudio version >= 1.3.1056*
-*These instructions assume the user has already connected RStudio to GitHub*
+*These instructions assume the user has already connected RStudio to GitHub and has access to the nationalparkservice/CCRP_Climate_Futures repo*
 
 **Step 1. Clone CCRP_Climate_Futures into your local repository folder and connect to RStudio**
 
@@ -19,43 +19,43 @@ Maintained by: Climate Change Response Program
 [CCRP_Climate_Futures](https://github.com/nationalparkservice/CCRP_Climate_Futures)
 
     
-**Step 2: Create a new folder for data and make sure GitHub ignores it**
+**Step 2: Create a new folder for park-specific data and make sure GitHub ignores it**
 
-The parsing scripts are not functional in version 1 (due to remote work) so data must be parsed and placed appropriately before running the .Rmd script
+The parsing scripts are not functional in version 1 (due to remote work) so data must be parsed and placed appropriately in the './data/park-specific/input' folder before running the .Rmd script
 
 *A note on file structure: The notation './' is used to refer to the project root directory. This is where your .RProj file is located.*
 
-    - Create folders within your repo for data by clicking on the 'New Folder' button at the top left of the lower right window. 
-    - Create a new folder called 'data'. If it is incorrectly named the script will not run. 
+    - Note the folder structure in the lower right window. There should be a 'data' folder and within it a subfolder labeled 'general'
+    - You will need to create another subfolder called 'park-specific'
+    - Create folders within your repo for data by clicking on the 'New Folder' button at the top left of the lower right window.
+    - Make sure you are inside the 'data' folder and create a new folder labeled 'park-specific'. If it is incorrectly named the script will not run. 
     - Select the 'Git' tab in the upper right window of RStudio
-    - Make sure your new 'data' folder does not appear
-    
-    IF IT DOES: 
-    - Check the white box to 'stage' the new data folder you  have just created
-    - Right-click on the blue box beneath the 'status' bar
-    - Select 'ignore'
-    - Save. Git will now ignore all contents of the '/data' folder including subfolders
-    - Contact Annie at anne_dillon@nps.gov or Amber at amber_runyon@nps.gov because this means something is amiss
+    - Make sure your new folder does not appear. If it does, make sure it is placed in the correct location and spelled exactly as written. Please contact Annie Kellner Dillon (anne_dillon@nps.gov) or Amber Runyon (amber_runyon@nps.gov) if anything appears under the Git tab at this point. 
+
 
 **Step 3: Leave RStudio and use File Explorer to create data subfolders and add necessary data files**
 *To request parsed data, see Amber Runyon at amber_runyon@nps.gov. To request other files see Annie Kellner Dillon (anne_dillon@nps.gov) or Amber Runyon*
 
-*A zipped folder of all data located at [CCRP_Climate_Futures_Data](https://doimspp.sharepoint.com/sites/NPS-CCRP-FCScienceAdaptation/Shared%20Documents/Forms/AllItems.aspx?viewid=54c972dc%2D7b2e%2D4eb7%2Da737%2D42792988c0b3&id=%2Fsites%2FNPS%2DCCRP%2DFCScienceAdaptation%2FShared%20Documents%2FRCF%2Fscript%20rewrites)
+*A zipped folder of all data is located at [CCRP_Climate_Futures_Data](https://doimspp.sharepoint.com/sites/NPS-CCRP-FCScienceAdaptation/Shared%20Documents/Forms/AllItems.aspx?viewid=54c972dc%2D7b2e%2D4eb7%2Da737%2D42792988c0b3&id=%2Fsites%2FNPS%2DCCRP%2DFCScienceAdaptation%2FShared%20Documents%2FRCF%2Fscript%20rewrites)
 
 File names must be spelled exactly as they are written here or the scripts will not work. The notation '/' refers to a folder with multiple files (i.e. the .shp, .dbf, .prj etc. that comprise an ESRI shapefile)
+
+    - Create the following subfolder within the ./data folder:
+        - park-specific ('./data/park-specific')
+        
+    - Now, within the park-specific subfolder, create another subfolder called 'input' ('./data/park-specific/input')
     
-    - Create the following subfolders within the ./data folder:
-        - spatial-data ('./data/spatial-data') 
-        - park-specific-data ('./data/park-specific-data')
-        - general-data ('./data/general-data)
+    - Create the following subfolder within the ./data/general folder:
+    
+        - spatial-data ('./data/general/spatial-data') 
         
     - Place the following files in folders as follows (PARK is a placeholder for the four-letter park code - i.e., CONG):
-        - './data/park-specific-data':
+        - './data/park-specific/input':
             - PARK_init_parsed.RData (normally created by MACA parsing script)
             - PARK_PRISM_PptTminTmax_IntermediateFiles.RData (this file is normally created by the PRISM parsing script: './scripts/PRISM/RSS PRISM AN81 4km crop summarize v01.1.R)
             - GridMet.csv (normally created by GridMet parsing script)
             
-        - './data/spatial-data
+        - './data/general/spatial-data'
             - water_storage.tif 
             - elevation_cropped.tif
             - /US_Counties 
@@ -64,7 +64,11 @@ File names must be spelled exactly as they are written here or the scripts will 
             - /nps_boundary_centroids
             - /Climate_grid
 
+*NOTE: 'general' data only has to be added one time for all CONUS parks. 'park-specific' input data will have to be added for every new park.* 
+
 **Step 4: Install Java on your machine if you do not already have it. If you have trouble, see document Instructions_for_installing_Java_for_use_with_R.docx**
+
+*Note: Java and rJava are only used for creating maps within the get_params script. All analyses can be run without them.*
 
     - Install Java from the following website: https://java.com/en/download/manual.jsp  
         - Make sure you install the correct version (i.e, 64-bit for 64-bit machines). You want to select the 'offline' version that matches your machine. 
@@ -82,15 +86,10 @@ File names must be spelled exactly as they are written here or the scripts will 
 **Step 6: Run the script!**
 
     - Make sure your new files and folders do not appear beneath the 'Git' tab
-    - Enter park data into the user-input chunk in the .Rmd script
+    - Enter park data and all parameters into the user-input chunk in the .Rmd script
     - Run the script! Select Run --> Run All or press Ctrl+Alt+R
-    - The script will create all the necessary files and folders from here on out. You can find derived data in the ./data/derived-data folder, and figures in the ./figures folder
+    - The script will create all the necessary files and folders from here on out. You can find data output in the ./data/park-specific/output folder, and figures in the ./figures folder
 
-**Step 7 : Leave RStudio and create a backup copy of repo (optional)**
-
-    - Navigate to the local copy of your repo
-    - Compress entire repo into a zip file with the name of the park and the date
-    - Store the copy wherever appropriate (e.g., on your local machine, shared drive or cloud)
 
 ## End instructions for running CCRP_Climate_Futures.Rmd
     
