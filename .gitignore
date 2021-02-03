@@ -8,6 +8,7 @@ Drt.all.csv
 *.csv
 figures/
 packrat/lib*/
-data/spatial-data/
-data/park-specific-data/
+data/general/spatial-data/
+data/park-specific/
+
 
