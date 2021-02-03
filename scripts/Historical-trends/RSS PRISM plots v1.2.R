@@ -4,7 +4,7 @@
 
 # Create output directories
 
-file <- list.files(path = './data/RData', pattern = 'IntermediateFiles.RData', full.names = TRUE) # will load all .RData files within directory
+file <- list.files(path = './data/park-specific/input', pattern = 'IntermediateFiles.RData', full.names = TRUE) # will load all .RData files within directory
 load(file)
 
 figs <- './figures' # for figures
@@ -17,7 +17,7 @@ if(dir.exists(WD_plots) == FALSE){
   dir.create(WD_plots)
 }
 
-WD_data = './data/derived-data' # for .csv's
+WD_data = './data/park-specific/output' # for .csv's
 if(dir.exists(WD_data) == FALSE){
   dir.create(WD_data)
 }
@@ -404,7 +404,7 @@ colnames(lmTable) <- c("Var", "Period", "YrCoeff(degF(in)/100yrs)", "seSlope", "
 
 print(lmTable, row.names = F)
 
-write.csv(lmTable, paste('./data/derived-data/', SiteID, " Regression Table test ", Sys.Date(), ".csv", 
+write.csv(lmTable, paste('./data/park-specific/output/', SiteID, " Regression Table test ", Sys.Date(), ".csv", 
       sep=""), row.names=FALSE)
 
 rm(lmPpt,lmPptP1,lmPptP2,lmTmax,lmTmaxP1,lmTmaxP2,lmTmin,lmTminP1,lmTminP2,lmTmean,lmTmeanP1,lmTmeanP2)

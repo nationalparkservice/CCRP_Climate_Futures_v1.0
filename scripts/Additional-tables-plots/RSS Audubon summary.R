@@ -1,13 +1,12 @@
 
 #### INITIALS ####
 
-AudubonDataPath = "./data/raw-data/Audubon-NPS_study-all_species_trends_filtered.csv"
 ParkCode = pCode
-OutDir = "./data/derived-data"
+OutDir = "./data/park-specific/output"
 
 #### END INITIALS ####
 
-AllAudubonData <- read.csv(AudubonDataPath)
+AllAudubonData <- readRDS("./data/general/Audubon.Rds")
 ParkData <- subset(AllAudubonData, unit_code == ParkCode)
 
 TrendSummary <- ddply(ParkData, ~season+climate_trend, summarise, 

@@ -7,15 +7,15 @@
 # FBI_max_delta FLI_rate FBI_rate"    
 
 #rm(list=ls())
-DataDirName <- "./data/raw-data/"
+DataDirName <- "./data/general/"
 OutDirName <- './figures/additional/'
 
-pCode <- "CONG"
+pCode <- site
 # print plots to screen or to file in working directory?
 outDevice <- "file"
 # outDevice <- "screen"    # use ONLY "screen" or "file"
 
-inFile <- paste(DataDirName, "FLI FBI table.csv", sep="")
+inFile <- readRDS('./data/general-data/FLI_FBI.Rds')
 
 dec2century <-  10   # days/decade to days/century
 
@@ -62,4 +62,4 @@ abline(v=0, lty=3)
 if(outDevice == "file")dev.off()
 cat(yFBI, FBI[yFBI])
 x <- pData[which(pData$Pcode == pCode),]
-write.table(x, file = './data/derived-data/FLI FBI data.txt')
+write.table(x, file = './data/park-specific/FLI FBI data.txt')

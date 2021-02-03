@@ -2,35 +2,8 @@
 
 ################################################## INITIALS ##################################################
 
-DataFile <- list.files(path = './data/RData', pattern = 'init_parsed.RData', full.names = TRUE) # Environment needs to be added if not parsing MACA data
+DataFile <- list.files(path = './data/park-specific/input', pattern = 'init_parsed.RData', full.names = TRUE) # Environment needs to be added if not parsing MACA data
 load(DataFile)
-
-
-#Directory and RData file where daily data series is stored
-
-#Create output directory
-
-WD_data = './data/RData'
-if(dir.exists(WD_data) == FALSE){
-  dir.create(WD_data)
-}
-
-#Year range for summarizing future climate (Year - Range/2) to (Year + Range/2)
-Year = 2040 #Central year
-Range = 30  #Number of years to summarize (should be at least 30)
-
-# Threshold percentages for defining Climate futures. Default low/high:  0.25, 0.75
-CFLow = 0.25     
-CFHigh = 0.75
-CFs = c("Warm Wet", "Hot Wet", "Central", "Warm Dry", "Hot Dry") #Use spaces and characters only
-
-#Temperature/precip threshold values
-HotTemp = 95    # deg F. Default should be about 100 deg F
-ColdTemp = 32    # deg F
-PrecipThreshold = 0.05    # inches per day. Precip Threshold (used to measure Drought duration). For many GCMs shoud not 
-#  be 0 because models "drizzle". Some investigation necessary.
-QuantileLow = 0.05   #Quantiles for temperature threshold calculations
-QuantileHigh = 0.95
 
 #Month and season names 
 months=factor(c("January","February","March","April","May","June","July","August","September","October","November","December"),levels = month.name)
@@ -197,13 +170,13 @@ Future_Means$CF4 = as.numeric((Future_Means$DeltaTavg<Tavg & Future_Means$DeltaP
 Future_Means$CF5 = as.numeric((Future_Means$DeltaTavg>Tavg & Future_Means$DeltaPr<Pr25) | Future_Means$DeltaTavg>Tavg75 & Future_Means$DeltaPr<PrAvg)
 
 #Assign full name of climate future to new variable CF
-Future_Means$CF[Future_Means$CF1==1]=CFs[1]
-Future_Means$CF[Future_Means$CF2==1]=CFs[2]
-Future_Means$CF[Future_Means$CF3==1]=CFs[3]
-Future_Means$CF[Future_Means$CF4==1]=CFs[4]
-Future_Means$CF[Future_Means$CF5==1]=CFs[5]
+Future_Means$CF[Future_Means$CF1==1]=CFs_all[1]
+Future_Means$CF[Future_Means$CF2==1]=CFs_all[2]
+Future_Means$CF[Future_Means$CF3==1]=CFs_all[3]
+Future_Means$CF[Future_Means$CF4==1]=CFs_all[4]
+Future_Means$CF[Future_Means$CF5==1]=CFs_all[5]
 Future_Means$CF=as.factor(Future_Means$CF)
-Future_Means$CF = factor(Future_Means$CF,ordered=TRUE,levels=CFs)
+Future_Means$CF = factor(Future_Means$CF,ordered=TRUE,levels=CFs_all)
 
 #     Remove extraneous Climate Future columns
 Future_Means$CF1 = NULL
@@ -290,28 +263,28 @@ H_MonMean<-aggregate(cbind(TmaxCustom,TminCustom,TavgCustom,PrecipCustom,RHmean)
 H_MonMean$CF<-"Historical";H_MonMean<-H_MonMean[,c("Month","CF",names(H_MonMean[,2:6]))]
 F_MonCF<-aggregate(cbind(TmaxCustom,TminCustom,TavgCustom,PrecipCustom,RHmean)~Month+CF,F_Monthly,mean)
 Monthly<-rbind(H_MonMean,F_MonCF)
-Monthly$CF<-factor(Monthly$CF,levels = c(CFs,"Historical"))
+Monthly$CF<-factor(Monthly$CF,levels = c(CFs_all,"Historical"))
 
 # Monthly delta
 Monthly_delta<-F_MonCF
 for (i in 3:7){
   Monthly_delta[,i]<-F_MonCF[,i]-H_MonMean[,i][match(F_MonCF$Month,H_MonMean$Month)]
 }
-Monthly_delta$CF<-factor(Monthly_delta$CF,levels = c(CFs))
+Monthly_delta$CF<-factor(Monthly_delta$CF,levels = c(CFs_all))
 
 # Seasonal abs
 H_SeasMean<-aggregate(cbind(TmaxCustom,TminCustom,TavgCustom,PrecipCustom,RHmean)~season,H_Season,mean)
 H_SeasMean$CF<-"Historical";H_SeasMean<-H_SeasMean[,c("season","CF",names(H_SeasMean[,2:6]))]
 F_SeasCF<-aggregate(cbind(TmaxCustom,TminCustom,TavgCustom,PrecipCustom,RHmean)~season+CF,F_Season,mean)
 Season<-rbind(H_SeasMean,F_SeasCF)
-Season$CF<-factor(Season$CF,levels = c(CFs,"Historical"))
+Season$CF<-factor(Season$CF,levels = c(CFs_all,"Historical"))
 Season$season = factor(Season$season, levels = c("Winter","Spring","Summer","Fall"))
 
 # Season delta
 Season_delta<-F_SeasCF
 for (i in 3:7){
   Season_delta[,i]<-F_SeasCF[,i]-H_SeasMean[,i][match(F_SeasCF$season,H_SeasMean$season)]
-}; Season_delta$CF<-factor(Season_delta$CF,levels = c(CFs))
+}; Season_delta$CF<-factor(Season_delta$CF,levels = c(CFs_all))
 Season_delta$season = factor(Season_delta$season, levels = c("Winter","Spring","Summer","Fall"))
 
 ########################################## END MONTH & SEASON SUMMARY ##########################################
@@ -449,6 +422,6 @@ F_annual<-merge(F_annual,Sp.Frost,by=c("CF","GCM","Year"));rm(Sp.Frost)
 ######################################## END THRESHOLD CALCULATIONS ##############################
 
 ##### Save Current workspace environment
-save.image(sprintf("./data/RData/%s_%s_%s_Final_Environment.RData",SiteID, Lat, Lon))
+save.image(sprintf("./data/park-specific/output/%s_%s_%s_Final_Environment.RData",SiteID, Lat, Lon))
 
 #  EOF

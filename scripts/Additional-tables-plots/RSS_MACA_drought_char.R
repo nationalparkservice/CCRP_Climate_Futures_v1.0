@@ -1,20 +1,10 @@
 
 ################################ USER INPUTS #################################################
 
-Gridmet <- read.csv("data/raw-data/GridMet.csv",header=T)
+Gridmet <- read.csv("data/park-specific-data/GridMet.csv",header=T)
 
-file <- list.files(path = './data/RData', pattern = 'Final_Environment.RData', full.names = TRUE) 
+file <- list.files(path = './data/park-specific-data', pattern = 'Final_Environment.RData', full.names = TRUE) 
 load(file)
-
-
-# Load input data
-
-GCMs = c("CNRM-CM5.rcp45","HadGEM2-ES365.rcp85") # per teams chat 6/23/20 with AR
-CFs<- c("Warm Wet", "Hot Dry")
-
-## SPEI variables
-SPEI_per<-6 # This is the value for the period SPEI is aggregated. 6-months is standard but could change if want. 
-truncation<- -.5 # SPEI value, under which drought events are considered
 
 
 ## All 508-compliant color scheme -- navy (hot wet), light blue (warm wet), pink (warm dry), red (hot dry)

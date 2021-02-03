@@ -2,13 +2,13 @@
 # Load files if not running scripts sequentially
 
 
-file1 <- list.files(path = './data/RData', pattern = 'IntermediateFiles.RData', full.names = TRUE) 
+file1 <- list.files(path = './data/park-specific-data', pattern = 'IntermediateFiles.RData', full.names = TRUE) 
 load(file1)
 
-file2 <- list.files(path = './data/RData', pattern = 'Final_Environment.RData', full.names = TRUE) 
+file2 <- list.files(path = './data/park-specific-data', pattern = 'Final_Environment.RData', full.names = TRUE) 
 load(file2)
 
-grid<-read.csv("data/raw-data/GridMet.csv",header=T)
+grid<-read.csv("data/park-specific/input/GridMet.csv",header=T)
 
 if(dir.exists('./figures/summary-plots') == FALSE){
   dir.create('./figures/summary-plots')
@@ -23,7 +23,7 @@ Future_all<-merge(ALL_FUTURE,CF_GCM,by="GCM")
 BC.min = 1979 #Bias correction range
 BC.max = 2018 # GridMET now goes through 2018
 
-CF.sub = c("Historical", "Warm Wet", "Hot Dry") #CFs using
+CF.sub = c("Historical", CFs) #CFs using
 col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
 #col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
 #col<- c("darkgray","light green","orange")  # HotWet/WarmDry

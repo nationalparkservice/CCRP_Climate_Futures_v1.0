@@ -5,13 +5,11 @@
 
 #Formatted input data as a daily time series. Needs to include the following columns: Date, ppt_mm, tmax_C, tmin_C, and tmean_C (temp.'s in deg. Celsius)
 
-DataFile <- list.files(path = './data/RData', pattern = 'Final_Environment.RData', full.names = TRUE) # Environment needs to be added if not parsing MACA data
+DataFile <- list.files(path = './data/park-specific/output', pattern = 'Final_Environment.RData', full.names = TRUE) # Environment needs to be added if not parsing MACA data
 load(DataFile)
 
 
 #rm(list=setdiff(ls(), c("ALL_HIST","ALL_FUTURE","site","CF_GCM")))
-
-site<-"CONG"
 
 #Site characteristics 
 #sites = read.csv("C:/Users/adillon/Documents/RSS/CONG/WB/CONG_site_characteristics.csv") #CSV file containing properties for all sites
@@ -163,8 +161,8 @@ AnnualWB$sum_w_et_dsoil = aggregate(W_ET_DSOIL ~ year+GCM, data=aggregate(W_ET_D
 AnnualWB$sum_d = aggregate(D ~ year+GCM, data=aggregate(D~year+GCM+SiteID,data=WBData,sum), mean)[,3]
 AnnualWB$sum_gdd = aggregate(GDD ~ year+GCM, data=aggregate(GDD~year+GCM+SiteID,data=WBData,sum), mean)[,3]
 
-write.csv(MonthlyWB,"./data/derived-data/MonthlyWB.csv",row.names=F)
-write.csv(AnnualWB,"./data/derived-data/AnnualWB.csv",row.names=F)
+write.csv(MonthlyWB,"./data/park-specific/output/MonthlyWB.csv",row.names=F)
+write.csv(AnnualWB,"./data/park-specific/output/AnnualWB.csv",row.names=F)
 
 
 #######################################################################################################################
@@ -238,7 +236,7 @@ ggsave(paste(site,"-SOIL_in_density_panel.png",sep=""), path = OutDir, width = 1
 
 ########################
 # biome plots
-biome<-read.csv("./data/raw-data/D_AET_points.csv",header=T)
+biome<-readRDS("./data/general/D_AET.Rds")
 head(biome)
 color<-as.character(unique(biome$color,ordered=T))
 
