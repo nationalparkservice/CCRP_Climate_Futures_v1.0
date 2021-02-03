@@ -30,7 +30,7 @@ copyDirectory(from = figs_repo_dir, to = figs_local_dir, recursive = TRUE)
 
 # Data
 
-data_local_dir = paste(local_rss_dir, "data", sep = '/')
+data_local_dir = paste(local_rss_dir, "data", sep = '/') # create local directory for data
 if(dir.exists(data_local_dir) == FALSE){
   dir.create(data_local_dir)
 }
@@ -42,7 +42,10 @@ copyDirectory(from = data_repo_dir, to = data_local_dir, recursive = TRUE)
 # Remove spatial files
 
 spatial_dir <- paste(data_local_dir, "spatial-data", sep = "/")
+general_dir <- paste(data_local_dir, "general", sep = "/")
+
 unlink(spatial_dir, recursive = TRUE)
+unlink(general_dir, recursive = TRUE)
 
 # Rmd file
 
