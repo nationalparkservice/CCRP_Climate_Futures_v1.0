@@ -29,7 +29,7 @@ figs_repo_dir <- paste(project_root_dir, "figures", sep = '/')
 copyDirectory(from = figs_repo_dir, to = figs_local_dir, recursive = TRUE)
 
 # Data
-fff
+
 data_local_dir = paste(local_rss_dir, "data", sep = '/')
 if(dir.exists(data_local_dir) == FALSE){
   dir.create(data_local_dir)
@@ -51,14 +51,16 @@ file.copy(file.path(project_root_dir, rmd), local_rss_dir)
 
 # Session Info
 
+# Create session info
+
+inputs <- list.files(path = './data/park-specific-data')
+
 sink("sessionInfo.txt")
 sessionInfo()
+cat(paste("input file:", inputs))
 sink()
 
-# Add inputs to text file with sessionInf
-
-txt_file <- file("sessionInfo.txt")
-writeLines(c"Inputs:", "")
+# copy to local folder and delete
 
 txt <- list.files(project_root_dir, pattern = '.txt')
 file.copy(file.path(project_root_dir, txt), local_rss_dir)
