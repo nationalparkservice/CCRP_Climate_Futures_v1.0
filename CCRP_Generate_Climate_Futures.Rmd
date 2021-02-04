@@ -50,7 +50,7 @@ QuantileHigh = 0.95
 
 # -------------- Input information for Water Balance model ------------------- #
 
-WB_GCMs = c("CNRM-CM5.rcp45","HadGEM2-ES365.rcp85") # Specific models need to be selected to run the Water Balance scripts
+#WB_GCMs = c("CNRM-CM5.rcp45","HadGEM2-ES365.rcp85") # Specific models need to be selected to run the Water Balance scripts
 
 # The following files are inputs into this script. Change as necessary. 
 #inputs <- c(paste0(site, "_lat_long_PRISM_PptTminTmax_IntermediateFiles.RData"), 
@@ -171,11 +171,10 @@ source(here::here("scripts", "Additional-tables-plots", "RSS Audubon summary.R")
 
 # Final Environment created in this script
 
-file <- list.files(path = './data/RData', pattern = 'Final_Environment.RData', full.names = TRUE) 
+file <- list.files(path = './data/park-specific/output', pattern = 'Final_Environment.RData', full.names = TRUE) 
 load(file)
 
 final_new <- rbind(H_annual, F_annual)
-final_new <- dplyr::select(final_new, -c(EndGrow:Sp.Frost))
 
 summary_new <- final_new %>%
   group_by(CF) %>%
@@ -185,10 +184,11 @@ summary_new <- final_new %>%
 
 # Final Environment created using old system
 
-old <- list.files(path = './data/RData/old', pattern = 'Final_Environment.RData', full.names = TRUE)
+old <- list.files(path = './data/park-specific/old', pattern = 'Final_Environment.RData', full.names = TRUE)
 load(old)
 
 final_old <- rbind(H_annual, F_annual)
+final_old <- final_old %>% select(-Sp.Frost)
 
 summary_old <- final_old %>%
   group_by(CF) %>%
@@ -218,7 +218,7 @@ diff
 
 # This script is for copying and pasting files and folders unique to an RSS to a local folder, for the purposes of using, sharing, or archiving products. Files are then deleted from the Climate_Futures repo so that files are not inadvertently overwritten or confused with products from a different site.
 
-source(here::here("scripts", "copy_paste_delete_files.R")) # copies files and folders to specified local folder
+source(here::here("scripts", "Misc", "copy_paste_delete_files.R")) # copies files and folders to specified local folder
 
 
 ```

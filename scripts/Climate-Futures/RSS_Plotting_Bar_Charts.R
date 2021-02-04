@@ -64,7 +64,7 @@ Season_delta$season<-factor(Season_delta$season,levels=c("Winter","Spring","Summ
 H<-H_annual[,-c(1:2)]
 Hist_annual<-aggregate(.~Year,data=H,mean);rm(H)
 Hist_annual$CF<-"Historical"
-Hist_annual<-Hist_annual[,c("Year","CF",names(Hist_annual[,2:26]))] 
+Hist_annual<-Hist_annual[,c("Year","CF",names(Hist_annual[,2:22]))] 
 F_annual<-subset(F_annual, CF %in% FutureSubset, select = -c(GCM))
 Fut_annual<-aggregate(.~Year+CF,F_annual,mean)
 Annual<-rbind(Hist_annual,Fut_annual)
@@ -605,17 +605,17 @@ ggsave(sprintf("%s_%s_%s_Freeze-thaw-Boxplot.png", SiteID, Lat, Lon), path = './
 ####################
 
 # Total number of days/year with spring frost (GDD==T, Tmin<32)
-var<-"Sp.Frost"
-At<-aggregate(eval(parse(text=var))~CF,Annual,mean);
-names(At)<-c("CF",var)
-ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
-  geom_bar(stat="identity",position="dodge",colour="black") +
-  BarPlotTheme +
+#var<-"Sp.Frost"
+#<-aggregate(eval(parse(text=var))~CF,Annual,mean);
+#names(At)<-c("CF",var)
+#ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
+  #geom_bar(stat="identity",position="dodge",colour="black") +
+  #BarPlotTheme +
    #coord_cartesian(ylim=c(0, 40)) +
-  labs(title = paste(SiteID, " - Average annual spring frost days in ", Year, sep=""), 
-       y = "Days/Yr", colour = "Climate Future")  +
-  scale_fill_manual(name="",values = colors3) +
-  coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
+  #labs(title = paste(SiteID, " - Average annual spring frost days in ", Year, sep=""), 
+       #y = "Days/Yr", colour = "Climate Future")  +
+  #scale_fill_manual(name="",values = colors3) +
+  #coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
 
 #ggsave(sprintf("%s_%s_%s_Spring_frost.png", SiteID, Lat, Lon), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
 
@@ -727,7 +727,7 @@ ggsave(sprintf("%s_%s_%s_Heat-index-danger-Boxplot.png", SiteID, Lat, Lon), path
 
 
 ############################################### PRINT TABLES #################################################################
-A<-aggregate(.~CF,Annual[,2:24],mean) 
-write.xlsx(list("Means"=A,"Annual"=Annual,"Season"=Season,"D_Season"=Season_delta,"Monthly"=Monthly,"Monthly_delta"=Monthly_delta), 
+A<-aggregate(.~CF,Annual[,2:23], mean) 
+write.xlsx(list("Means"=A,"A3nual"=Annual,"Season"=Season,"D_Season"=Season_delta,"Monthly"=Monthly,"Monthly_delta"=Monthly_delta), 
            file=("./data/park-specific/output/Plot_data.xlsx"),col.names=TRUE)
 

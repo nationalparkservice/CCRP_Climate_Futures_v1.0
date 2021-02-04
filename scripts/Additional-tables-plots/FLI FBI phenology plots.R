@@ -15,11 +15,10 @@ pCode <- site
 outDevice <- "file"
 # outDevice <- "screen"    # use ONLY "screen" or "file"
 
-inFile <- readRDS('./data/general-data/FLI_FBI.Rds')
+pData <- readRDS('./data/general/FLI_FBI.Rds')
 
 dec2century <-  10   # days/decade to days/century
 
-pData <- read.csv(inFile , header=T)
 pNum <- 1:length(pData$FLI_rate)
 
 resultInterp <- function(pctObs){    #  text associated with percentile of results
@@ -62,4 +61,4 @@ abline(v=0, lty=3)
 if(outDevice == "file")dev.off()
 cat(yFBI, FBI[yFBI])
 x <- pData[which(pData$Pcode == pCode),]
-write.table(x, file = './data/park-specific/FLI FBI data.txt')
+write.table(x, file = './data/park-specific/output/FLI FBI data.txt')

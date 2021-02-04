@@ -1,9 +1,9 @@
 
 ################################ USER INPUTS #################################################
 
-Gridmet <- read.csv("data/park-specific-data/GridMet.csv",header=T)
+Gridmet <- read.csv("data/park-specific/input/GridMet.csv",header=T)
 
-file <- list.files(path = './data/park-specific-data', pattern = 'Final_Environment.RData', full.names = TRUE) 
+file <- list.files(path = './data/park-specific/output', pattern = 'Final_Environment.RData', full.names = TRUE) 
 load(file)
 
 
@@ -54,8 +54,8 @@ drt3<-aggregate(cbind(Pr_mm,SPEI)~Year,drt,mean)
 # ALL_HIST$GCM<-paste(ALL_HIST$GCM,"rcp45",sep=".")
 # AH$GCM<-paste(AH$GCM,"rcp85",sep=".")
 # ALL_HIST<-rbind(ALL_HIST,AH); rm(AH)
-H<-subset(ALL_HIST,GCM %in% GCMs,select=c(Date,GCM,PrecipCustom,TavgCustom))
-F<-subset(ALL_FUTURE, GCM %in% GCMs, select=c(Date,GCM,PrecipCustom,TavgCustom))
+H<-subset(ALL_HIST,GCM %in% WB_GCMs,select=c(Date,GCM,PrecipCustom,TavgCustom))
+F<-subset(ALL_FUTURE, GCM %in% WB_GCMs, select=c(Date,GCM,PrecipCustom,TavgCustom))
 ALL<-rbind(H,F)
 
 ALL$Month<-format(ALL$Date,format="%m")

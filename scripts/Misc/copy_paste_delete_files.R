@@ -30,7 +30,7 @@ copyDirectory(from = figs_repo_dir, to = figs_local_dir, recursive = TRUE)
 
 # Data
 
-data_local_dir = paste(local_rss_dir, "data", sep = '/') # create local directory for data
+data_local_dir = paste(local_rss_dir, "data/", sep = '/') # create local directory for data
 if(dir.exists(data_local_dir) == FALSE){
   dir.create(data_local_dir)
 }
@@ -39,12 +39,9 @@ data_repo_dir <- paste(project_root_dir, "data", sep = '/')
 
 copyDirectory(from = data_repo_dir, to = data_local_dir, recursive = TRUE)
 
-# Remove spatial files
+# Remove spatial files from local folder
 
-spatial_dir <- paste(data_local_dir, "spatial-data", sep = "/")
 general_dir <- paste(data_local_dir, "general", sep = "/")
-
-unlink(spatial_dir, recursive = TRUE)
 unlink(general_dir, recursive = TRUE)
 
 # Rmd file
@@ -56,11 +53,11 @@ file.copy(file.path(project_root_dir, rmd), local_rss_dir)
 
 # Create session info
 
-inputs <- list.files(path = './data/park-specific-data')
+inputs <- list.files(path = './data/park-specific/input')
 
 sink("sessionInfo.txt")
 sessionInfo()
-cat(paste("input file:", inputs))
+cat(paste("input files:", inputs))
 sink()
 
 # copy to local folder and delete
@@ -68,10 +65,10 @@ sink()
 txt <- list.files(project_root_dir, pattern = '.txt')
 file.copy(file.path(project_root_dir, txt), local_rss_dir)
 
-# Remove figures and derived data from repo
+# Remove figures and park-specific data from repo
 
-deriv_data <- paste(data_repo_dir, "derived-data", sep = '/')
+park_specific_data_repo_dir <- paste(data_repo_dir, "park-specific", sep = '/')
 
-unlink(deriv_data, recursive = TRUE)
+unlink(park_specific_data_repo_dir, recursive = TRUE)
 unlink(figs_repo_dir, recursive = TRUE)
 unlink("sessionInfo.txt")
