@@ -335,7 +335,7 @@ for (i in 1:length(CF.split)){
 head(HistoricalDrought)
 head(FutureDrought)
 Drought<-rbind(HistoricalDrought,FutureDrought)
-write.csv(Drought,"./data/derived-data/Drt.all.csv",row.names=FALSE)  # csv with all drought events
+write.csv(Drought,"./data/park-specific/output/Drt.all.csv",row.names=FALSE)  # csv with all drought events
 
 Hist_char<-setNames(data.frame(matrix(ncol=6,nrow=length(levels(HistoricalDrought$CF)))),c("CF","per","Duration","Severity","Intensity","Frequency"))
 Hist_char$CF<-levels(HistoricalDrought$CF)
@@ -363,7 +363,7 @@ for (i in 1:length(Drought_char$CF)){
 Drought_char<-rbind(Hist_char,Drought_char) 
 
 # csv for averages for each CF for hist and future periods
-write.csv(Drought_char,"./data/derived-data/Drought_char.csv",row.names=FALSE)
+write.csv(Drought_char,"./data/park-specific/output/Drought_char.csv",row.names=FALSE)
 ########################################### BAR PLOTS ###############################################
 #Drought duration barplot
 Drought_char_H = subset(Drought_char, per == "H")
