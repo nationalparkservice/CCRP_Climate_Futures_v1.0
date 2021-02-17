@@ -11,23 +11,23 @@ rm(list = ls())
 
 # -------------- Input site information -------------------------------------- #
 
-SiteID = "CONG"
-site <- "CONG" # This is entered twice because the object is assigned differently in different scripts. The park code will only be entered once in future versions. 
-state <- "South Carolina"
+SiteID = "CARE"
+site <- "CARE" # This is entered twice because the object is assigned differently in different scripts. The park code will only be entered once in future versions. 
+state <- "Utah"
 
 # --------------- Input local folder information ----------------------------- #
 
 # When this document has finished running, the files will be copied to a local directory and all newly created files (e.g., figures) will be deleted from the repo
 
-project_root_dir <- 'C:/Users/adillon/Documents/Repos/CCRP_Climate_Futures' # local directory where your repo is stored
-local_rss_dir <- 'C:/Users/adillon/Documents/RSS/CONG/Test' # local directory where you want this repo copied. Should be something like 'C:/Users/adillon/Documents/RSS/CONG'
+project_root_dir <- 'C:/Users/msears/Documents/Repos/CCRP_Climate_Futures_v1.0' # local directory where your repo is stored
+local_rss_dir <- 'C:/Users/msears/Documents/RSS/CARE/' # local directory where you want this repo copied. Should be something like 'C:/Users/adillon/Documents/RSS/CONG'
 
 # -------------- Input information for Climate Futures analyses (MACA) ------- #
 
 # Specify Climate Futures and Models
 
-FutureSubset <- c("Warm Wet","Hot Dry") # Pick pair of climate futures.
-CFs<- c("Warm Wet", "Hot Dry") # Same as above
+FutureSubset <- c("Warm Dry","Hot Wet") # Pick pair of climate futures.
+CFs<- c("Warm Dry", "Hot Wet") # Same as above
 CFs_all <- c("Warm Wet", "Hot Wet", "Central", "Warm Dry", "Hot Dry")
 
 # Specify parameters:
