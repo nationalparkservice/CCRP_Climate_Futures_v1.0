@@ -24,9 +24,6 @@ BC.min = 1979 #Bias correction range
 BC.max = 2018 # GridMET now goes through 2018
 
 CF.sub = c("Historical", CFs) #CFs using
-col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
-#col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
-#col<- c("darkgray","light green","orange")  # HotWet/WarmDry
 
 ############################################ Format Gridmet data ####################################################
 head(grid)
