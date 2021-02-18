@@ -26,8 +26,10 @@ local_rss_dir <- 'C:/Users/msears/Documents/RSS/CARE/' # local directory where y
 
 # Specify Climate Futures and Models
 
-FutureSubset <- c("Warm Dry","Hot Wet") # Pick pair of climate futures.
-CFs<- c("Warm Dry", "Hot Wet") # Same as above
+FutureSubset <- c("Warm Wet","Hot Dry") # Pick pair of climate futures.
+CFs<- c("Warm Wet", "Hot Dry") # Same as above
+colors2<- c("#9A9EE5","#E10720")  # Select pair of climate futures - WarmWet/HotDry
+#colors2<- c("#F3D3CB","#12045C")  # Select pair of climate futures - HotWet/WarmDry
 CFs_all <- c("Warm Wet", "Hot Wet", "Central", "Warm Dry", "Hot Dry")
 
 # Specify parameters:
@@ -50,12 +52,15 @@ QuantileHigh = 0.95
 
 # -------------- Input information for Water Balance model ------------------- #
 
-#WB_GCMs = c("CNRM-CM5.rcp45","HadGEM2-ES365.rcp85") # Specific models need to be selected to run the Water Balance scripts
+WB_GCMs = c("CSIRO-Mk3-6-0.rcp45","HadGEM2-ES365.rcp85") # Specific models need to be selected to run the Water Balance scripts
+
+col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
+#col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
 
 # The following files are inputs into this script. Change as necessary. 
-#inputs <- c(paste0(site, "_lat_long_PRISM_PptTminTmax_IntermediateFiles.RData"), 
-            #paste0(site, "_init_parsed.RData"), 
-            #"GridMet.csv")
+inputs <- c(paste0(site, "_lat_long_PRISM_PptTminTmax_IntermediateFiles.RData"), 
+            paste0(site, "_init_parsed.RData"), 
+            "GridMet.csv")
 
 # The following needs to be inputted if the park centroid will not be used to select the MACA grid cell for the water balance model:
 
