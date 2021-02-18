@@ -6,11 +6,6 @@ Gridmet <- read.csv("data/park-specific/input/GridMet.csv",header=T)
 file <- list.files(path = './data/park-specific/output', pattern = 'Final_Environment.RData', full.names = TRUE) 
 load(file)
 
-
-## All 508-compliant color scheme -- navy (hot wet), light blue (warm wet), pink (warm dry), red (hot dry)
-colors2<- c("#9A9EE5","#E10720")  # WarmWet/HotDry
-# colors2<- c("#F3D3CB","#12045C")  # HotWet/WarmDry
-
 colors3<-c("white",colors2)
 
 if(dir.exists('./figures/additional') == FALSE){
