@@ -7,10 +7,6 @@ ALL_FUTURE<-merge(ALL_FUTURE,CF_GCM,by="GCM")
 BC.min = 1979 #Bias correction range
 BC.max = 2018 
 
-col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
-#col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
-
-
 #CSV file containing properties for all sites
 n<-nrow(sites)
 #Threshold temperature (deg C) for growing degree-days calculation

@@ -18,9 +18,9 @@ Baseline_all$Date = strptime(Baseline_all$Date, "%Y-%m-%d")
 Future_all$Date = strptime(Future_all$Date, "%Y-%m-%d")
 
 # # Subset Future_all to only be near future (2025-2055) and Baseline_all to only but until 2000
-BA<-Baseline_all
-Baseline_all$GCM<-paste(Baseline_all$GCM,".rcp45",sep="");BA$GCM<-paste(BA$GCM,".rcp85",sep="")
-Baseline_all<-rbind(Baseline_all,BA);rm(BA)
+#BA<-Baseline_all
+#Baseline_all$GCM<-paste(Baseline_all$GCM,".rcp45",sep="");BA$GCM<-paste(BA$GCM,".rcp85",sep="")
+#Baseline_all<-rbind(Baseline_all,BA);rm(BA)
 ALL_HIST<-Baseline_all
 Baseline_all$Year<-format(as.Date(Baseline_all$Date, format="%Y-%m-%d"),"%Y")
 Baseline_all<-subset(Baseline_all,Year<2000)

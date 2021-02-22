@@ -13,8 +13,6 @@ col.RCP2 = c("blue", "red")
 
 ## All 508-compliant color scheme -- navy (hot wet), light blue (warm wet), pink (warm dry), red (hot dry)
 colors5 <-   c("white","#12045C","#9A9EE5","#F3D3CB","#E10720")
-colors2<- c("#9A9EE5","#E10720")  # WarmWet/HotDamp
-#colors2<- c("#F3D3CB","#12045C")  # HotWet/WarmDry
 
 colors3<-c("white",colors2)
 
