@@ -30,10 +30,6 @@ OutDir = "./figures/water-balance"
 #Select GCMs - Include RCP
 unique(ALL_FUTURE$GCM)
 
-
-colors2<- c("#9A9EE5","#E10720")  # WarmWet/HotDry
-#colors2<- c("#F3D3CB","#12045C")  # HotWet/WarmDry
-
 colors3<-c("gray",colors2)
 ############################################################ END USER INPUTS ###################################################################
 
