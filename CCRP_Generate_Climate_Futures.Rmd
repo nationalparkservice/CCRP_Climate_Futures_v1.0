@@ -11,16 +11,16 @@ rm(list = ls())
 
 # -------------- Input site information -------------------------------------- #
 
-SiteID = "ELMA"
-site <- "ELMA" # This is entered twice because the object is assigned differently in different scripts. The park code will only be entered once in future versions. 
-state <- "New Mexico"
+SiteID = "MACA"
+site <- "MACA" # This is entered twice because the object is assigned differently in different scripts. The park code will only be entered once in future versions. 
+state <- "Kentucky"
 
 # --------------- Input local folder information ----------------------------- #
 
 # When this document has finished running, the files will be copied to a local directory and all newly created files (e.g., figures) will be deleted from the repo
 
 project_root_dir <- 'C:/Users/msears/Documents/Repos/CCRP_Climate_Futures_v1.0' # local directory where your repo is stored
-local_rss_dir <- 'C:/Users/msears/Documents/RSS/ELMA_ELMO/' # local directory where you want this repo copied. Should be something like 'C:/Users/adillon/Documents/RSS/CONG'
+local_rss_dir <- 'C:/Users/msears/Documents/RSS/MACA/' # local directory where you want this repo copied. Should be something like 'C:/Users/adillon/Documents/RSS/CONG'
 
 # -------------- Input information for Climate Futures analyses (MACA) ------- #
 
