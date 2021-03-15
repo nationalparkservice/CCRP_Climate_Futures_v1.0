@@ -59,8 +59,8 @@ QuantileHigh = 0.95
 
 # The following files are inputs into this script. Change as necessary. 
 #inputs <- c(paste0(site, "_lat_long_PRISM_PptTminTmax_IntermediateFiles.RData"), 
-            paste0(site, "_init_parsed.RData"), 
-            "GridMet.csv")
+#            paste0(site, "_init_parsed.RData"), 
+#            "GridMet.csv")
 
 # The following needs to be inputted if the park centroid will not be used to select the MACA grid cell for the water balance model:
 
