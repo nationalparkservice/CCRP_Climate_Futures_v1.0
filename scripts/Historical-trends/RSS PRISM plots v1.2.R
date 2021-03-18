@@ -4,6 +4,8 @@
 
 # Create output directories
 
+renv::activate()
+
 file <- list.files(path = './data/park-specific/input', pattern = 'IntermediateFiles.RData', full.names = TRUE) # will load all .RData files within directory
 load(file)
 
