@@ -211,7 +211,7 @@ ggplot(Annual, aes(x=deficit, colour=CF,fill=CF,linetype=CF),show.legend=F) +geo
   scale_linetype_manual(values=seq(1,length(unique(Annual$CF)),1)) +
   labs(y = "Density",
        x = "Annual moisture deficit (in)",
-       title = paste(site,"  Water Deficit for GCMs (2025-2055) and Historical Period (1895-1999)",sep=" ")) +
+       title = paste(site,"  Water Deficit for GCMs (2025-2055) and Historical Period (1950-1999)",sep=" ")) +
   theme(axis.text = element_text(size=20), axis.title = element_text(size=20), legend.text=element_text(size=20), legend.background=element_rect(fill = "White", size = 0.5),
         plot.title=element_text(size=22, hjust=0),legend.position = c(.8,.8)) 
 
@@ -223,7 +223,7 @@ ggplot(Annual, aes(x=SOIL_in, colour=CF,fill=CF,linetype=CF),show.legend=F) +geo
   scale_linetype_manual(values=seq(1,length(unique(Annual$CF)),1)) +
   labs(y = "Density",
        x = "Annual soil moisture (in)",
-       title = paste(site,"  Soil Moisture for GCMs (2025-2055) and Historical Period (1895-1999)",sep=" ")) +
+       title = paste(site,"  Soil Moisture for GCMs (2025-2055) and Historical Period (1950-1999)",sep=" ")) +
   theme(axis.text = element_text(size=20), axis.title = element_text(size=20), legend.text=element_text(size=14),
         plot.title=element_text(size=22, hjust=0),legend.position = c(.8,.8)) 
 
