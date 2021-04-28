@@ -10,7 +10,7 @@
 DataDirName <- "./data/general/"
 OutDirName <- './figures/additional/'
 
-pCode <- site
+pCode <- SiteID
 # print plots to screen or to file in working directory?
 outDevice <- "file"
 # outDevice <- "screen"    # use ONLY "screen" or "file"

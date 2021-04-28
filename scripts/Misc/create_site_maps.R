@@ -37,7 +37,7 @@ for(i in 1:length(map_types)){
     tm_compass(type = "4star", position = c("right", "top"), size = 3, bg.color = "white") + tm_scale_bar(text.size = 0.75, breaks = c(0,1,2,3), bg.color = "white") +
     tm_layout(legend.position = c("left", "bottom"), legend.stack = "vertical", legend.frame = TRUE, legend.bg.color = "white", legend.text.size = 1)
   
-  tmap_save(map, filename = paste0(maps, "/", site, "-MACA25-", map_types[i], ".png"))
+  tmap_save(map, filename = paste0(maps, "/", SiteID, "-MACA25-", map_types[i], ".png"))
   
 }
 
@@ -65,6 +65,6 @@ for(i in 1:length(map_types)){
     tm_compass(type = "4star", position = c("right", "top"), size = 3, bg.color = "white") + tm_scale_bar(text.size = 0.75, breaks = c(0,1,2,3), bg.color = "white") +
     tm_layout(legend.position = c("left", "bottom"), legend.stack = "vertical", legend.frame = TRUE, legend.bg.color = "white", legend.text.size = 1)
   
-  tmap_save(map, filename = paste0(maps, "/", site, "-MACA9-", map_types[i], ".png"))
+  tmap_save(map, filename = paste0(maps, "/", SiteID, "-MACA9-", map_types[i], ".png"))
   
 }
