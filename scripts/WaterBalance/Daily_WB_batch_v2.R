@@ -203,7 +203,7 @@ ggplot(Annual, aes(x=deficit, y=AET, colour=CF)) + geom_point(size=3)+ geom_smoo
   theme(axis.text = element_text(size=20), axis.title = element_text(size=20), legend.text=element_text(size=14),
         plot.title=element_text(size=22)) #+xlim(20,45)+ylim(2,16)
 
-ggsave(paste("Water Balance-",site,".png",sep=""), path = OutDir, width = 15, height = 9)
+ggsave(paste("Water Balance-",SiteID,".png",sep=""), path = OutDir, width = 15, height = 9)
 
 ggplot(Annual, aes(x=deficit, colour=CF,fill=CF,linetype=CF),show.legend=F) +geom_density(alpha=0.3,size=1.5) +
   scale_colour_manual(values=colors3) +

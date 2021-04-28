@@ -28,6 +28,8 @@ local_rss_dir <- 'C:/Users/adillon/Documents/RSS/ELMA/' # local directory where 
 
 FutureSubset <- c("Warm Wet","Hot Dry") # Pick pair of climate futures.
 CFs<- c("Warm Wet", "Hot Dry") # Same as above
+
+
 colors2<- c("#9A9EE5","#E10720")  # Select pair of climate futures - WarmWet/HotDry
 #colors2<- c("#F3D3CB","#12045C")  # Select pair of climate futures - HotWet/WarmDry
 CFs_all <- c("Warm Wet", "Hot Wet", "Central", "Warm Dry", "Hot Dry")
@@ -70,6 +72,7 @@ WB_GCMs = c("MRI-CGCM3.rcp45","HadGEM2-ES365.rcp85") # Specific models need to b
 # ------------ Input information for Drought analyses ------------------------ #
 
 ## SPEI variables
+
 SPEI_per<-6 # This is the value for the period SPEI is aggregated. 6-months is standard but could change if want. 
 truncation<- -.5 # SPEI value, under which drought events are considered
 
