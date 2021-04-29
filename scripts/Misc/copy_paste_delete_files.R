@@ -55,8 +55,10 @@ file.copy(file.path(project_root_dir, rmd), local_rss_dir)
 
 inputs <- list.files(path = './data/park-specific/input')
 
+
 sink("sessionInfo.txt")
 sessionInfo()
+
 cat(paste("input files:", inputs))
 sink()
 

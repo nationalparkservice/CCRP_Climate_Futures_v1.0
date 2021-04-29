@@ -12,8 +12,6 @@ library(WriteXLS)
 library(prism)
 rm(list=ls())
 
-#  for output file names
-SiteID <- "YELL-SC"  # identifier.  Use "" if not desired
 
 #Location for saving data
 # DataDir <- "C:/Users/achildress/DOI/NPS-NRSS-CCRP-FC Science Adaptation - Documents/General/Miscellaneous/PRISM4k/"
