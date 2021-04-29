@@ -3,43 +3,47 @@
 ##################################################
 
 # This script prints analysis metadata into the sessionInfo.txt file
-# NOTE: Information on Water Balance package version is included in sessionInfo() just like any other package from CRAN (or elsewhere)
+
 
 
 
 sink("sessionInfo.txt") # Create sessionInfo text file
 sessionInfo() # add information on package and R versions
-cat("")
+cat("\n")
 
 # Input files
 
+cat("\n")
 inputs <- list.files(path = './data/park-specific/input') # Input files
 cat(paste("input files:", inputs))
+cat("\n")
 
 # Water Balance model
+# NOTE: Information on Water Balance package version is included in sessionInfo() just like any other package from CRAN (or elsewhere)
 
+cat("\n")
 cat("WATER BALANCE MODEL INFORMATION")
-cat(paste("Models used in Water Balance analysis:", WB_GCMs)) 
-cat("")
+cat("\n")
+cat(paste("Models used in Water Balance analysis:", WB_GCMs[1], WB_GCMs[2])) 
+cat("\n")
 
 # Drought analysis
 
+cat("\n")
 cat("DROUGHT ANALYSIS")
+cat("\n")
 cat(paste("SPEI aggregation period (in months):", SPEI_per))
 cat(paste("SPEI truncation value:", truncation))
 cat(paste("SPEI baseline starts in", SPEI_start), "and ends in", SPEI_end)
-cat("")
+cat("\n")
 
+# Bias correction text
+# NOTE: This will probably be moved to a Methods document at some point
 
-
-
-
-
-
-
-
-
-
+cat("\n")
+cat("BIAS CORRECTION METHODS")
+cat("\n")
+cat("Long-term timeseries plots use PRISM historical data - bias-corrected against gridMET from [BC.min] to [BC.max] using the delta method. Projections use MACA data.")
 
 sink()
 
