@@ -11,9 +11,8 @@ rm(list = ls())
 
 # -------------- Input site information -------------------------------------- #
 
-SiteID = "CARE"
-site <- "CARE" # This is entered twice because the object is assigned differently in different scripts. The park code will only be entered once in future versions. 
-state <- "Utah"
+SiteID = "ELMA"
+state <- "New Mexico"
 
 # --------------- Input local folder information ----------------------------- #
 
@@ -56,7 +55,7 @@ QuantileHigh = 0.95
 
 WB_GCMs = c("MRI-CGCM3.rcp45","HadGEM2-ES365.rcp85") # Specific models need to be selected to run the Water Balance scripts
 
-#col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
+col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
 #col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
 
 # The following files are inputs into this script. Change as necessary. 
@@ -174,52 +173,6 @@ source(here::here("scripts", "Additional-tables-plots", "RSS_MACA_drought_char.R
 source(here::here("scripts", "Additional-tables-plots", "FLI FBI phenology plots.R"))
 
 source(here::here("scripts", "Additional-tables-plots", "RSS Audubon summary.R"))
-```
-
-```{r Testing, eval = FALSE}
-
-# Final Environment created in this script
-
-file <- list.files(path = './data/park-specific/output', pattern = 'Final_Environment.RData', full.names = TRUE) 
-load(file)
-
-final_new <- rbind(H_annual, F_annual)
-
-summary_new <- final_new %>%
-  group_by(CF) %>%
-  skim() %>%
-  yank("numeric") %>%
-  select(-c(n_missing, complete_rate, hist))
-
-# Final Environment created using old system
-
-old <- list.files(path = './data/park-specific/old', pattern = 'Final_Environment.RData', full.names = TRUE)
-load(old)
-
-final_old <- rbind(H_annual, F_annual)
-final_old <- final_old %>% select(-Sp.Frost)
-
-summary_old <- final_old %>%
-  group_by(CF) %>%
-  skim() %>%
-  yank("numeric") %>%
-  select(-c(n_missing, complete_rate, hist))
-
-# Compare
-
-diff <- summary_new %>%
-  dplyr::select(skim_variable, CF)
-
-diff[,3] <- summary_new[,3] - summary_old[,3]
-diff[,4] <- summary_new[,4] - summary_old[,4]
-diff[,5] <- summary_new[,5] - summary_old[,5]
-diff[,6] <- summary_new[,6] - summary_old[,6]
-diff[,7] <- summary_new[,7] - summary_old[,7]
-diff[,8] <- summary_new[,8] - summary_old[,8]
-diff[,9] <- summary_new[,9] - summary_old[,9]
-
-diff
-  
 ```
 
 

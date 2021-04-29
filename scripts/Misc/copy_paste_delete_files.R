@@ -58,6 +58,7 @@ inputs <- list.files(path = './data/park-specific/input')
 
 sink("sessionInfo.txt")
 sessionInfo()
+
 cat(paste("input files:", inputs))
 sink()
 
