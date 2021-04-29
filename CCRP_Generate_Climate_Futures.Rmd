@@ -74,7 +74,8 @@ col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
 
 SPEI_per<-6 # This is the value for the period SPEI is aggregated. 6-months is standard but could change if want. 
 truncation<- -.5 # SPEI value, under which drought events are considered
-
+SPEI_start <- 1950
+SPEI_end <- 1999
 
 ```
 

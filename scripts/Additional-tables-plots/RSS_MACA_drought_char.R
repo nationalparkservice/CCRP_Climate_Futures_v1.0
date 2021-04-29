@@ -73,9 +73,9 @@ CF.split<-split(MON,MON$CF) #Splits df into array by CF
 for (i in 1:length(CF.split)){
   name=names(CF.split)[i]
   t<-CF.split[[i]]
-  tp<-ts(t$Pr_mm,frequency=12,start=c(1950,1))
-  tpet<-ts(t$PET,frequency=12,start=c(1950,1))
-  SPEI<-spei(tp-tpet,SPEI_per,ref.start=c(1950,1),ref.end=c(1999,12))
+  tp<-ts(t$Pr_mm,frequency=12,start=c(SPEI_start,1))
+  tpet<-ts(t$PET,frequency=12,start=c(SPEI_start,1))
+  SPEI<-spei(tp-tpet,SPEI_per,ref.start=c(SPEI_start,1),ref.end=c(SPEI_end,12))
   CF.split[[i]]$SPEI <- SPEI$fitted[1:length(SPEI$fitted)]
   # Plot each CF
   plot <- paste('./figures/additional/', name)
