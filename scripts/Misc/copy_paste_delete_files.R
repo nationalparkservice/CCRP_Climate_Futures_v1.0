@@ -49,28 +49,9 @@ unlink(general_dir, recursive = TRUE)
 rmd <- list.files(project_root_dir, pattern = '.Rmd') 
 file.copy(file.path(project_root_dir, rmd), local_rss_dir)
 
-# Session Info
-
-# Create session info
-
-inputs <- list.files(path = './data/park-specific/input')
-
-
-sink("sessionInfo.txt")
-sessionInfo()
-
-cat(paste("input files:", inputs))
-sink()
-
-# copy to local folder and delete
-
-txt <- list.files(project_root_dir, pattern = '.txt')
-file.copy(file.path(project_root_dir, txt), local_rss_dir)
-
 # Remove figures and park-specific data from repo
 
 park_specific_data_repo_dir <- paste(data_repo_dir, "park-specific", sep = '/')
 
 unlink(park_specific_data_repo_dir, recursive = TRUE)
 unlink(figs_repo_dir, recursive = TRUE)
-unlink("sessionInfo.txt")

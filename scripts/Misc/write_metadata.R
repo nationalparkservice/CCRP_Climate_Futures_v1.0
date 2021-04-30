@@ -5,8 +5,6 @@
 # This script prints analysis metadata into the sessionInfo.txt file
 
 
-
-
 sink("sessionInfo.txt") # Create sessionInfo text file
 sessionInfo() # add information on package and R versions
 cat("\n")
@@ -15,7 +13,7 @@ cat("\n")
 
 cat("\n")
 inputs <- list.files(path = './data/park-specific/input') # Input files
-cat(paste("input files:", inputs))
+cat(paste("input files:", inputs[1], inputs[2], inputs[3], sep = " "))
 cat("\n")
 
 # Water Balance model
@@ -33,7 +31,9 @@ cat("\n")
 cat("DROUGHT ANALYSIS")
 cat("\n")
 cat(paste("SPEI aggregation period (in months):", SPEI_per))
+cat("\n")
 cat(paste("SPEI truncation value:", truncation))
+cat("\n")
 cat(paste("SPEI baseline starts in", SPEI_start), "and ends in", SPEI_end)
 cat("\n")
 
@@ -43,7 +43,7 @@ cat("\n")
 cat("\n")
 cat("BIAS CORRECTION METHODS")
 cat("\n")
-cat("Long-term timeseries plots use PRISM historical data - bias-corrected against gridMET from [BC.min] to [BC.max] using the delta method. Projections use MACA data.")
+cat(paste("Long-term timeseries plots use PRISM historical data - bias-corrected against gridMET from", BC.min, "to", BC.max, "using the delta method. Projections use MACA data."))
 
 sink()
 
@@ -51,7 +51,6 @@ sink()
 
 txt <- list.files(project_root_dir, pattern = '.txt')
 file.copy(file.path(project_root_dir, txt), local_rss_dir)
-
 
 
 unlink("sessionInfo.txt")
