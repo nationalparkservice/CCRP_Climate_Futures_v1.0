@@ -844,9 +844,6 @@ ggsave(paste(PLOT,"Ppt.png",sep=""), path = './figures/Historical-trends', width
 
 
 ###### SPEI calculations
-library(SPEI)
-SPEI_per<-12 # Use 6-month SPEI 
-truncation<- -0.75
 
 head(baseData)
 baseData$Tmean_C<-(baseData$tmean - 32) * 5/9
