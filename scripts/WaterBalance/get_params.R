@@ -127,9 +127,11 @@ sites[,10] <- 0 # default value for Soil.Init
 sites[,11] <- 1 # default value for shade coefficient
 
 sites <- select(sites, 7,2,1,3:6, 8:11) # reorder columns
-colnames(sites) <- c("SiteID", "Lat", "Lon", "Elev", "Aspect", "Slope", "SWC.Max", "Wind", "Snowpack", "Soil.Init", "Shade.Coeff")
+colnames(sites) <- c("Point", "Lat", "Lon", "Elev", "Aspect", "Slope", "SWC.Max", "Wind", "Snowpack", "Soil.Init", "Shade.Coeff")
 
 sites$SWC.Max = sites$SWC.Max*10 # convert units for Soil Water-holding capacity
 sites # check to be sure values are populated correctly. There should not be NA values. 
+
+write.csv(sites, file = paste('./data/park-specific/output/', SiteID, " WB site parameters ", Sys.Date(), ".csv", sep = ""), row.names = FALSE)
 
 
