@@ -92,6 +92,10 @@ knitr::opts_chunk$set(
 
 # renv::init()
 
+renv::update(exclude = "WaterBalance") # The first time running this line, you might need to follow directions to create a Personal Access Token with GitHub. Simply follow directions printed in the console. If you run into trouble, contact Annie Kellner at anne_dillon@nps.gov 
+
+
+
 library(here); library(plyr); # Use here::here when package lubridate is used
 library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot); library(reshape2); library(raster); library(ncdf4); library(reshape2); library(WriteXLS); library(data.table); library(RColorBrewer); library(ggrepel); library(lubridate); library(dplyr); library(forcats); library(openxlsx); library("WaterBalance"); library(sf); library(raster); library(rgdal); library(R.utils); library(tmap); library(tmaptools); library(rJava); library(OpenStreetMap); library(gridExtra); library(SPEI); library(tidyr); library(tibble); library(sp); library(skimr) #library(cft)
 
