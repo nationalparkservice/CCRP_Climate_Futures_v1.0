@@ -120,6 +120,8 @@ PRISM.BC$Tmean.roll10 <- rollmean(PRISM.BC$Tavg.mean, rollLen,fill=NA)
 PRISM.BC$Precip.roll10 <- rollmean(PRISM.BC$Precip.mean, rollLen,fill=NA)
 yrAvgs.sub<-merge(yrAvgs.sub,PRISM.BC[,c("year","Tmean.roll10","Precip.roll10")],by="year",all=TRUE)
 
+yrAvgs.sub$CF <- factor(yrAvgs.sub$CF, levels = c("Historical", CFs))
+
 
 # Tmean
 ggplot(yrAvgs.sub, aes(x=as.numeric(as.character(year)), y=Tavg.mean, col=CF, fill=CF)) + 
