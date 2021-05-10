@@ -73,7 +73,7 @@ for (j in 1:length(WB_GCMs)){
   gcm = WB_GCMs[j]
   DailyWB = subset(ClimData,GCM=gcm)
   for(i in 1:nrow(sites)){
-    SiteID = sites$SiteID[i]
+    ID = sites$ID[i]
     Lat = sites$Lat[i]
     Lon = sites$Lon[i]
     Elev = sites$Elevation[i]
@@ -86,7 +86,7 @@ for (j in 1:length(WB_GCMs)){
     Shade.Coeff = sites$Shade.Coeff[i]
     
     #Calculate daily water balance variables 
-    DailyWB$SiteID = SiteID
+    DailyWB$ID = ID
     DailyWB$daylength = get_daylength(DailyWB$Date, Lat)
     DailyWB$F = get_freeze(DailyWB$tmean_C)
     DailyWB$RAIN = get_rain(DailyWB$ppt_mm, DailyWB$F)
@@ -123,39 +123,39 @@ WBData$yrmon = strftime(WBData$Date, "%Y%m")
 WBData$year = strftime(WBData$Date, "%Y")
 
 #Monthly
-MonthlyWB = aggregate(ppt_mm~yrmon+GCM,data=aggregate(ppt_mm~yrmon+GCM+SiteID,data=WBData,sum),mean)
+MonthlyWB = aggregate(ppt_mm~yrmon+GCM,data=aggregate(ppt_mm~yrmon+GCM+ID,data=WBData,sum),mean)
 colnames(MonthlyWB)[3]<-"sum_p"
 
 MonthlyWB$avg_t = aggregate(tmean_C ~ yrmon+GCM, data=WBData, FUN=mean)[,3]
-MonthlyWB$sum_rain = aggregate(RAIN~yrmon+GCM,data=aggregate(RAIN~yrmon+GCM+SiteID,data=WBData,sum),mean)[,3]
-MonthlyWB$sum_snow = aggregate(SNOW~yrmon+GCM,data=aggregate(SNOW~yrmon+GCM+SiteID,data=WBData,sum),mean)[,3]
+MonthlyWB$sum_rain = aggregate(RAIN~yrmon+GCM,data=aggregate(RAIN~yrmon+GCM+ID,data=WBData,sum),mean)[,3]
+MonthlyWB$sum_snow = aggregate(SNOW~yrmon+GCM,data=aggregate(SNOW~yrmon+GCM+ID,data=WBData,sum),mean)[,3]
 MonthlyWB$max_pack = aggregate(PACK ~ yrmon+GCM, data=WBData, FUN=max)[,3]
-MonthlyWB$sum_melt = aggregate(MELT~yrmon+GCM,data=aggregate(MELT~yrmon+GCM+SiteID,data=WBData,sum),mean)[,3]
-MonthlyWB$sum_w = aggregate(W~yrmon+GCM,data=aggregate(W~yrmon+GCM+SiteID,data=WBData,sum),mean)[,3]
-MonthlyWB$sum_pet = aggregate(PET~yrmon+GCM,data=aggregate(PET~yrmon+GCM+SiteID,data=WBData,sum),mean)[,3]
-MonthlyWB$sum_w_pet = aggregate(W_PET~yrmon+GCM,data=aggregate(W_PET~yrmon+GCM+SiteID,data=WBData,sum),mean)[,3]
+MonthlyWB$sum_melt = aggregate(MELT~yrmon+GCM,data=aggregate(MELT~yrmon+GCM+ID,data=WBData,sum),mean)[,3]
+MonthlyWB$sum_w = aggregate(W~yrmon+GCM,data=aggregate(W~yrmon+GCM+ID,data=WBData,sum),mean)[,3]
+MonthlyWB$sum_pet = aggregate(PET~yrmon+GCM,data=aggregate(PET~yrmon+GCM+ID,data=WBData,sum),mean)[,3]
+MonthlyWB$sum_w_pet = aggregate(W_PET~yrmon+GCM,data=aggregate(W_PET~yrmon+GCM+ID,data=WBData,sum),mean)[,3]
 MonthlyWB$avg_soil = aggregate(SOIL ~ yrmon+GCM, data=WBData, FUN=mean)[,3]
-MonthlyWB$sum_aet = aggregate(AET~yrmon+GCM,data=aggregate(AET~yrmon+GCM+SiteID,data=WBData,sum),mean)[,3]
-MonthlyWB$sum_w_et_dsoil = aggregate(W_ET_DSOIL~yrmon+GCM,data=aggregate(W_ET_DSOIL~yrmon+GCM+SiteID,data=WBData,sum),mean)[,3]
-MonthlyWB$sum_d = aggregate(D~yrmon+GCM,data=aggregate(D~yrmon+GCM+SiteID,data=WBData,sum),mean)[,3]
-MonthlyWB$sum_gdd = aggregate(GDD~yrmon+GCM,data=aggregate(GDD~yrmon+GCM+SiteID,data=WBData,sum),mean)[,3]
+MonthlyWB$sum_aet = aggregate(AET~yrmon+GCM,data=aggregate(AET~yrmon+GCM+ID,data=WBData,sum),mean)[,3]
+MonthlyWB$sum_w_et_dsoil = aggregate(W_ET_DSOIL~yrmon+GCM,data=aggregate(W_ET_DSOIL~yrmon+GCM+ID,data=WBData,sum),mean)[,3]
+MonthlyWB$sum_d = aggregate(D~yrmon+GCM,data=aggregate(D~yrmon+GCM+ID,data=WBData,sum),mean)[,3]
+MonthlyWB$sum_gdd = aggregate(GDD~yrmon+GCM,data=aggregate(GDD~yrmon+GCM+ID,data=WBData,sum),mean)[,3]
 
 #Annual
-AnnualWB = aggregate(ppt_mm ~ year+GCM, data=aggregate(ppt_mm~year+GCM+SiteID,data=WBData,sum), mean)
+AnnualWB = aggregate(ppt_mm ~ year+GCM, data=aggregate(ppt_mm~year+GCM+ID,data=WBData,sum), mean)
 colnames(AnnualWB)[3]<-"sum_p"
 AnnualWB$avg_t = aggregate(tmean_C ~ year+GCM, data=WBData, FUN=mean)[,3]
-AnnualWB$sum_rain = aggregate(RAIN ~ year+GCM, data=aggregate(RAIN~year+GCM+SiteID,data=WBData,sum), mean)[,3]
-AnnualWB$sum_snow = aggregate(SNOW ~ year+GCM, data=aggregate(SNOW~year+GCM+SiteID,data=WBData,sum), mean)[,3]
-AnnualWB$max_pack = aggregate(PACK ~ year+GCM, data=aggregate(PACK~year+GCM+SiteID,data=WBData,max), mean)[,3]
-AnnualWB$sum_melt = aggregate(MELT ~ year+GCM, data=aggregate(MELT~year+GCM+SiteID,data=WBData,sum), mean)[,3]
-AnnualWB$sum_w = aggregate(W ~ year+GCM, data=aggregate(W~year+GCM+SiteID,data=WBData,sum), mean)[,3]
-AnnualWB$sum_pet = aggregate(PET ~ year+GCM, data=aggregate(PET~year+GCM+SiteID,data=WBData,sum), mean)[,3]
-AnnualWB$sum_w_pet = aggregate(W_PET ~ year+GCM, data=aggregate(W_PET~year+GCM+SiteID,data=WBData,sum), mean)[,3]
+AnnualWB$sum_rain = aggregate(RAIN ~ year+GCM, data=aggregate(RAIN~year+GCM+ID,data=WBData,sum), mean)[,3]
+AnnualWB$sum_snow = aggregate(SNOW ~ year+GCM, data=aggregate(SNOW~year+GCM+ID,data=WBData,sum), mean)[,3]
+AnnualWB$max_pack = aggregate(PACK ~ year+GCM, data=aggregate(PACK~year+GCM+ID,data=WBData,max), mean)[,3]
+AnnualWB$sum_melt = aggregate(MELT ~ year+GCM, data=aggregate(MELT~year+GCM+ID,data=WBData,sum), mean)[,3]
+AnnualWB$sum_w = aggregate(W ~ year+GCM, data=aggregate(W~year+GCM+ID,data=WBData,sum), mean)[,3]
+AnnualWB$sum_pet = aggregate(PET ~ year+GCM, data=aggregate(PET~year+GCM+ID,data=WBData,sum), mean)[,3]
+AnnualWB$sum_w_pet = aggregate(W_PET ~ year+GCM, data=aggregate(W_PET~year+GCM+ID,data=WBData,sum), mean)[,3]
 AnnualWB$avg_soil = aggregate(SOIL ~ year+GCM, data=WBData, FUN=mean)[,3]
-AnnualWB$sum_aet = aggregate(AET ~ year+GCM, data=aggregate(AET~year+GCM+SiteID,data=WBData,sum), mean)[,3]
-AnnualWB$sum_w_et_dsoil = aggregate(W_ET_DSOIL ~ year+GCM, data=aggregate(W_ET_DSOIL~year+GCM+SiteID,data=WBData,sum), mean)[,3]
-AnnualWB$sum_d = aggregate(D ~ year+GCM, data=aggregate(D~year+GCM+SiteID,data=WBData,sum), mean)[,3]
-AnnualWB$sum_gdd = aggregate(GDD ~ year+GCM, data=aggregate(GDD~year+GCM+SiteID,data=WBData,sum), mean)[,3]
+AnnualWB$sum_aet = aggregate(AET ~ year+GCM, data=aggregate(AET~year+GCM+ID,data=WBData,sum), mean)[,3]
+AnnualWB$sum_w_et_dsoil = aggregate(W_ET_DSOIL ~ year+GCM, data=aggregate(W_ET_DSOIL~year+GCM+ID,data=WBData,sum), mean)[,3]
+AnnualWB$sum_d = aggregate(D ~ year+GCM, data=aggregate(D~year+GCM+ID,data=WBData,sum), mean)[,3]
+AnnualWB$sum_gdd = aggregate(GDD ~ year+GCM, data=aggregate(GDD~year+GCM+ID,data=WBData,sum), mean)[,3]
 
 write.csv(MonthlyWB,"./data/park-specific/output/MonthlyWB.csv",row.names=F)
 write.csv(AnnualWB,"./data/park-specific/output/AnnualWB.csv",row.names=F)
@@ -197,13 +197,13 @@ ggplot(Annual, aes(x=deficit, y=AET, colour=CF)) + geom_point(size=3)+ geom_smoo
     y = "Annual Actual Evapotranspiration (in)",
     x = "Annual moisture deficit (in)",
     colour = "GCM",
-    title = paste("Water Balance for ",SiteID,sep="")  
+    title = paste("Water Balance for ",ID,sep="")  
   ) + theme(plot.title = element_text(hjust = 0.5)) + #+ geom_vline(xintercept=mean(Historical.wb$deficit), colour="black") +geom_vline(xintercept=mean(Future.wb$deficit), colour="blue")
   # size is pts
   theme(axis.text = element_text(size=20), axis.title = element_text(size=20), legend.text=element_text(size=14),
         plot.title=element_text(size=22)) #+xlim(20,45)+ylim(2,16)
 
-ggsave(paste("Water Balance-",SiteID,".png",sep=""), path = OutDir, width = 15, height = 9)
+ggsave(paste("Water Balance-",ID,".png",sep=""), path = OutDir, width = 15, height = 9)
 
 ggplot(Annual, aes(x=deficit, colour=CF,fill=CF,linetype=CF),show.legend=F) +geom_density(alpha=0.3,size=1.5) +
   scale_colour_manual(values=colors3) +
@@ -211,11 +211,11 @@ ggplot(Annual, aes(x=deficit, colour=CF,fill=CF,linetype=CF),show.legend=F) +geo
   scale_linetype_manual(values=seq(1,length(unique(Annual$CF)),1)) +
   labs(y = "Density",
        x = "Annual moisture deficit (in)",
-       title = paste(SiteID,"  Water Deficit for GCMs (2025-2055) and Historical Period (1950-1999)",sep=" ")) +
+       title = paste(ID,"  Water Deficit for GCMs (2025-2055) and Historical Period (1950-1999)",sep=" ")) +
   theme(axis.text = element_text(size=20), axis.title = element_text(size=20), legend.text=element_text(size=20), legend.background=element_rect(fill = "White", size = 0.5),
         plot.title=element_text(size=22, hjust=0),legend.position = c(.8,.8)) 
 
-ggsave(paste(SiteID,"-Deficit_density_panel.png",sep=""), path = OutDir, width = 15, height = 9)
+ggsave(paste(ID,"-Deficit_density_panel.png",sep=""), path = OutDir, width = 15, height = 9)
 
 ggplot(Annual, aes(x=SOIL_in, colour=CF,fill=CF,linetype=CF),show.legend=F) +geom_density(alpha=0.3,size=1.5) +
   scale_colour_manual(values=colors3) +
@@ -223,11 +223,11 @@ ggplot(Annual, aes(x=SOIL_in, colour=CF,fill=CF,linetype=CF),show.legend=F) +geo
   scale_linetype_manual(values=seq(1,length(unique(Annual$CF)),1)) +
   labs(y = "Density",
        x = "Annual soil moisture (in)",
-       title = paste(SiteID,"  Soil Moisture for GCMs (2025-2055) and Historical Period (1950-1999)",sep=" ")) +
+       title = paste(ID,"  Soil Moisture for GCMs (2025-2055) and Historical Period (1950-1999)",sep=" ")) +
   theme(axis.text = element_text(size=20), axis.title = element_text(size=20), legend.text=element_text(size=14),
         plot.title=element_text(size=22, hjust=0),legend.position = c(.8,.8)) 
 
-ggsave(paste(SiteID,"-SOIL_in_density_panel.png",sep=""), path = OutDir, width = 15, height = 9)
+ggsave(paste(ID,"-SOIL_in_density_panel.png",sep=""), path = OutDir, width = 15, height = 9)
 
 
 ########################
@@ -260,14 +260,14 @@ plot_1 <- ggplot() +
                     breaks = names(color),
                     labels = names(color),
                     values = color) + 
-  labs(title=paste(SiteID, " water balance effects on biome",sep=""),
+  labs(title=paste(ID, " water balance effects on biome",sep=""),
        y = "Annual Evapotranspiration (mm)", x = "Annual moisture deficit (mm)") 
 plot_1
 
 plot_1 + geom_point(data=Annual, aes(x=sum_d, y=sum_aet, colour=CF), size=3) + 
   geom_smooth(data=Annual, aes(x=sum_d, y=sum_aet, colour=CF),method="lm", se=FALSE, size=2) + 
   scale_colour_manual("Scenario",values=colors3)
-ggsave(paste(SiteID,"-WB-biome effects.png",sep=""), path = OutDir, width = 15, height = 9)
+ggsave(paste(ID,"-WB-biome effects.png",sep=""), path = OutDir, width = 15, height = 9)
 
 ### Monthly
 MonthlyWB$year<-as.numeric(substr(MonthlyWB$yrmon, 1, 4))

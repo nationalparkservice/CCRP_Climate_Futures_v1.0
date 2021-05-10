@@ -11,15 +11,15 @@ rm(list = ls())
 
 # -------------- Input site information -------------------------------------- #
 
-SiteID = "ELMA"
-state <- "New Mexico"
+SiteID = "CARE"
+state <- "Utah"
 
 # --------------- Input local folder information ----------------------------- #
 
 # When this document has finished running, the files will be copied to a local directory and all newly created files (e.g., figures) will be deleted from the repo
 
 project_root_dir <- 'C:/Users/adillon/Documents/Repos/CCRP_Climate_Futures_v1.0' # local directory where your repo is stored
-local_rss_dir <- 'C:/Users/adillon/Documents/RSS/ELMA/' # local directory where you want this repo copied. Should be something like 'C:/Users/adillon/Documents/RSS/CONG'
+local_rss_dir <- 'C:/Users/adillon/Documents/RSS/CARE/' # local directory where you want this repo copied. Should be something like 'C:/Users/adillon/Documents/RSS/CONG'
 
 # -------------- Input information for Climate Futures analyses (MACA) ------- #
 
@@ -90,7 +90,7 @@ knitr::opts_chunk$set(
 
 #packrat::init(options = list(local.repos = c('./local-repos/WaterBalance'))) # Please do not run this line without consulting Amber Runyon or Annie Kellner
 
-# renv::init()
+# renv::init() Only needs to be run 1x when project is initiated. No one should ever have to run this line again. 
 
 renv::update(exclude = "WaterBalance") # The first time running this line, you might need to follow directions to create a Personal Access Token with GitHub. Simply follow directions printed in the console. If you run into trouble, contact Annie Kellner at anne_dillon@nps.gov 
 
