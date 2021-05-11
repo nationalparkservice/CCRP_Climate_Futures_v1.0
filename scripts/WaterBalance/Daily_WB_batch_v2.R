@@ -13,7 +13,7 @@ load(DataFile)
 
 #Site characteristics 
 #sites = read.csv("C:/Users/adillon/Documents/RSS/CONG/WB/CONG_site_characteristics.csv") #CSV file containing properties for all sites
-n<-nrow(sites)
+n<-nrow(wb_sites)
 #Threshold temperature (deg C) for growing degree-days calculation
 T.Base = 0 
 
@@ -72,18 +72,18 @@ AllDailyWB<-list()
 for (j in 1:length(WB_GCMs)){
   gcm = WB_GCMs[j]
   DailyWB = subset(ClimData,GCM=gcm)
-  for(i in 1:nrow(sites)){
-    ID = sites$ID[i]
-    Lat = sites$Lat[i]
-    Lon = sites$Lon[i]
-    Elev = sites$Elevation[i]
-    Aspect = sites$Aspect[i]
-    Slope = sites$Slope[i]
-    SWC.Max = sites$SWC.Max[i]
-    Wind = sites$Wind[i]
-    Snowpack.Init = sites$Snowpack.Init[i]
-    Soil.Init = sites$Soil.Init[i]
-    Shade.Coeff = sites$Shade.Coeff[i]
+  for(i in 1:nrow(wb_sites)){
+    ID = wb_sites$WB_site[i]
+    Lat = wb_sites$Lat[i]
+    Lon = wb_sites$Lon[i]
+    Elev = wb_sites$Elevation[i]
+    Aspect = wb_sites$Aspect[i]
+    Slope = wb_sites$Slope[i]
+    SWC.Max = wb_sites$SWC.Max[i]
+    Wind = wb_sites$Wind[i]
+    Snowpack.Init = wb_sites$Snowpack.Init[i]
+    Soil.Init = wb_sites$Soil.Init[i]
+    Shade.Coeff = wb_sites$Shade.Coeff[i]
     
     #Calculate daily water balance variables 
 
@@ -204,13 +204,13 @@ ggplot(Annual, aes(x=deficit, y=AET, colour=CF)) + geom_point(size=3)+ geom_smoo
     y = "Annual Actual Evapotranspiration (in)",
     x = "Annual moisture deficit (in)",
     colour = "GCM",
-    title = paste("Water Balance for ",ID,sep="")  
+    title = paste("Water Balance for ",SiteID,sep="")  
   ) + theme(plot.title = element_text(hjust = 0.5)) + #+ geom_vline(xintercept=mean(Historical.wb$deficit), colour="black") +geom_vline(xintercept=mean(Future.wb$deficit), colour="blue")
   # size is pts
   theme(axis.text = element_text(size=20), axis.title = element_text(size=20), legend.text=element_text(size=14),
         plot.title=element_text(size=22)) #+xlim(20,45)+ylim(2,16)
 
-ggsave(paste("Water Balance-",ID,".png",sep=""), path = OutDir, width = 15, height = 9)
+ggsave(paste("Water Balance-",SiteID,".png",sep=""), path = OutDir, width = 15, height = 9)
 
 ggplot(Annual, aes(x=deficit, colour=CF,fill=CF,linetype=CF),show.legend=F) +geom_density(alpha=0.3,size=1.5) +
   scale_colour_manual(values=colors3) +
@@ -218,11 +218,11 @@ ggplot(Annual, aes(x=deficit, colour=CF,fill=CF,linetype=CF),show.legend=F) +geo
   scale_linetype_manual(values=seq(1,length(unique(Annual$CF)),1)) +
   labs(y = "Density",
        x = "Annual moisture deficit (in)",
-       title = paste(ID,"  Water Deficit for GCMs (2025-2055) and Historical Period (1950-1999)",sep=" ")) +
+       title = paste(SiteID,"  Water Deficit for GCMs (2025-2055) and Historical Period (1950-1999)",sep=" ")) +
   theme(axis.text = element_text(size=20), axis.title = element_text(size=20), legend.text=element_text(size=20), legend.background=element_rect(fill = "White", size = 0.5),
         plot.title=element_text(size=22, hjust=0),legend.position = c(.8,.8)) 
 
-ggsave(paste(ID,"-Deficit_density_panel.png",sep=""), path = OutDir, width = 15, height = 9)
+ggsave(paste(SiteID,"-Deficit_density_panel.png",sep=""), path = OutDir, width = 15, height = 9)
 
 ggplot(Annual, aes(x=SOIL_in, colour=CF,fill=CF,linetype=CF),show.legend=F) +geom_density(alpha=0.3,size=1.5) +
   scale_colour_manual(values=colors3) +
@@ -230,11 +230,11 @@ ggplot(Annual, aes(x=SOIL_in, colour=CF,fill=CF,linetype=CF),show.legend=F) +geo
   scale_linetype_manual(values=seq(1,length(unique(Annual$CF)),1)) +
   labs(y = "Density",
        x = "Annual soil moisture (in)",
-       title = paste(ID,"  Soil Moisture for GCMs (2025-2055) and Historical Period (1950-1999)",sep=" ")) +
+       title = paste(SiteID,"  Soil Moisture for GCMs (2025-2055) and Historical Period (1950-1999)",sep=" ")) +
   theme(axis.text = element_text(size=20), axis.title = element_text(size=20), legend.text=element_text(size=14),
         plot.title=element_text(size=22, hjust=0),legend.position = c(.8,.8)) 
 
-ggsave(paste(ID,"-SOIL_in_density_panel.png",sep=""), path = OutDir, width = 15, height = 9)
+ggsave(paste(SiteID,"-SOIL_in_density_panel.png",sep=""), path = OutDir, width = 15, height = 9)
 
 
 ########################
@@ -267,14 +267,14 @@ plot_1 <- ggplot() +
                     breaks = names(color),
                     labels = names(color),
                     values = color) + 
-  labs(title=paste(ID, " water balance effects on biome",sep=""),
+  labs(title=paste(SiteID, " water balance effects on biome",sep=""),
        y = "Annual Evapotranspiration (mm)", x = "Annual moisture deficit (mm)") 
 plot_1
 
 plot_1 + geom_point(data=Annual, aes(x=sum_d, y=sum_aet, colour=CF), size=3) + 
   geom_smooth(data=Annual, aes(x=sum_d, y=sum_aet, colour=CF),method="lm", se=FALSE, size=2) + 
   scale_colour_manual("Scenario",values=colors3)
-ggsave(paste(ID,"-WB-biome effects.png",sep=""), path = OutDir, width = 15, height = 9)
+ggsave(paste(SiteID,"-WB-biome effects.png",sep=""), path = OutDir, width = 15, height = 9)
 
 ### Monthly
 MonthlyWB$year<-as.numeric(substr(MonthlyWB$yrmon, 1, 4))

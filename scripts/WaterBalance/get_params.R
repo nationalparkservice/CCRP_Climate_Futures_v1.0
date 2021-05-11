@@ -114,24 +114,24 @@ tm_shape(park) +
 latlong <- st_as_sf(points) # convert to sf object 
 latlong <- st_transform(latlong, crs = 4326) # project to lat/long
 
-sites <- as.data.frame(st_coordinates(latlong)) # begin new dataframe for sites
+wb_sites <- as.data.frame(st_coordinates(latlong)) # begin new dataframe for wb_sites
 
-sites[,3] <- raster::extract(dem, points)
-sites[,4] <- raster::extract(aspect, points)
-sites[,5] <- raster::extract(slope, points)
-sites[,6] <- raster::extract(soil, points)
-sites[,7] <- seq.int(nrow(sites))
-sites[,8] <- 5 # default value for wind
-sites[,9] <- 0 # default value for snowpack
-sites[,10] <- 0 # default value for Soil.Init
-sites[,11] <- 1 # default value for shade coefficient
+wb_sites[,3] <- raster::extract(dem, points)
+wb_sites[,4] <- raster::extract(aspect, points)
+wb_sites[,5] <- raster::extract(slope, points)
+wb_sites[,6] <- raster::extract(soil, points)
+wb_sites[,7] <- seq.int(nrow(wb_sites))
+wb_sites[,8] <- 5 # default value for wind
+wb_sites[,9] <- 0 # default value for snowpack
+wb_sites[,10] <- 0 # default value for Soil.Init
+wb_sites[,11] <- 1 # default value for shade coefficient
 
-sites <- select(sites, 7,2,1,3:6, 8:11) # reorder columns
-colnames(sites) <- c("ID", "Lat", "Lon", "Elev", "Aspect", "Slope", "SWC.Max", "Wind", "Snowpack", "Soil.Init", "Shade.Coeff")
+wb_sites <- select(wb_sites, 7,2,1,3:6, 8:11) # reorder columns
+colnames(wb_sites) <- c("WB_site", "Lat", "Lon", "Elev", "Aspect", "Slope", "SWC.Max", "Wind", "Snowpack", "Soil.Init", "Shade.Coeff")
 
-sites$SWC.Max = sites$SWC.Max*10 # convert units for Soil Water-holding capacity
-sites # check to be sure values are populated correctly. There should not be NA values. 
+wb_sites$SWC.Max = wb_sites$SWC.Max*10 # convert units for Soil Water-holding capacity
+wb_sites # check to be sure values are populated correctly. There should not be NA values. 
 
-write.csv(sites, file = paste('./data/park-specific/output/', SiteID, " WB site parameters ", Sys.Date(), ".csv", sep = ""), row.names = FALSE)
+write.csv(wb_sites, file = paste('./data/park-specific/output/', SiteID, " WB site parameters ", Sys.Date(), ".csv", sep = ""), row.names = FALSE)
 
 
