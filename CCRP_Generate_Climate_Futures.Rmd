@@ -6,6 +6,8 @@ abstract: This script combines all scripts previously run under CCRP's Climate L
 ---
 
 NOTE: If you have trouble with packages loading from renv, go into your .Rprofile file and comment out the line ```source("renv/activate.R)```
+Then restart R and re-run from your general package library (R will do this automatically upon restart if the above line is commented out). If you want to check what library R is accessing, type ```.libPaths()``` into your console. 
+
 
 ```{r user-inputs}
 
