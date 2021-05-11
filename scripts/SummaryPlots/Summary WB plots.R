@@ -91,22 +91,24 @@ for(i in 1:nrow(sites)){
   MonthlyWB = PRISM.BC
   MonthlyWB$site = SiteID
   MonthlyWB$daylength = get_daylength(MonthlyWB$Date, Lat)
-  MonthlyWB$F = get_freeze(MonthlyWB$tmean_C)
+  MonthlyWB$jtemp = as.numeric(get_jtemp(Lon, Lat))
+  MonthlyWB$F = get_freeze(MonthlyWB$jtemp, MonthlyWB$tmean_C)
   MonthlyWB$RAIN = get_rain(MonthlyWB$ppt_mm, MonthlyWB$F)
   MonthlyWB$SNOW = get_snow(MonthlyWB$ppt_mm, MonthlyWB$F)
-  MonthlyWB$PACK = get_snowpack(MonthlyWB$ppt_mm, MonthlyWB$F, Snowpack.Init)
-  MonthlyWB$MELT = get_melt(MonthlyWB$PACK, MonthlyWB$SNOW, MonthlyWB$F, Snowpack.Init)
+  MonthlyWB$MELT = get_melt(MonthlyWB$tmean_C, MonthlyWB$jtemp, hock=4, MonthlyWB$SNOW, Snowpack.Init)
+  MonthlyWB$PACK = get_snowpack(MonthlyWB$jtemp, MonthlyWB$SNOW, MonthlyWB$MELT)
   MonthlyWB$W = MonthlyWB$MELT + MonthlyWB$RAIN
   if(Method == "Thornthwaite"){
     MonthlyWB$PET = ET_Thorn_monthly(MonthlyWB)
   }
   MonthlyWB$PET = modify_PET(MonthlyWB$PET, Slope, Aspect, Lat, Shade.Coeff)
   MonthlyWB$W_PET = MonthlyWB$W - MonthlyWB$PET
-  MonthlyWB$SOIL = get_soil(MonthlyWB$W, MonthlyWB$PET, SWC.Max, Soil.Init)
+  MonthlyWB$SOIL = get_soil(MonthlyWB$W, Soil.Init, MonthlyWB$PET, MonthlyWB$W_PET, SWC.Max)
   MonthlyWB$DSOIL = diff(c(Soil.Init, MonthlyWB$SOIL))
   MonthlyWB$AET = get_AET(MonthlyWB$W, MonthlyWB$PET, MonthlyWB$SOIL, Soil.Init)
   MonthlyWB$W_ET_DSOIL = MonthlyWB$W - MonthlyWB$AET - MonthlyWB$DSOIL
   MonthlyWB$D = MonthlyWB$PET - MonthlyWB$AET
+  MonthlyWB$GDD = get_GDD(MonthlyWB$tmean_C, T.Base)
   AllMonthlyWB[[i]] = MonthlyWB
 }
 MonthlyWB<-do.call(rbind,AllMonthlyWB)
@@ -165,25 +167,27 @@ for (j in 1:length(GCMs)){
     Snowpack.Init = sites$Snowpack.Init[i]
     Soil.Init = sites$Soil.Init[i]
     Shade.Coeff = sites$Shade.Coeff[i]
-
+    
     MonthlyWB$site = SiteID
     MonthlyWB$daylength = get_daylength(MonthlyWB$Date, Lat)
-    MonthlyWB$F = get_freeze(MonthlyWB$tmean_C)
+    MonthlyWB$jtemp = as.numeric(get_jtemp(Lon, Lat))
+    MonthlyWB$F = get_freeze(MonthlyWB$jtemp, MonthlyWB$tmean_C)
     MonthlyWB$RAIN = get_rain(MonthlyWB$ppt_mm, MonthlyWB$F)
     MonthlyWB$SNOW = get_snow(MonthlyWB$ppt_mm, MonthlyWB$F)
-    MonthlyWB$PACK = get_snowpack(MonthlyWB$ppt_mm, MonthlyWB$F, Snowpack.Init)
-    MonthlyWB$MELT = get_melt(MonthlyWB$PACK, MonthlyWB$SNOW, MonthlyWB$F, Snowpack.Init)
+    MonthlyWB$MELT = get_melt(MonthlyWB$tmean_C, MonthlyWB$jtemp, hock=4, MonthlyWB$SNOW, Snowpack.Init)
+    MonthlyWB$PACK = get_snowpack(MonthlyWB$jtemp, MonthlyWB$SNOW, MonthlyWB$MELT)
     MonthlyWB$W = MonthlyWB$MELT + MonthlyWB$RAIN
     if(Method == "Thornthwaite"){
       MonthlyWB$PET = ET_Thorn_monthly(MonthlyWB)
     }
     MonthlyWB$PET = modify_PET(MonthlyWB$PET, Slope, Aspect, Lat, Shade.Coeff)
     MonthlyWB$W_PET = MonthlyWB$W - MonthlyWB$PET
-    MonthlyWB$SOIL = get_soil(MonthlyWB$W, MonthlyWB$PET, SWC.Max, Soil.Init)
+    MonthlyWB$SOIL = get_soil(MonthlyWB$W, Soil.Init, MonthlyWB$PET, MonthlyWB$W_PET, SWC.Max)
     MonthlyWB$DSOIL = diff(c(Soil.Init, MonthlyWB$SOIL))
     MonthlyWB$AET = get_AET(MonthlyWB$W, MonthlyWB$PET, MonthlyWB$SOIL, Soil.Init)
     MonthlyWB$W_ET_DSOIL = MonthlyWB$W - MonthlyWB$AET - MonthlyWB$DSOIL
     MonthlyWB$D = MonthlyWB$PET - MonthlyWB$AET
+    MonthlyWB$GDD = get_GDD(MonthlyWB$tmean_C, T.Base)
   }
   AllMonthlyWB[[j]] = MonthlyWB
 }

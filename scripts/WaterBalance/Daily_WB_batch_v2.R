@@ -18,7 +18,7 @@ n<-nrow(sites)
 T.Base = 0 
 
 #Method for PET calculation 
-Method = "Hamon"  #Hamon is default method for daily PRISM and MACA data (containing only Tmax, Tmin, and Date). 
+Method = "Oudin"  #Hamon is default method for daily PRISM and MACA data (containing only Tmax, Tmin, and Date). 
 
 #Date format
 DateFormat = "%m/%d/%Y"
@@ -86,13 +86,19 @@ for (j in 1:length(WB_GCMs)){
     Shade.Coeff = sites$Shade.Coeff[i]
     
     #Calculate daily water balance variables 
+<<<<<<< HEAD
     DailyWB$ID = ID
+=======
+    DailyWB$SiteID = SiteID
+    DailyWB$doy <- yday(DailyWB$Date)
+>>>>>>> 6173d50b80d9ca12336e618fcf76721e0336021c
     DailyWB$daylength = get_daylength(DailyWB$Date, Lat)
-    DailyWB$F = get_freeze(DailyWB$tmean_C)
+    DailyWB$jtemp = as.numeric(get_jtemp(Lon, Lat))
+    DailyWB$F = get_freeze(DailyWB$jtemp, DailyWB$tmean_C)
     DailyWB$RAIN = get_rain(DailyWB$ppt_mm, DailyWB$F)
     DailyWB$SNOW = get_snow(DailyWB$ppt_mm, DailyWB$F)
-    DailyWB$PACK = get_snowpack(DailyWB$ppt_mm, DailyWB$F, Snowpack.Init)
-    DailyWB$MELT = get_melt(DailyWB$PACK, DailyWB$SNOW, DailyWB$F, Snowpack.Init)
+    DailyWB$MELT = get_melt(DailyWB$tmean_C, DailyWB$jtemp, hock=4, DailyWB$SNOW, Snowpack.Init)
+    DailyWB$PACK = get_snowpack(DailyWB$jtemp, DailyWB$SNOW, DailyWB$MELT)
     DailyWB$W = DailyWB$MELT + DailyWB$RAIN
     if(Method == "Hamon"){
       DailyWB$PET = ET_Hamon_daily(DailyWB)
@@ -100,12 +106,16 @@ for (j in 1:length(WB_GCMs)){
       if(Method == "Penman-Monteith"){
         DailyWB$PET = ET_PenmanMonteith_daily(DailyWB)
       } else {
-        print("Error - PET method not found")
+        if(Method == "Oudin"){
+          DailyWB$PET = get_OudinPET(DailyWB$doy, Lat, DailyWB$PACK, DailyWB$tmean_C, Slope, Aspect, Shade.Coeff)
+        } else {
+          print("Error - PET method not found")
+        }
       }
     }
     DailyWB$PET = modify_PET(DailyWB$PET, Slope, Aspect, Lat, Shade.Coeff)
     DailyWB$W_PET = DailyWB$W - DailyWB$PET
-    DailyWB$SOIL = get_soil(DailyWB$W, DailyWB$PET, SWC.Max, Soil.Init)
+    DailyWB$SOIL = get_soil(DailyWB$W, Soil.Init, DailyWB$PET, DailyWB$W_PET, SWC.Max)
     DailyWB$DSOIL = diff(c(Soil.Init, DailyWB$SOIL))
     DailyWB$AET = get_AET(DailyWB$W, DailyWB$PET, DailyWB$SOIL, Soil.Init)
     DailyWB$W_ET_DSOIL = DailyWB$W - DailyWB$AET - DailyWB$DSOIL
