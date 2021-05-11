@@ -5,12 +5,9 @@ output: html_document
 abstract: This script combines all scripts previously run under CCRP's Climate Lite protocol for Resource Stewardship Strategies (RSS). 
 ---
 
-
 ```{r user-inputs}
 
 rm(list = ls())
-
-# After inputting park-specific values below, please SAVE FILE BEFORE RUNNING. 
 
 # -------------- Input site information -------------------------------------- #
 
@@ -56,7 +53,7 @@ QuantileHigh = 0.95
 
 # -------------- Input information for Water Balance model ------------------- #
 
-WB_GCMs = c("CSIRO-Mk3-6-0.rcp45","HadGEM2-ES365.rcp85") # Specific models need to be selected to run the Water Balance scripts
+WB_GCMs = c("MRI-CGCM3.rcp45","HadGEM2-ES365.rcp85") # Specific models need to be selected to run the Water Balance scripts
 
 col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
 #col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
@@ -88,14 +85,16 @@ knitr::opts_chunk$set(
   echo = FALSE, 
   collapse = TRUE,
   warning = TRUE, # set to FALSE when done
-  message = TRUE # set to FALSE when donerenv
+  message = TRUE # set to FALSE when done
 )
 
 #packrat::init(options = list(local.repos = c('./local-repos/WaterBalance'))) # Please do not run this line without consulting Amber Runyon or Annie Kellner
 
 # renv::init() Only needs to be run 1x when project is initiated. No one should ever have to run this line again. 
 
-renv::update(exclude = "WaterBalance") # The first time running this line, you might need to follow directions to create a Personal Access Token with GitHub. Simply follow directions printed in the console. If you run into trouble, contact Annie Kellner at anne_dillon@nps.gov 
+#renv::update(exclude = "WaterBalance") # The first time running this line, you might need to follow directions to create a Personal Access Token with GitHub. Simply follow directions printed in the console. If you run into trouble, contact Annie Kellner at anne_dillon@nps.gov 
+
+# renv::snapshot()
 
 
 
@@ -117,6 +116,7 @@ library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot
 
 # Requires "PARK_lat_long_PRISM_PptTminTmax_IntermediateFiles.RData"
 # Outputs plots into ./figures/Historical-trends
+# If you get an error re: invalid 'description' argument, it means you did not upload the input data into the repo
 
 source(here::here("scripts", "Historical-trends", "RSS PRISM plots v1.2.R"),echo = FALSE) 
 
