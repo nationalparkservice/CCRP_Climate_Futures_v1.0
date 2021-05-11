@@ -86,12 +86,9 @@ for (j in 1:length(WB_GCMs)){
     Shade.Coeff = sites$Shade.Coeff[i]
     
     #Calculate daily water balance variables 
-<<<<<<< HEAD
+
     DailyWB$ID = ID
-=======
-    DailyWB$SiteID = SiteID
     DailyWB$doy <- yday(DailyWB$Date)
->>>>>>> 6173d50b80d9ca12336e618fcf76721e0336021c
     DailyWB$daylength = get_daylength(DailyWB$Date, Lat)
     DailyWB$jtemp = as.numeric(get_jtemp(Lon, Lat))
     DailyWB$F = get_freeze(DailyWB$jtemp, DailyWB$tmean_C)
