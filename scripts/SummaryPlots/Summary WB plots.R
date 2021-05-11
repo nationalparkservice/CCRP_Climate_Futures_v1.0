@@ -227,6 +227,8 @@ MACA.yrAvgs = subset(MACA.yrAvgs, year > 2019)
 yrAvgs = rbind(PRISM.D, MACA.yrAvgs)
 yrAvgs.sub = subset(yrAvgs, CF %in% c("Historical",CF.sub))
 
+yrAvgs.sub$CF <- factor(yrAvgs.sub$CF, levels = c("Historical", CFs))
+
 
 ############################################# Plotting ###########################################################
 PlotTheme = theme(axis.text=element_text(size=20),    #Text size for axis tick mark labels
