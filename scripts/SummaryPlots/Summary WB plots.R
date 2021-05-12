@@ -8,7 +8,7 @@ BC.min = 1979 #Bias correction range
 BC.max = 2018 
 
 #CSV file containing properties for all sites
-n<-nrow(sites)
+n<-nrow(wb_sites)
 #Threshold temperature (deg C) for growing degree-days calculation
 T.Base = 0 
 
@@ -75,18 +75,18 @@ PRISM.BC$tmean_C <- 5/9*(PRISM.BC$Tavg.mean -32)
 PRISM.BC$Date<-as.Date(paste(PRISM.BC$year,PRISM.BC$month,"1",sep="-"),format="%Y-%m-%d")
 
 AllMonthlyWB<-list()
-for(i in 1:nrow(sites)){
-  SiteID = sites$SiteID[i]
-  Lat = sites$Lat[i]
-  Lon = sites$Lon[i]
-  Elev = sites$Elevation[i]
-  Aspect = sites$Aspect[i]
-  Slope = sites$Slope[i]
-  SWC.Max = sites$SWC.Max[i]
-  Wind = sites$Wind[i]
-  Snowpack.Init = sites$Snowpack.Init[i]
-  Soil.Init = sites$Soil.Init[i]
-  Shade.Coeff = sites$Shade.Coeff[i]
+for(i in 1:nrow(wb_sites)){
+  SiteID = wb_sites$SiteID[i]
+  Lat = wb_sites$Lat[i]
+  Lon = wb_sites$Lon[i]
+  Elev = wb_sites$Elevation[i]
+  Aspect = wb_sites$Aspect[i]
+  Slope = wb_sites$Slope[i]
+  SWC.Max = wb_sites$SWC.Max[i]
+  Wind = wb_sites$Wind[i]
+  Snowpack.Init = wb_sites$Snowpack.Init[i]
+  Soil.Init = wb_sites$Soil.Init[i]
+  Shade.Coeff = wb_sites$Shade.Coeff[i]
   
   MonthlyWB = PRISM.BC
   MonthlyWB$site = SiteID
@@ -155,18 +155,18 @@ AllMonthlyWB<-list()
 for (j in 1:length(GCMs)){
   gcm = GCMs[j]
   MonthlyWB = subset(MACA.Avgs,GCM == gcm)
-  for(i in 1:nrow(sites)){
-    SiteID = sites$SiteID[i]
-    Lat = sites$Lat[i]
-    Lon = sites$Lon[i]
-    Elev = sites$Elevation[i]
-    Aspect = sites$Aspect[i]
-    Slope = sites$Slope[i]
-    SWC.Max = sites$SWC.Max[i]
-    Wind = sites$Wind[i]
-    Snowpack.Init = sites$Snowpack.Init[i]
-    Soil.Init = sites$Soil.Init[i]
-    Shade.Coeff = sites$Shade.Coeff[i]
+  for(i in 1:nrow(wb_sites)){
+    SiteID = wb_sites$WB_site[i]
+    Lat = wb_sites$Lat[i]
+    Lon = wb_sites$Lon[i]
+    Elev = wb_sites$Elevation[i]
+    Aspect = wb_sites$Aspect[i]
+    Slope = wb_sites$Slope[i]
+    SWC.Max = wb_sites$SWC.Max[i]
+    Wind = wb_sites$Wind[i]
+    Snowpack.Init = wb_sites$Snowpack.Init[i]
+    Soil.Init = wb_sites$Soil.Init[i]
+    Shade.Coeff = wb_sites$Shade.Coeff[i]
     
     MonthlyWB$site = SiteID
     MonthlyWB$daylength = get_daylength(MonthlyWB$Date, Lat)
