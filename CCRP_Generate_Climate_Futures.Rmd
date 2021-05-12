@@ -92,11 +92,13 @@ knitr::opts_chunk$set(
   message = TRUE # set to FALSE when done
 )
 
-# renv::init() Only needs to be run 1x when project is initiated. No one should ever have to run this line again. 
+#renv::init() Only needs to be run 1x when project is initiated. No one should ever have to run this line again. 
 
-#renv::update(exclude = "WaterBalance") # The first time running this line, you might need to follow directions to create a Personal Access Token with GitHub. Simply follow directions printed in the console. If you run into trouble, contact Annie Kellner at anne_dillon@nps.gov 
+#renv::restore() # This line will restore packages to the versions recorded in the lockfile. Collaborators can use this command to keep their packages current. This line should be run once a week.  
 
-# renv::snapshot()
+#renv::update(exclude = "WaterBalance") # This line should be run once a week by whoever is regularly using this script. The first time running this line, you might need to follow directions to create a Personal Access Token with GitHub. Simply follow directions printed in the console. If you run into trouble, contact Annie Kellner Dillon at anne_dillon@nps.gov 
+
+# renv::snapshot() # This command takes a snapshot of the packages in their current state and records it in the lockfile. Renv will perform this task periodically. If a manual snapshot is desired, use this command to manually update the lockfile.   
 
 
 library(here); library(plyr); # Use here::here when package lubridate is used
