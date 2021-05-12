@@ -123,9 +123,11 @@
     },
     "WaterBalance": {
       "Package": "WaterBalance",
-      "Version": "0.1.0",
-      "Source": "unknown",
-      "Hash": "24030ffa29ff56a54e58b585824afb73"
+      "Version": "1.1.0",
+      "Source": "Local",
+      "RemoteType": "local",
+      "RemoteUrl": "C:/Users/adillon/Documents/Repos/CCRP_Climate_Futures_v1.0/local-repos/WaterBalance_1.1.0.tar.gz",
+      "Hash": "caf1e3d902ad80631e299952262ce3f8"
     },
     "WriteXLS": {
       "Package": "WriteXLS",
@@ -411,13 +413,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "4d243a9c10b00589889fe32314ffd902"
-    },
-    "geosphere": {
-      "Package": "geosphere",
-      "Version": "1.5-10",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "eee36211f74e4dbc80eae9d504b58f0b"
     },
     "gert": {
       "Package": "gert",

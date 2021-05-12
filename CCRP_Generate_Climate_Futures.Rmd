@@ -157,7 +157,7 @@ source(here::here("scripts", "Misc", "create_site_maps.R")) # Create site maps
 
 ```{r}
 
-if (exists("GCMs") == FALSE) stop("Please specify GCMs")
+if (exists("WB_GCMs") == FALSE) stop("Please specify GCMs for Water Balance")
 
 source(here::here("scripts", "WaterBalance", "Daily_WB_batch_v2.R")) # Run the Water Balance Model
 
