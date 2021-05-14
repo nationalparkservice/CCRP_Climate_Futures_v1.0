@@ -169,9 +169,6 @@ Future_Means$CF3 = as.numeric((Future_Means$DeltaTavg>Tavg25 & Future_Means$Delt
 Future_Means$CF4 = as.numeric((Future_Means$DeltaTavg<Tavg & Future_Means$DeltaPr<Pr25) | Future_Means$DeltaTavg<Tavg25 & Future_Means$DeltaPr<PrAvg)
 Future_Means$CF5 = as.numeric((Future_Means$DeltaTavg>Tavg & Future_Means$DeltaPr<Pr25) | Future_Means$DeltaTavg>Tavg75 & Future_Means$DeltaPr<PrAvg)
 
-if (mean(Future_Means$DeltaPr[which(Future_Means$CF4 == 1)]) > 0 & mean(Future_Means$DeltaPr[which(Future_Means$CF5 == 1)]) > 0) {
-  CFs_all <- gsub("Dry", "Damp", CFs)
-}
 
 #Assign full name of climate future to new variable CF
 Future_Means$CF[Future_Means$CF1==1]=CFs_all[1]
