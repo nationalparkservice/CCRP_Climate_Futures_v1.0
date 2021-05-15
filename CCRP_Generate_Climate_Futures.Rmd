@@ -185,7 +185,7 @@ source(here::here("scripts", "Additional-tables-plots", "RSS Audubon summary.R")
 ```
 # Create metadata and copy/delete files
 
-```{r Copy-and-delete-files, message=FALSE, warning=FALSE}
+```{r Copy-and-delete-files, eval = FALSE, message=FALSE, warning=FALSE}
 
 # This script is for copying and pasting files and folders unique to an RSS to a local folder, for the purposes of using, sharing, or archiving products. Files are then deleted from the Climate_Futures repo so that files are not inadvertently overwritten or confused with products from a different site.
 
