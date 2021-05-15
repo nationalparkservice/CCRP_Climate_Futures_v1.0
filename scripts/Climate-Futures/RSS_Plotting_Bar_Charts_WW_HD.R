@@ -745,5 +745,5 @@ ggsave(sprintf("%s_%s_%s_Heat-index-danger-Boxplot.png", SiteID, Lat, Lon), path
 ############################################### PRINT TABLES #################################################################
 A<-aggregate(.~CF,Annual[,2:23], mean) 
 write.xlsx(list("Means"=A,"A3nual"=Annual,"Season"=Season,"D_Season"=Season_delta,"Monthly"=Monthly,"Monthly_delta"=Monthly_delta), 
-           file=("./data/park-specific/output/Plot_data.xlsx"),col.names=TRUE)
+           file=("./data/park-specific/output/WW_HD/Plot_data.xlsx"),col.names=TRUE)
 

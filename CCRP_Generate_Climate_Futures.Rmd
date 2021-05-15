@@ -29,12 +29,7 @@ local_rss_dir <- 'C:/Users/adillon/Documents/RSS/CARE/' # local directory where 
 
 # Specify Climate Futures and Models
 
-FutureSubset <- c("Warm Wet","Hot Dry") # Pick pair of climate futures.
-CFs<- c("Warm Wet", "Hot Dry") # Same as above
 
-
-colors2<- c("#9A9EE5","#E10720")  # Select pair of climate futures - WarmWet/HotDry
-#colors2<- c("#F3D3CB","#12045C")  # Select pair of climate futures - HotWet/WarmDry
 CFs_all <- c("Warm Wet", "Hot Wet", "Central", "Warm Dry", "Hot Dry")
 
 # Specify parameters:
@@ -138,9 +133,9 @@ source(here::here("scripts", "Climate-Futures", "RSS_MACA_Scatter and diagnostic
 
 ```{r CF-plots}
 
-if (exists("FutureSubset") == FALSE) stop("Please specify Climate Futures") # At the top of the script, please enter a combination of futures, e.g. Warm Wet/Hot Dry
+source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts_WW_HD.R")) # CF Quadrants I & II (usually "Warm/Wet" "Hot/Dry")
 
-source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts.R")) # Requires "PARK_lat_long_Final_Environment.RData". Outputs plots and Excel Workbook 
+source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts_HW_WD.R")) # CF Quadrants II & IV (usually "Hot Wet" "Warm Damp")
 
 ```
 
