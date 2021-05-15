@@ -233,6 +233,13 @@ yrAvgs.sub = subset(yrAvgs, CF %in% c("Historical",CF.sub))
 
 yrAvgs.sub$CF <- factor(yrAvgs.sub$CF, levels = c("Historical", CFs))
 
+# Rolling 10 year avg
+
+deficit_avg = with(PRISM.D, tapply(D.mean, year, mean))
+
+PRISM.D$D.mean.roll10 <- rollmean(PRISM.D$D.mean, rollLen, fill = NA, align = "right")
+
+yrAvgs.sub <- merge(yrAvgs.sub, PRISM.D[,c("year", "D.mean.roll10")], by = "year", all = TRUE)
 
 ############################################# Plotting ###########################################################
 PlotTheme = theme(axis.text=element_text(size=20),    #Text size for axis tick mark labels
@@ -256,6 +263,7 @@ ggplot(yrAvgs.sub, aes(x=as.numeric(as.character(year)), y=D.mean, col=CF, fill=
   geom_ribbon(aes(x=as.numeric(as.character(year)), ymin=D.min, ymax=D.max, fill=CF), alpha=0.5) +
   geom_line(size=2) + geom_point(col="black", size=2, shape=16) +
   geom_point() +
+  geom_line(aes(x=as.numeric(as.character(year)), y=D.mean.roll10),size=1.5,colour="gray37",na.rm=TRUE) +
   scale_x_continuous(breaks=c(1900, 1920, 1940, 1960, 1980, 2000, 2020, 2040, 2060, 2080, 2100)) +
   labs(x="Year", y="Mean annual climatic water deficit (in/year)") +
   scale_color_manual(name="Climate Future",values=col) +
