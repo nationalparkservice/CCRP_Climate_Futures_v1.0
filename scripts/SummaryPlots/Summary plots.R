@@ -116,8 +116,8 @@ PlotHeight = 9
 tmeanAvg = with(PRISM.BC, tapply(Tavg.mean, year, mean))
 pptAvg = with(PRISM.BC, tapply(Precip.mean, year, mean))
 rollLen = 10
-PRISM.BC$Tmean.roll10 <- rollmean(PRISM.BC$Tavg.mean, rollLen,fill=NA)
-PRISM.BC$Precip.roll10 <- rollmean(PRISM.BC$Precip.mean, rollLen,fill=NA)
+PRISM.BC$Tmean.roll10 <- rollmean(PRISM.BC$Tavg.mean, rollLen,fill=NA, align = "right")
+PRISM.BC$Precip.roll10 <- rollmean(PRISM.BC$Precip.mean, rollLen,fill=NA, align = "right")
 yrAvgs.sub<-merge(yrAvgs.sub,PRISM.BC[,c("year","Tmean.roll10","Precip.roll10")],by="year",all=TRUE)
 
 yrAvgs.sub$CF <- factor(yrAvgs.sub$CF, levels = c("Historical", CFs))
