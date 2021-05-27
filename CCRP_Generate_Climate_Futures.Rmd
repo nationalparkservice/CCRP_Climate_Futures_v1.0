@@ -133,7 +133,9 @@ source(here::here("scripts", "Climate-Futures", "RSS_MACA_Scatter and diagnostic
 
 ```{r CF-plots}
 
-source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts_WW_HD.R")) # CF Quadrants I & II (usually "Warm/Wet" "Hot/Dry")
+source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts_WW_HD.R")) # CF Quadrants I & III (usually "Warm/Wet" "Hot/Dry")
+
+source(here::here("scripts", "Climate-Futures", "RSS_MACA_Plot_Table_Creation.R"), local = knitr::knit_global()) # Requires "PARK_init_parsed.RData"; Output = "PARK_lat_long_Final_Environment.RData". 
 
 source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts_HW_WD.R")) # CF Quadrants II & IV (usually "Hot Wet" "Warm Damp")
 
