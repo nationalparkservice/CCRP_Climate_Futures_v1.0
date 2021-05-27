@@ -23,7 +23,7 @@ state <- "Utah"
 # When this document has finished running, the files will be copied to a local directory and all newly created files (e.g., figures) will be deleted from the repo
 
 project_root_dir <- 'C:/Users/adillon/Documents/Repos/CCRP_Climate_Futures_v1.0' # local directory where your repo is stored
-local_rss_dir <- 'C:/Users/adillon/Documents/RSS/CARE/' # local directory where you want this repo copied. Should be something like 'C:/Users/adillon/Documents/RSS/CONG'
+local_rss_dir <- 'C:/Users/adillon/Documents/RSS/CARE/CARE_HW_WD' # local directory where you want this repo copied. Should be something like 'C:/Users/adillon/Documents/RSS/CONG'
 
 # -------------- Input information for Climate Futures analyses (MACA) ------- #
 
