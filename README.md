@@ -66,7 +66,7 @@ File names must be spelled exactly as they are written here or the scripts will 
 
 *NOTE: 'general' data only has to be added one time for all CONUS parks. 'park-specific' input data will have to be added for every new park.* 
 
-**Step 4: Install Java on your machine if you do not already have it. If you have trouble, see document Instructions_for_installing_Java_for_use_with_R.docx**
+**Step 4: Install Java on your machine if you do not already have it. If you have trouble, see document* [Instructions_for_installing_Java_for_use_with_R.docx](https://doimspp.sharepoint.com/:w:/r/sites/NPS-CCRP-FCScienceAdaptation/_layouts/15/Doc.aspx?sourcedoc=%7B2E0D1A3C-7FA7-4E3E-BB4B-7943CCCAD699%7D&file=Instructions_for_installing_Java_for_use_with_R.docx&action=default&mobileredirect=true)
 
 *Note: Java and rJava are only used for creating maps within the get_params script. All analyses can be run without them.*
 
