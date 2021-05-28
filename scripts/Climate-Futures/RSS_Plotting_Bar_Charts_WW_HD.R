@@ -67,7 +67,7 @@ Monthly<-subset(Monthly,CF %in% FutureSubset); Monthly$CF<-factor(Monthly$CF, le
 # Monthly$Month<-factor(Monthly$Month,levels=c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"))
 
 
-Monthly_delta<-subset(Monthly_delta,CF %in% FutureSubset); Monthly_delta$CF<-factor(Monthly_delta$CF, levels=c(FutureSubset))
+Monthly_delta <- subset(Monthly_delta, CF %in% FutureSubset); Monthly_delta$CF<-factor(Monthly_delta$CF, levels=c(FutureSubset))
 # Monthly_delta$Month<-factor(Monthly_delta$Month,levels=c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"))
 
 Season<-subset(Season,CF %in% FutureSubset); Season$CF<-factor(Season$CF, levels=c("Historical",FutureSubset))
@@ -345,7 +345,7 @@ ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
   geom_bar(stat="identity",position="dodge",colour="black") +
   BarPlotTheme +
   # coord_cartesian(ylim=c(0, 40)) +
-  labs(title = paste(SiteID, " - Days/Yr with Tmin < Historic 5th Percentile (", round(HistTminLow, 1), "˚F) in ", Year, sep=""), 
+  labs(title = paste(SiteID, " - Days/Yr with Tmin < Historic 5th Percentile (", round(HistTminLow, 1), " deg F) in ", Year, sep=""), 
        y = "Days/Yr", colour = "Climate Future")  +
   scale_fill_manual(name="",values = colors3) +
   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
@@ -357,7 +357,7 @@ p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) +
   geom_boxplot(colour="black",aes(fill = factor(CF)), outlier.shape=NA)+ 
   geom_jitter(shape = 21, size = 5, aes(fill = factor(CF),colour=factor(me.col)), position=position_jitter(0.2)) +
   BarPlotTheme +
-  labs(title = paste(SiteID, " - Days/Yr with Tmin < Historic 5th Percentile (", round(HistTminLow, 1), "˚F) in ", Year, sep=""), 
+  labs(title = paste(SiteID, " - Days/Yr with Tmin < Historic 5th Percentile (", round(HistTminLow, 1), " deg F) in ", Year, sep=""), 
        y = "Days/Yr") +
   scale_color_manual(name="",values = c("black","white"),guide=FALSE) +
   scale_fill_manual(name="",values = colors3)
@@ -375,7 +375,7 @@ ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
   geom_bar(stat="identity",position="dodge",colour="black") +
   BarPlotTheme +
   # coord_cartesian(ylim=c(0, 40)) +
-  labs(title = paste(SiteID, " - Days/Yr with Tmax > Historic 95th Percentile (", round(HistTmaxHigh, 1), "˚F) in ", Year, sep=""), 
+  labs(title = paste(SiteID, " - Days/Yr with Tmax > Historic 95th Percentile (", round(HistTmaxHigh, 1), " deg F) in ", Year, sep=""), 
        y = "Days/Yr", colour = "Climate Future")  +
   scale_fill_manual(name="",values = colors3) +
   coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
@@ -389,7 +389,7 @@ p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) +
   geom_boxplot(colour="black",aes(fill = factor(CF)), outlier.shape=NA)+ 
   geom_jitter(shape = 21, size = 5, aes(fill = factor(CF),colour=factor(me.col)), position=position_jitter(0.2)) +
   BarPlotTheme +
-  labs(title = paste(SiteID, " - Days/Yr with Tmax > Historic 95th Percentile (", round(HistTmaxHigh, 1), "˚F) in ", Year, sep=""), 
+  labs(title = paste(SiteID, " - Days/Yr with Tmax > Historic 95th Percentile (", round(HistTmaxHigh, 1), " deg F) in ", Year, sep=""), 
        y = "Days/Yr") +
   scale_color_manual(name="",values = c("black","white"),guide=FALSE) +
   scale_fill_manual(name="",values = colors3)
@@ -732,7 +732,7 @@ p<-ggplot(Annual_samp, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) +
   geom_boxplot(colour="black",aes(fill = factor(CF)), outlier.shape=NA)+ 
   geom_jitter(shape = 21, size = 5, aes(fill = factor(CF),colour=factor(me.col)), position=position_jitter(0.2)) +
   BarPlotTheme +
-  labs(title = paste(SiteID, " - Average annual precipitation (in)) in ", Year, sep=""),
+  labs(title = paste(SiteID, " - Average annual precipitation (in) in ", Year, sep=""),
        y = "inches/yr") +
   scale_color_manual(name="",values = c("black","white"),guide=FALSE) +
   scale_fill_manual(name="",values = colors3)
