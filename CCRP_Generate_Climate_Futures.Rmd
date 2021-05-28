@@ -119,23 +119,33 @@ source(here::here("scripts", "Historical-trends", "RSS PRISM plots v1.2.R"),echo
 ```
 
 
-## Climate Futures (MACA)
+## Climate Futures (MACA): Quadrants I and III
 
-```{r Climate-Futures, echo=FALSE, message=FALSE, warning=FALSE, results=HIDE}
+```{r Climate-Futures-Q1 & Q3, echo=FALSE, message=FALSE, warning=FALSE, results=HIDE}
 
 # source(here::here("RSS_MACA_Parsing.R")) # Parse MACA data. Output = "_init_parsed.RData". 
 # source(here::here("Gridmet-Parse.R")) # Parse GridMET data. Output = "GridMet.csv"
 
+FutureSubset <- c(CFs_all[1], CFs_all[5]) # Usually Warm Wet/Hot Dry
+CFs<- c(CFs_all[1], CFs_all[5])# Same as above
+
 source(here::here("scripts", "Climate-Futures", "RSS_MACA_Plot_Table_Creation.R"), local = knitr::knit_global()) # Requires "PARK_init_parsed.RData"; Output = "PARK_lat_long_Final_Environment.RData". 
 
 source(here::here("scripts", "Climate-Futures", "RSS_MACA_Scatter and diagnostic.R"), local = knitr::knit_global()) # Creates scatter and diagnostic plots. Outputs to Figs MACA folder. 
+
+source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts_WW_HD.R")) # CF Quadrants II & IV (usually "Hot Wet" "Warm Damp")
 ```
+
+
+## Climate Futures (MACA): Quadrants II and IV
 
 ```{r CF-plots}
 
-source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts_WW_HD.R")) # CF Quadrants I & III (usually "Warm/Wet" "Hot/Dry")
+FutureSubset <- c(CFs_all[2], CFs_all[4]) # Pick pair of climate futures.
+CFs<- c(CFs_all[2], CFs_all[4])# Same as above
 
-source(here::here("scripts", "Climate-Futures", "RSS_MACA_Plot_Table_Creation.R"), local = knitr::knit_global()) # Requires "PARK_init_parsed.RData"; Output = "PARK_lat_long_Final_Environment.RData". 
+file <- list.files(path = './data/park-specific/output', pattern = 'Final_Environment.RData', full.names = TRUE) # will load all .RData files within directory
+load(file)
 
 source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts_HW_WD.R")) # CF Quadrants II & IV (usually "Hot Wet" "Warm Damp")
 
