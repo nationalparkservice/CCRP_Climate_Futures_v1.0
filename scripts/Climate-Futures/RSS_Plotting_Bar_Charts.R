@@ -9,10 +9,6 @@
 # Need to check all the subsets
 ### NEED TO CHANGE LINE 72 for ordering scenarios on plots
 
-FutureSubset <- c(CFs_all[1], CFs_all[5]) # Pick pair of climate futures.
-CFs<- c(CFs_all[1], CFs_all[5])# Same as above
-
-
 Scenario1<-FutureSubset[1]
 Scenario2<-FutureSubset[2]
 

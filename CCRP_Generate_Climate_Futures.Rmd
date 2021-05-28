@@ -52,7 +52,7 @@ QuantileHigh = 0.95
 
 # -------------- Input information for Water Balance model ------------------- #
 
-WB_GCMs = c("MRI-CGCM3.rcp45","HadGEM2-ES365.rcp85") # Specific models need to be selected to run the Water Balance scripts
+#WB_GCMs = c("MRI-CGCM3.rcp45","HadGEM2-ES365.rcp85") # Specific models need to be selected to run the Water Balance scripts
 
 col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
 #col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
@@ -164,7 +164,7 @@ source(here::here("scripts", "Misc", "create_site_maps.R")) # Create site maps
 
 ```{r}
 
-if (exists("GCMs") == FALSE) stop("Please specify GCMs")
+WB_GCMs <- c(WW.model, HD.model) # RETURN TO THIS WHEN PCA IS INTEGRATED. Might be good to separate out the plots and avoid re-running code unnecessarily. 
 
 source(here::here("scripts", "WaterBalance", "Daily_WB_batch_v2.R")) # Run the Water Balance Model
 
