@@ -304,6 +304,7 @@ HistPrecip95 = quantile(Baseline_all$PrecipCustom[which(Baseline_all$PrecipCusto
 HistPr99 = quantile(Baseline_all$PrecipCustom[which(Baseline_all$PrecipCustom > 0.05)], 0.99)
 
 Baseline_all$Julian = Baseline_all$Date$yday
+Baseline_all$halfyr = ifelse(Baseline_all$Julian<=182,1,2)
 Baseline_all<-Baseline_all[with(Baseline_all,order(Year,GCM,Julian)),]
 Baseline_all$TavgCustom = (Baseline_all$TmaxCustom + Baseline_all$TminCustom)/2
 Baseline_all$OverHotTemp = Baseline_all$TmaxCustom > HotTemp
@@ -330,6 +331,7 @@ Baseline_all$HI.Dan = Baseline_all$HI >102 & Baseline_all$HI < 124
 Baseline_all$Frost = Baseline_all$GDD == TRUE & Baseline_all$TminCustom < 32
 
 Future_all$Julian = Future_all$Date$yday
+Future_all$halfyr = ifelse(Future_all$Julian<=182,1,2)
 Future_all<-Future_all[with(Future_all,order(Year,GCM,Julian)),]
 Future_all$TavgCustom = (Future_all$TmaxCustom + Future_all$TminCustom)/2
 Future_all$OverHotTemp = Future_all$TmaxCustom > HotTemp
@@ -371,7 +373,7 @@ H_annual <- merge(H_annual,H.WinterTemp,by=c("CF","GCM","Year")); rm(H.WinterTem
 # Further Growing Season Calculations
 #Historical_GS <- as.data.table(subset(Baseline_all,select=c(Year,CF,GCM,Julian,GDD_count,N_GDD_count)))
 #Historical_GU<-Historical_GS[GDD_count==7,.SD[1],by=.(Year,CF,GCM)] 
-#Historical_SE<-Historical_GS[N_GDD_count==6,.SD[c(.N)],by=.(Year,CF,GCM)]
+#Historical_SE<-Historical_GS[N_GDD_count==6 & halfyr==2,.SD[1],by=.(Year,CF,GCM)]
 #Historical_SE$adjusted<-Historical_SE$Julian - 6
 #H<-aggregate(cbind(Julian)~CF+GCM+Year,data=Historical_GU,mean,na.rm=TRUE)
 #colnames(H)[4] <- "BegGrow"
@@ -404,7 +406,7 @@ F_annual <- merge(F_annual,F.WinterTemp,by=c("CF","GCM","Year")); rm(F.WinterTem
 # # Further Growing Season Calculations
 #Future_GS <- as.data.table(subset(Future_all,select=c(Year,CF,GCM,Julian,GDD_count,N_GDD_count)))
 #Future_GU<-Future_GS[GDD_count==7,.SD[1],by=.(Year,CF,GCM)] 
-#Future_SE<-Future_GS[N_GDD_count==6,.SD[c(.N)],by=.(Year,CF,GCM)]
+#Future_SE<-Future_GS[N_GDD_count==6 & halfyr == 2,.SD[1],by=.(Year,CF,GCM)]
 #Future_SE$adjusted<-Future_SE$Julian - 6
 #F<-aggregate(cbind(Julian)~CF+GCM+Year,data=Future_GU,mean,na.rm=TRUE)
 #colnames(F)[4] <- "BegGrow"
