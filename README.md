@@ -36,7 +36,7 @@ The parsing scripts are not functional in version 1 (due to remote work) so data
 **Step 3: Leave RStudio and use File Explorer to create data subfolders and add necessary data files**
 *To request parsed data, see Amber Runyon at amber_runyon@nps.gov. To request other files see Annie Kellner Dillon (anne_dillon@nps.gov) or Amber Runyon*
 
-*A zipped folder of all data is located at [CCRP_Climate_Futures_Data](https://doimspp.sharepoint.com/sites/NPS-CCRP-FCScienceAdaptation/Shared%20Documents/Forms/AllItems.aspx?viewid=54c972dc%2D7b2e%2D4eb7%2Da737%2D42792988c0b3&id=%2Fsites%2FNPS%2DCCRP%2DFCScienceAdaptation%2FShared%20Documents%2FRCF%2Fscript%20rewrites)
+*A zipped folder of all data is located at [CCRP_Climate_Futures_Data](https://doimspp.sharepoint.com/sites/NPS-CCRP-FCScienceAdaptation/Shared%20Documents/Forms/AllItems.aspx?newTargetListUrl=%2Fsites%2FNPS%2DCCRP%2DFCScienceAdaptation%2FShared%20Documents&viewpath=%2Fsites%2FNPS%2DCCRP%2DFCScienceAdaptation%2FShared%20Documents%2FForms%2FAllItems%2Easpx&viewid=54c972dc%2D7b2e%2D4eb7%2Da737%2D42792988c0b3&id=%2Fsites%2FNPS%2DCCRP%2DFCScienceAdaptation%2FShared%20Documents%2FReproducible%20Climate%20Futures%2Fscript%20rewrites%2Fdata)
 
 File names must be spelled exactly as they are written here or the scripts will not work. The notation '/' refers to a folder with multiple files (i.e. the .shp, .dbf, .prj etc. that comprise an ESRI shapefile)
 
