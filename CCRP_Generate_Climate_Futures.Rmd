@@ -154,7 +154,7 @@ The get_params.R script extracts site parameters for inputting into Dave Thoma's
 
 source(here::here("scripts", "WaterBalance", "get_params.R")) # Extract site parameters
 
-source(here::here("scripts", "Misc", "create_site_maps.R")) # Create site maps
+source(here::here("scripts", "Misc", "create_site_maps.R")) # Create site maps. If you cannot install Java, comment this line out. 
 ```
 
 ```{r}
