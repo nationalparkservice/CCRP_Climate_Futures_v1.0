@@ -5,45 +5,16 @@
 
 #Units: temp = K, precip = mm, Rh = %
 
-library(cft)
-library(tibble)
-library(ggplot2)
-library(tidyr)
-library(lubridate)
-library(ggrepel)
-library(dplyr)
-library(sp)
-library(sf)
-
-rm(list=ls())
-
 ## Park data
-proj_dir <- "~/Parse_test"
-Lat <- 41.83476
-Lon = -103.707
-SiteID <- "SCBL"
+
+proj_dir = './data/park-specific/output' # for .csv's
+if(dir.exists(proj_dir) == FALSE){
+  dir.create(proj_dir)
+}
+
 
 ## Download data
-#Variable and scenario names corresponding to MACA data directory structure
-vars = c("pr", "tasmax", "tasmin","rhsmax","rhsmin")
-scens = c("rcp45", "rcp85")
 
-#Variable names for output tables
-VarNames = c("PrecipCustom", "TmaxCustom", "TminCustom","RHmaxCustom","RHminCustom")
-
-# GCMs to be extracted
-GCMs = c('bcc-csm1-1','bcc-csm1-1-m','BNU-ESM','CanESM2','CCSM4','CNRM-CM5','CSIRO-Mk3-6-0',
-         'GFDL-ESM2G','GFDL-ESM2M','HadGEM2-CC365','HadGEM2-ES365',
-         'inmcm4','IPSL-CM5A-MR','IPSL-CM5A-LR','IPSL-CM5B-LR',
-         'MIROC5','MIROC-ESM','MIROC-ESM-CHEM','MRI-CGCM3','NorESM1-M')
-
-#Date ranges to be extracted
-Future_StartYear = 2006   #2006-2099
-Future_EndYear = 2099   #2006-2099
-Hist_StartYear = 1950     #1950-2005
-Hist_EndYear = 2005      #1950-2005
-
-Remove_files = "Y" # "N"       #Removes all climate data files saved in directory
 
 ############################## END INITIALS ##################################################
 

@@ -10,14 +10,38 @@ Then restart R and re-run from your general package library (R will do this auto
 
 ##
 
-```{r user-inputs}
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(
+  echo = FALSE, 
+  collapse = TRUE,
+  warning = TRUE, # set to FALSE when done
+  message = TRUE # set to FALSE when done
+)
+
+#renv::init() Only needs to be run 1x when project is initiated. No one should ever have to run this line again. 
+
+#renv::restore() # This line will restore packages to the versions recorded in the lockfile. Collaborators can use this command to keep their packages current. This line should be run once a week.  
+
+#renv::update(exclude = "WaterBalance") # This line should be run once a week by whoever is regularly using this script. The first time running this line, you might need to follow directions to create a Personal Access Token with GitHub. Simply follow directions printed in the console. If you run into trouble, contact Annie Kellner Dillon at anne_dillon@nps.gov 
+
+# renv::snapshot() # This command takes a snapshot of the packages in their current state and records it in the lockfile. Renv will perform this task periodically. If a manual snapshot is desired, use this command to manually update the lockfile.   
+
+
+library(here); library(plyr); # Use here::here when package lubridate is used
+library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot); library(reshape2); library(raster); library(ncdf4); library(reshape2); library(WriteXLS); library(data.table); library(RColorBrewer); library(ggrepel); library(lubridate); library(dplyr); library(forcats); library(openxlsx); library("WaterBalance"); library(sf); library(raster); library(rgdal); library(R.utils); library(tmap); library(tmaptools); library(rJava); library(OpenStreetMap); library(gridExtra); library(SPEI); library(tidyr); library(tibble); library(sp); library(skimr); library(cft)
+
+```
+
+
+There are two code chunks in which the RCF user should enter information that is park-specific. The first chunk contains inputs that are often changed (i.e., with each new park). The second chunk contains user inputs that are *rarely* changed (i.e., project lead has requested a change).
+
+**First user input chunk (please enter park-specific information):**
+
+```{r user-inputs-1}
 
 rm(list = ls())
 
-# -------------- Input site information -------------------------------------- #
-
-SiteID = "CARE"
-state <- "Utah"
 
 # --------------- Input local folder information ----------------------------- #
 
@@ -26,17 +50,64 @@ state <- "Utah"
 project_root_dir <- 'C:/Users/adillon/Documents/Repos/CCRP_Climate_Futures_v1.0' # local directory where your repo is stored
 local_rss_dir <- 'C:/Users/adillon/Documents/RSS/CARE' # local directory where you want this repo copied. Should be something like 'C:/Users/adillon/Documents/RSS/CONG'
 
+# -------------- Input site information -------------------------------------- #
+
+SiteID = "CARE"
+state <- "Utah"
+Lat <- 38.383553
+Lon <- -111.283004
+
 # -------------- Input information for Climate Futures analyses (MACA) ------- #
 
-# Specify Climate Futures and Models
+# Specify Climate Futures
 
 FutureSubset <- c("Warm Wet","Hot Dry") # Pick pair of climate futures.
 CFs<- c("Warm Wet", "Hot Dry") # Same as above
 
-
 colors2<- c("#9A9EE5","#E10720")  # Select pair of climate futures - WarmWet/HotDry
 #colors2<- c("#F3D3CB","#12045C")  # Select pair of climate futures - HotWet/WarmDry
+
+# -------------- Input information for Water Balance model ------------------- #
+
+WB_GCMs = c("MRI-CGCM3.rcp45","HadGEM2-ES365.rcp85") # Specific models need to be selected to run the Water Balance scripts
+
+col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
+#col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
+
+```
+
+**Second user input chunk (information that should only be changed when directly specified)**
+
+```{r user-inputs-2}
+
 CFs_all <- c("Warm Wet", "Hot Wet", "Central", "Warm Dry", "Hot Dry")
+
+# ----------- Information for MACA parsing script ---- ----------------------- #
+
+#Date ranges to be extracted
+
+Future_StartYear = 2006   #2006-2099
+Future_EndYear = 2099   #2006-2099
+Hist_StartYear = 1950     #1950-2005
+Hist_EndYear = 2005      #1950-2005
+
+#Variable and scenario names corresponding to MACA data directory structure
+vars = c("pr", "tasmax", "tasmin","rhsmax","rhsmin")
+scens = c("rcp45", "rcp85")
+
+#Variable names for output tables
+VarNames = c("PrecipCustom", "TmaxCustom", "TminCustom","RHmaxCustom","RHminCustom")
+
+# GCMs to be extracted
+GCMs = c('bcc-csm1-1','bcc-csm1-1-m','BNU-ESM','CanESM2','CCSM4','CNRM-CM5','CSIRO-Mk3-6-0',
+         'GFDL-ESM2G','GFDL-ESM2M','HadGEM2-CC365','HadGEM2-ES365',
+         'inmcm4','IPSL-CM5A-MR','IPSL-CM5A-LR','IPSL-CM5B-LR',
+         'MIROC5','MIROC-ESM','MIROC-ESM-CHEM','MRI-CGCM3','NorESM1-M')
+
+Remove_files = "Y" # "N"       #Removes all climate data files saved in directory
+
+
+# --------- Information for Climate Futures Analyses (MACA) ------------------ #
 
 # Specify parameters:
 
@@ -56,24 +127,14 @@ PrecipThreshold = 0.05    # inches per day. Precip Threshold (used to measure Dr
 QuantileLow = 0.05   #Quantiles for temperature threshold calculations
 QuantileHigh = 0.95
 
-# -------------- Input information for Water Balance model ------------------- #
-
-WB_GCMs = c("MRI-CGCM3.rcp45","HadGEM2-ES365.rcp85") # Specific models need to be selected to run the Water Balance scripts
-
-col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
-#col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
-
-# The following files are inputs into this script. Change as necessary. 
-#inputs <- c(paste0(site, "_lat_long_PRISM_PptTminTmax_IntermediateFiles.RData"), 
-#            paste0(site, "_init_parsed.RData"), 
-#            "GridMet.csv")
+# -------------- Information for Water Balance model ------------------- #
 
 # The following needs to be inputted if the park centroid will not be used to select the MACA grid cell for the water balance model:
 
 #MACA_lat <- 40.4465 
 #MACA_lon <- -108.7651
 
-# ------------ Input information for Drought analyses ------------------------ #
+# ------------ Information for drought analyses ------------------------ #
 
 ## SPEI variables
 
@@ -81,29 +142,6 @@ SPEI_per<-6 # This is the value for the period SPEI is aggregated. 6-months is s
 truncation<- -.5 # SPEI value, under which drought events are considered
 SPEI_start <- 1950
 SPEI_end <- 1999
-
-```
-
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(
-  echo = FALSE, 
-  collapse = TRUE,
-  warning = TRUE, # set to FALSE when done
-  message = TRUE # set to FALSE when done
-)
-
-#renv::init() Only needs to be run 1x when project is initiated. No one should ever have to run this line again. 
-
-#renv::restore() # This line will restore packages to the versions recorded in the lockfile. Collaborators can use this command to keep their packages current. This line should be run once a week.  
-
-#renv::update(exclude = "WaterBalance") # This line should be run once a week by whoever is regularly using this script. The first time running this line, you might need to follow directions to create a Personal Access Token with GitHub. Simply follow directions printed in the console. If you run into trouble, contact Annie Kellner Dillon at anne_dillon@nps.gov 
-
-# renv::snapshot() # This command takes a snapshot of the packages in their current state and records it in the lockfile. Renv will perform this task periodically. If a manual snapshot is desired, use this command to manually update the lockfile.   
-
-
-library(here); library(plyr); # Use here::here when package lubridate is used
-library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot); library(reshape2); library(raster); library(ncdf4); library(reshape2); library(WriteXLS); library(data.table); library(RColorBrewer); library(ggrepel); library(lubridate); library(dplyr); library(forcats); library(openxlsx); library("WaterBalance"); library(sf); library(raster); library(rgdal); library(R.utils); library(tmap); library(tmaptools); library(rJava); library(OpenStreetMap); library(gridExtra); library(SPEI); library(tidyr); library(tibble); library(sp); library(skimr) #library(cft)
 
 ```
 
