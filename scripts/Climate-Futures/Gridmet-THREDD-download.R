@@ -2,23 +2,11 @@
 # Script to download daily gridmet data
 # Aggregated data available here: http://thredds.northwestknowledge.net:8080/thredds/reacch_climate_MET_aggregated_catalog.html
 #######################################################################################
-library(ncdf4) # package for netcdf manipulation
-library(raster) # package for raster manipulation
 
-rm(list=ls())
-data.dir <- "C:/Users/achildress/Documents/NOAA-data/gridmet/"
+data.dir <- "./data/park-specific/input/"
 
 #Set working directory where files will download
-Remove_files = "Y"
 
-Lat <- 29.282894
-Lon <- -103.336537
-
-var = c("pr","tmmx","tmmn")
-longVar = c("precipitation_amount", "daily_maximum_temperature", "daily_minimum_temperature")
-box = c(Lat+.5,Lat-.5,Lon+.5,Lon-.5)
-startDate = "1979-01-01"
-endDate = "2020-12-31"
 
 # Download data - takes ~30 sec / var
 for (i in 1:length(var)){
@@ -60,10 +48,10 @@ for(i in 1:length(files)){
 #set names so match output from other scripts -- need to change if alter variables
 names(GridMet)<-c("Date","precip","tmax","tmin")
 
-write.csv(GridMet,"GridMet.csv",row.names=F)
+write.csv(GridMet,"./data/park-specific/input/GridMet.csv",row.names=F)
 
 # Remove saved climate files
 if(Remove_files == "Y") {
-  do.call(file.remove, list(list.files(data.dir, full.names = TRUE)))
+  do.call(file.remove, list(list.files(data.dir, pattern = '.nc', full.names = TRUE)))
   print("Files removed")
 } else {print("Files remain")}

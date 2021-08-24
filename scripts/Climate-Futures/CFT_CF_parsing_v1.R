@@ -7,7 +7,7 @@
 
 ## Park data
 
-proj_dir = './data/park-specific/output' # for .csv's
+proj_dir = './data/park-specific/input' # for .csv's
 if(dir.exists(proj_dir) == FALSE){
   dir.create(proj_dir)
 }

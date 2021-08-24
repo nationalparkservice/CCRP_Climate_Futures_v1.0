@@ -29,7 +29,7 @@ knitr::opts_chunk$set(
 
 
 library(here); library(plyr); # Use here::here when package lubridate is used
-library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot); library(reshape2); library(raster); library(ncdf4); library(reshape2); library(WriteXLS); library(data.table); library(RColorBrewer); library(ggrepel); library(lubridate); library(dplyr); library(forcats); library(openxlsx); library("WaterBalance"); library(sf); library(raster); library(rgdal); library(R.utils); library(tmap); library(tmaptools); library(rJava); library(OpenStreetMap); library(gridExtra); library(SPEI); library(tidyr); library(tibble); library(sp); library(skimr); library(cft)
+library(plotrix); library(zoo); library(ggplot2); library(grid); library(cowplot); library(reshape2); library(raster); library(ncdf4); library(reshape2); library(WriteXLS); library(data.table); library(RColorBrewer); library(ggrepel); library(lubridate); library(dplyr); library(forcats); library(openxlsx); library("WaterBalance"); library(sf); library(raster); library(rgdal); library(R.utils); library(tmap); library(tmaptools); #library(rJava); library(OpenStreetMap); library(gridExtra); library(SPEI); library(tidyr); library(tibble); library(sp); library(skimr); library(cft)
 
 ```
 
@@ -105,6 +105,7 @@ GCMs = c('bcc-csm1-1','bcc-csm1-1-m','BNU-ESM','CanESM2','CCSM4','CNRM-CM5','CSI
          'MIROC5','MIROC-ESM','MIROC-ESM-CHEM','MRI-CGCM3','NorESM1-M')
 
 Remove_files = "Y" # "N"       #Removes all climate data files saved in directory
+                                # This code can also be changed for GridMet
 
 
 # --------- Information for Climate Futures Analyses (MACA) ------------------ #
@@ -126,6 +127,15 @@ PrecipThreshold = 0.05    # inches per day. Precip Threshold (used to measure Dr
 #  be 0 because models "drizzle". Some investigation necessary.
 QuantileLow = 0.05   #Quantiles for temperature threshold calculations
 QuantileHigh = 0.95
+
+# -------------- Information for GridMET  ------------------------------------ #
+
+var = c("pr","tmmx","tmmn")
+longVar = c("precipitation_amount", "daily_maximum_temperature", "daily_minimum_temperature")
+box = c(Lat+.5,Lat-.5,Lon+.5,Lon-.5)
+startDate = "1979-01-01"
+endDate = "2020-12-31"
+
 
 # -------------- Information for Water Balance model ------------------- #
 
@@ -167,11 +177,11 @@ source(here::here("scripts", "Historical-trends", "RSS PRISM plots v1.2.R"),echo
 
 ## Climate Futures (MACA)
 
-```{r Climate-Futures, echo=FALSE, message=FALSE, warning=FALSE, results=HIDE}
+```{r Climate-Futures, message=FALSE, warning=FALSE, include=FALSE, results=HIDE}
 
 source(here::here("scripts", "Climate-Futures", "CFT_CF_parsing_v1.R")) # Parse MACA data. Output = "_init_parsed.RData". 
 
-# source(here::here("Gridmet-Parse.R")) # Parse GridMET data. Output = "GridMet.csv"
+source(here::here("scripts", "Climate-Futures", "Gridmet-THREDD-download.R")) # Parse GridMET data. Output = "GridMet.csv"
 
 source(here::here("scripts", "Climate-Futures", "RSS_MACA_Plot_Table_Creation.R"), local = knitr::knit_global()) # Requires "PARK_init_parsed.RData"; Output = "PARK_lat_long_Final_Environment.RData". 
 
