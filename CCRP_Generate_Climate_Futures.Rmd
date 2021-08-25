@@ -58,6 +58,10 @@ state <- "Utah"
 Lat <- 38.383553
 Lon <- -111.283004
 
+# -------------- Inputs for NOAA ClimGrid Extraction --------------------------#
+
+
+
 # -------------- Input information for Climate Futures analyses (MACA) ------- #
 
 # Specify Climate Futures
@@ -171,7 +175,7 @@ SPEI_end <- 1999
 # Outputs plots into ./figures/Historical-trends
 # If you get an error re: invalid 'description' argument, it means you did not upload the input data into the repo
 
-source(here::here("scripts", "Historical-trends", "RSS PRISM plots v1.2.R"),echo = FALSE) 
+#source(here::here("scripts", "Historical-trends", "RSS PRISM plots v1.2.R"),echo = FALSE) 
 
 ```
 
