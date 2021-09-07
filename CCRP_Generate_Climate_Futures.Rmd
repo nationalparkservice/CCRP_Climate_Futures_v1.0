@@ -155,8 +155,6 @@ QuantileHigh = 0.95
 
 # -------------- Information for GridMET  ------------------------------------ #
 
-var = c("pr","tmmx","tmmn")
-longVar = c("precipitation_amount", "daily_maximum_temperature", "daily_minimum_temperature")
 box = c(Lat+.5,Lat-.5,Lon+.5,Lon-.5)
 startDate = "1979-01-01"
 endDate = "2020-12-31"
@@ -225,7 +223,7 @@ source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts.R")) # 
 
 The get_params.R script extracts site parameters for inputting into Dave Thoma's Water Balance model (see 'Daily_WB_batch_v2.R'). The create_site_maps.R script creates a suite of maps from which the project lead can select the most appropriate for use with the RSS Powerpoint presentation. Maps output into the './figures/maps' folder. 
 
-```{r Water-Balance, message=FALSE, warning=FALSE, echo = FALSE, results=HIDE}
+```{r Water-Balance, message=FALSE, eval = FALSE, warning=FALSE, echo = FALSE, results=HIDE}
 
 source(here::here("scripts", "WaterBalance", "get_params.R")) # Extract site parameters
 

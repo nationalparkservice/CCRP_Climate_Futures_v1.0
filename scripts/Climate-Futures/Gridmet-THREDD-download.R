@@ -3,7 +3,13 @@
 # Aggregated data available here: http://thredds.northwestknowledge.net:8080/thredds/reacch_climate_MET_aggregated_catalog.html
 #######################################################################################
 
-data.dir <- "./data/park-specific/parsed-data/"
+dir.create('./data/park-specific/parsed-data/Gridmet') # Create folder to store .nc files from GridMET
+
+data.dir <- "./data/park-specific/parsed-data/Gridmet/"
+
+var = c("pr","tmmx","tmmn")
+longVar = c("precipitation_amount", "daily_maximum_temperature", "daily_minimum_temperature")
+
 
 #Set working directory where files will download
 
