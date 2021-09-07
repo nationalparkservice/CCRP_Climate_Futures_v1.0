@@ -4,7 +4,7 @@
 
 # Create output directories
 
-file <- list.files(path = './data/park-specific/input', pattern = 'IntermediateFiles.RData', full.names = TRUE) # will load all .RData files within directory
+file <- list.files(path = './data/park-specific/parsed-data', pattern = 'IntermediateFiles.RData', full.names = TRUE) # will load all .RData files within directory
 load(file)
 
 figs <- './figures' # for figures
@@ -22,18 +22,9 @@ if(dir.exists(WD_data) == FALSE){
   dir.create(WD_data)
 }
 
-doP1 <- "YES"  # Should a separate regression be calculated for the reference period (default 1900-1970)? 
-doP2 <- "YES"  # Should a separate regression be calculate for the period after the reference period (default 1971-present)? 
-beginRefYr = 1900
-endRefYr = 1970
-
-BeginYr	= 1895   # is this data file or for plots?
-EndYr = 2018
-dataEndYr = 2017   # needed for rolling mean plot below.  
-stepYrs	= 10		  # for period plots 
-rollLen = 10      # period of calc for rolling average; default 10 = decadal
-
-dpi = 600    
+BeginYr	= year(PptMeans$Date[1]) 
+EndYr = last(year(PptMeans$Date))
+dataEndYr = EndYr - 1 
 
 
 ##ggplot theme for all plots
@@ -581,7 +572,7 @@ pptSeas <- pptSeas[1:(yLabPs*10),]
   #Melt data frame
 GetDecadeSeasons = function(df){
   df$Year = as.numeric(row.names(df))
-  df.m = melt(df, id="Year")
+  df.m = reshape2::melt(df, id="Year")
   colnames(df.m) = c("Year", "Season", "Var")
   df.m$Decade = (floor((df.m$Year+5)/10))*10
   df.m$Season = factor(df.m$Season, levels=c("Winter", "Spring" ,"Summer", "Fall"))
@@ -746,7 +737,7 @@ Annual.Anomaly$aTmean.col = ifelse(Annual.Anomaly$aTmean > 0, "red", "blue")
 Annual.Anomaly$aPpt.col = ifelse(Annual.Anomaly$aPpt > 0, "green", "brown")
 
 PlotName <- "Red-Blue Anomaly Bar plot"
-  OFName <- paste(OFDir, "/Historical-trends ", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
+OFName <- paste("figures/Historical-trends/", PlotName, " ", SiteID, " ", Lat, " ", Lon, ".png", sep = "")
 
   # Tmax
 a = ggplot(Annual.Anomaly, aes(x=cYr, y=aTmax, fill=aTmax.col)) + 
@@ -876,15 +867,3 @@ ggsave("Historical SPEI.png", path = './figures/Historical-trends', width = 15, 
 ### EOF ###
 ###########
 
-# For presentation: difference between Dust Bowl average and overall average
-
-# Find tmax overall vs. tmax during dustbowl
-mean(tmaxAvg)
-dustbowl.max <- tmaxAvg[36:46]
-mean(dustbowl.max)
-
-# Find tmin overall vs. tmin during dustbowl
-
-mean(tminAvg)
-dustbowl.min <- tminAvg[36:46]
-mean(dustbowl.min)
