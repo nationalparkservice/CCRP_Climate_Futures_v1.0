@@ -3,7 +3,7 @@
 # Aggregated data available here: http://thredds.northwestknowledge.net:8080/thredds/reacch_climate_MET_aggregated_catalog.html
 #######################################################################################
 
-data.dir <- "./data/park-specific/input/"
+data.dir <- "./data/park-specific/parsed-data/"
 
 #Set working directory where files will download
 
@@ -48,7 +48,7 @@ for(i in 1:length(files)){
 #set names so match output from other scripts -- need to change if alter variables
 names(GridMet)<-c("Date","precip","tmax","tmin")
 
-write.csv(GridMet,"./data/park-specific/input/GridMet.csv",row.names=F)
+write.csv(GridMet,"./data/park-specific/parsed-data/GridMet.csv",row.names=F)
 
 # Remove saved climate files
 if(Remove_files == "Y") {

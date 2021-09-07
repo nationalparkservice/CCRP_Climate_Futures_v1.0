@@ -500,7 +500,7 @@ a <- ggplot(pdat, aes(x=startYr+5, y=tmax, shape=seas, colour=seas)) +
     scale_shape(name="Season: ") +
 		geom_point(size=3.2) +
 		ylab(expression(paste(Tmax, ~({}^o*F)))) + xlab("") +
-    scale_x_continuous(breaks=c(1900, 1920, 1940, 1960, 1980, 2000))
+    scale_x_continuous(breaks=c(1900, 1920, 1940, 1960, 1980, 2000, 2020))
 		
 b <- ggplot(pdat, aes(startYr+5, tmin, shape=seas, colour=seas)) +
 		#ylim(-1.75, 1.75) +
@@ -509,7 +509,7 @@ b <- ggplot(pdat, aes(startYr+5, tmin, shape=seas, colour=seas)) +
     scale_shape(name="Season: ") +
 		geom_point(size=3.2) +
 		ylab(expression(paste(Tmin, ~({}^o*F)))) + xlab("") +
-  scale_x_continuous(breaks=c(1900, 1920, 1940, 1960, 1980, 2000))
+  scale_x_continuous(breaks=c(1900, 1920, 1940, 1960, 1980, 2000, 2020))
 		
 c <- ggplot(pdat, aes(startYr+5, tmean, shape=seas, colour=seas)) +
 		#ylim(-1.75, 1.75) +
@@ -518,7 +518,7 @@ c <- ggplot(pdat, aes(startYr+5, tmean, shape=seas, colour=seas)) +
     scale_shape(name="Season: ") +
     geom_point(size=3.2) +
 		ylab(expression(paste(Tmean, ~({}^o*F)))) + xlab("") +
-  scale_x_continuous(breaks=c(1900, 1920, 1940, 1960, 1980, 2000))
+  scale_x_continuous(breaks=c(1900, 1920, 1940, 1960, 1980, 2000, 2020))
 		
 d <- ggplot(pdat, aes(startYr+5, ppt, shape=seas, colour=seas)) +
 		#ylim(-325, 325) +
@@ -527,7 +527,7 @@ d <- ggplot(pdat, aes(startYr+5, ppt, shape=seas, colour=seas)) +
     scale_shape(name="Season: ") +
     geom_point(size=3.2) +
 		ylab("Precip (in/yr)") + xlab("") +
-    scale_x_continuous(breaks=c(1900, 1920, 1940, 1960, 1980, 2000))
+    scale_x_continuous(breaks=c(1900, 1920, 1940, 1960, 1980, 2000, 2020))
 				
 p1 = plot_grid(a, b, c, d, nrow=4, align="v")
 title = ggdraw() + draw_label(paste(SiteID, "- Decadal Anomalies by Season"), 

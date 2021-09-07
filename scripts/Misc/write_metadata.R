@@ -12,8 +12,8 @@ cat("\n")
 # Input files
 
 cat("\n")
-inputs <- list.files(path = './data/park-specific/input') # Input files
-cat(paste("input files:", inputs[1], inputs[2], inputs[3], sep = " "))
+inputs <- list.files(path = './data/park-specific/parsed-data') # RData files created from parsed data
+cat(paste("data files:", inputs[1], inputs[2], inputs[3], sep = " "))
 cat("\n")
 
 # Water Balance model

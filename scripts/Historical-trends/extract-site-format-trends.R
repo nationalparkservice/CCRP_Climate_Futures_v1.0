@@ -15,6 +15,7 @@ if(dir.exists(parsed_data) == FALSE){
   dir.create(parsed_data)
 }
 
+OutDir <- paste0(parsed_data, "/")
 
 AoaExt <- extent(Lon-Buffer, Lon+Buffer, Lat-Buffer, Lat+Buffer)
 
@@ -69,5 +70,5 @@ tmin.data %>%
 rm(DF, prcp.data, t, tave.data, tmax.data, tmin.data, tt, tt.merge)
 
 
-save.image(sprintf("%s%s_%s_%s_nClimGrid_IntermediateFiles.RData", parsed_data, SiteID, Lat, Lon))
+save.image(sprintf("%s%s_%s_%s_nClimGrid_IntermediateFiles.RData", OutDir, SiteID, Lat, Lon))
 

@@ -7,10 +7,7 @@
 
 ## Park data
 
-proj_dir = './data/park-specific/input' # for .csv's
-if(dir.exists(proj_dir) == FALSE){
-  dir.create(proj_dir)
-}
+proj_dir = './data/park-specific/parsed-data'
 
 
 ## Download data

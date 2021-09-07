@@ -2,7 +2,7 @@
 
 ################################################## INITIALS ##################################################
 
-DataFile <- list.files(path = './data/park-specific/input', pattern = 'init_parsed.RData', full.names = TRUE) # Environment needs to be added if not parsing MACA data
+DataFile <- list.files(path = './data/park-specific/parsed-data', pattern = 'init_parsed.RData', full.names = TRUE) # Environment needs to be added if not parsing MACA data
 load(DataFile)
 
 #Month and season names 
