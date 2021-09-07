@@ -10,9 +10,9 @@
 # See CCRP's noaa-nClimGrid repository for scripts that will download and unzip tar files from the NOAA FTP 
 
 
-parsed-data = './data/parsed-data'
-if(dir.exists(parsed-data) == FALSE){
-  dir.create(parsed-data)
+parsed_data = './data/park-specific/parsed-data'
+if(dir.exists(parsed_data) == FALSE){
+  dir.create(parsed_data)
 }
 
 
@@ -69,15 +69,5 @@ tmin.data %>%
 rm(DF, prcp.data, t, tave.data, tmax.data, tmin.data, tt, tt.merge)
 
 
-
-# Save because takes so long to run
-
-#saveRDS(prcp.data, file = './data/park-specific/output/prcp_run1.Rds')
-
-
-save.image(sprintf("%s%s_%s_%s_nClimGrid_IntermediateFiles.RData", parsed-data, SiteID, Lat, Lon))
-
-end.time = Sys.time()
-run.time = end.time-start.time
-run.time
+save.image(sprintf("%s%s_%s_%s_nClimGrid_IntermediateFiles.RData", parsed_data, SiteID, Lat, Lon))
 
