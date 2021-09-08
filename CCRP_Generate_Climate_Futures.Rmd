@@ -54,10 +54,10 @@ local_rss_dir <- 'C:/Users/adillon/Documents/RSS/GRCA-NE' # local directory wher
 
 # -------------- Input site information -------------------------------------- #
 
-SiteID = "GRCA-NE" # site = "GRCA-NE" - for testing
-state <- "Arizona"
-Lat = 36.27
-Lon = -112.09
+SiteID = "CARE" 
+state <- "Utah"
+Lat = 38.383553
+Lon = -111.283004
 
 # -------------- Inputs for NOAA ClimGrid Extraction --------------------------#
 
@@ -193,7 +193,7 @@ source(here::here("scripts", "Historical-trends", "Gridmet-THREDD-download.R")) 
 
 # Requires "PARK_lat_long_PRISM_PptTminTmax_IntermediateFiles.RData"
 # Outputs plots into ./figures/Historical-trends
-# If you get an error re: invalid 'description' argument, it means you did not upload the input data into the repo
+# If you get an error re: invalid 'description' argument, it means the data is missing
 
 source(here::here("scripts", "Historical-trends", "RSS PRISM plots v1.2.R"), echo = FALSE) 
 
@@ -204,7 +204,7 @@ source(here::here("scripts", "Historical-trends", "RSS PRISM plots v1.2.R"), ech
 
 ```{r Climate-Futures, message=FALSE, warning=FALSE, include=FALSE, results=HIDE}
 
-source(here::here("scripts", "Climate-Futures", "CFT_CF_parsing_v1.R")) # Parse MACA data. Output = "_init_parsed.RData". 
+#source(here::here("scripts", "Climate-Futures", "CFT_CF_parsing_v1.R")) # Parse MACA data. Output = "_init_parsed.RData". # 9-8-21: CFT parsing script is not working due to an issue with the package or MACA servers. ACR to talk to CU Boulder about the issue. For now, add _init_parsed.RData file manually to parsed-data folder. 
 
 source(here::here("scripts", "Climate-Futures", "RSS_MACA_Plot_Table_Creation.R"), local = knitr::knit_global()) # Requires "PARK_init_parsed.RData"; Output = "PARK_lat_long_Final_Environment.RData". 
 
