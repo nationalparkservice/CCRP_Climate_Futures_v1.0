@@ -181,9 +181,11 @@ SPEI_end <- 1999
 
 ## Historical Trends
 
-```{r NOAA-parse, message=FALSE, warning=FALSE, echo=FALSE}
+```{r parse-NOAA-Gridmet, message=FALSE, warning=FALSE, echo=FALSE}
 
 source(here::here("scripts", "Historical-trends", "extract-site-format-trends.R")) # Parses NOAA data. Output = "PARK_lat_long_PRISM_nClimGrid_IntermediateFiles.RData" 
+
+source(here::here("scripts", "Historical-trends", "Gridmet-THREDD-download.R")) # Parse GridMET data. Output = "GridMet.csv"
 
 ```
 
@@ -203,8 +205,6 @@ source(here::here("scripts", "Historical-trends", "RSS PRISM plots v1.2.R"), ech
 ```{r Climate-Futures, message=FALSE, warning=FALSE, include=FALSE, results=HIDE}
 
 source(here::here("scripts", "Climate-Futures", "CFT_CF_parsing_v1.R")) # Parse MACA data. Output = "_init_parsed.RData". 
-
-source(here::here("scripts", "Climate-Futures", "Gridmet-THREDD-download.R")) # Parse GridMET data. Output = "GridMet.csv"
 
 source(here::here("scripts", "Climate-Futures", "RSS_MACA_Plot_Table_Creation.R"), local = knitr::knit_global()) # Requires "PARK_init_parsed.RData"; Output = "PARK_lat_long_Final_Environment.RData". 
 
