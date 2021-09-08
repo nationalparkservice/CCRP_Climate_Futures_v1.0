@@ -10,6 +10,12 @@
 # See CCRP's noaa-nClimGrid repository for scripts that will download and unzip tar files from the NOAA FTP 
 
 
+park_specific = './data/park-specific' # Create folder for park-specific data (i.e. parsed data and output)
+if(dir.exists(park_specific) == FALSE){
+  dir.create(park_specific)
+}
+
+
 parsed_data = './data/park-specific/parsed-data'
 if(dir.exists(parsed_data) == FALSE){
   dir.create(parsed_data)
