@@ -1,7 +1,7 @@
 
 ################################ USER INPUTS #################################################
 
-Gridmet <- read.csv("data/park-specific/input/GridMet.csv",header=T)
+Gridmet <- read.csv("data/park-specific/parsed-data/GridMet.csv",header=T)
 
 file <- list.files(path = './data/park-specific/output', pattern = 'Final_Environment.RData', full.names = TRUE) 
 load(file)

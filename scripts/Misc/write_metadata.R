@@ -13,8 +13,15 @@ cat("\n")
 
 cat("\n")
 inputs <- list.files(path = './data/park-specific/parsed-data') # RData files created from parsed data
-cat(paste("data files:", inputs[1], inputs[2], inputs[3], sep = " "))
+
+cat("input data files:")
+
+for(i in 1:length(inputs)){
+  cat(paste0(inputs[i], "; "))
+}
 cat("\n")
+
+#inputs[1], inputs[2], inputs[3], inputs[4], inputs[5], sep = " "))
 
 # Water Balance model
 # NOTE: Information on Water Balance package version is included in sessionInfo() just like any other package from CRAN (or elsewhere)
@@ -50,7 +57,7 @@ sink()
 # copy to local folder and delete
 
 txt <- list.files(project_root_dir, pattern = '.txt')
-file.copy(file.path(project_root_dir, txt), local_rss_dir)
+file.copy(file.path(project_root_dir, txt), local_rss_dir) # If this prints 'FALSE', you may have an existing 'sessionInfo.txt' file in your directory. Remove and re-run. 
 
 
 unlink("sessionInfo.txt")

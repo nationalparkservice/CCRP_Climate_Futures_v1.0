@@ -2,13 +2,13 @@
 # Load files if not running scripts sequentially
 
 
-file1 <- list.files(path = './data/park-specific/input', pattern = 'IntermediateFiles.RData', full.names = TRUE) 
+file1 <- list.files(path = './data/park-specific/parsed-data', pattern = 'IntermediateFiles.RData', full.names = TRUE) 
 load(file1)
 
 file2 <- list.files(path = './data/park-specific/output', pattern = 'Final_Environment.RData', full.names = TRUE) 
 load(file2)
 
-grid<-read.csv("data/park-specific/input/GridMet.csv",header=T)
+grid<-read.csv("data/park-specific/parsed-data/GridMet.csv",header=T)
 
 if(dir.exists('./figures/summary-plots') == FALSE){
   dir.create('./figures/summary-plots')
