@@ -195,6 +195,40 @@ CF_GCM = data.frame(GCM = Future_Means$GCM, CF = Future_Means$CF)
 Future_all = merge(Future_all, CF_GCM[1:2], by="GCM")
 Baseline_all$CF = "Historical"
 
+#### Select WB_GCMs
+lx = min(Future_Means$DeltaTavg)
+ux = max(Future_Means$DeltaTavg)
+ly = min(Future_Means$DeltaPr)
+uy = max(Future_Means$DeltaPr)
+
+  #convert to points
+ww = c(lx,uy)
+wd = c(lx,ly)
+hw = c(ux,uy)
+hd = c(ux,ly)
+
+pts <- Future_Means
+
+  #calc Euclidian dist of each point from corners
+pts$WW.distance <- sqrt((pts$DeltaTavg - ww[1])^2 + (pts$DeltaPr - ww[2])^2)
+pts$WD.distance <- sqrt((pts$DeltaTavg - wd[1])^2 + (pts$DeltaPr - wd[2])^2)
+pts$HW.distance <- sqrt((pts$DeltaTavg - hw[1])^2 + (pts$DeltaPr - hw[2])^2)
+pts$HD.distance <- sqrt((pts$DeltaTavg - hd[1])^2 + (pts$DeltaPr - hd[2])^2)
+
+pts %>% filter(CF == "Warm Wet") %>% slice(which.min(WW.distance)) %>% .$GCM -> ww
+pts %>% filter(CF == "Warm Dry") %>% slice(which.min(WD.distance)) %>% .$GCM -> wd
+pts %>% filter(CF == "Hot Wet") %>% slice(which.min(HW.distance)) %>% .$GCM -> hw
+pts %>% filter(CF == "Hot Dry") %>% slice(which.min(HD.distance)) %>% .$GCM -> hd
+
+Future_Means %>% mutate(corners = ifelse(GCM == ww,"Warm Wet",
+                                         ifelse(GCM == wd, "Warm Dry",
+                                                ifelse(GCM == hw, "Hot Wet",
+                                                       ifelse( GCM == hd, "Hot Dry",NA))))) -> Future_Means
+
+Future_Means %>% drop_na() %>% filter(CF %in% CFs) %>% select(c(GCM,CF)) -> WB_GCMs
+
+rm(lx,ux,ly,uy,ww,wd,hw,hd, pts)
+
 ################################ SUMMARIZE TEMPERATURE, PRECIP, RH BY MONTH & SEASON #######################
 Baseline_all$Month<-format(Baseline_all$Date,"%m")
 Baseline_all$Year<-format(Baseline_all$Date,"%Y")
