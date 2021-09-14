@@ -56,21 +56,21 @@ if(dir.exists(OutDir) == FALSE){
 
 ClimData<-data.frame(Date=as.numeric(),ppt_mm=as.numeric(),tmean_C=as.numeric(),GCM=as.character())
 # Loop through selected GCMs
-for(i in 1:length(WB_GCMs)){
-  gcm <- WB_GCMs[i]
+for(i in 1:nrow(WB_GCMs)){
+  gcm <- WB_GCMs$GCM[i]
   x<-subset(ALL_HIST,GCM == gcm, select=c("Date","ppt_mm","tmean_C","GCM"))
   y<-subset(ALL_FUTURE,GCM == gcm, select=c("Date","ppt_mm","tmean_C","GCM"))
   ClimData = rbind(ClimData,x,y)
 }
-ClimData$GCM<-factor(ClimData$GCM,levels=WB_GCMs)
+ClimData$GCM<-factor(ClimData$GCM,levels=WB_GCMs$GCM)
 ######################################################### END CLIMATE INPUTS ####################################################################
 
 
 ######################################################### CALCULATE WB VARIABLES ################################################################
 AllDailyWB<-list()
 
-for (j in 1:length(WB_GCMs)){
-  gcm = WB_GCMs[j]
+for (j in 1:nrow(WB_GCMs)){
+  gcm = WB_GCMs$GCM[j]
   DailyWB = subset(ClimData,GCM=gcm)
   for(i in 1:nrow(wb_sites)){
     ID = wb_sites$WB_site[i]
@@ -173,8 +173,8 @@ write.csv(AnnualWB,"./data/park-specific/output/AnnualWB.csv",row.names=F)
 # Inputs
 F.start = 2025
 F.end = 2055
-MonthlyWB<-merge(MonthlyWB,CF_GCM,by="GCM",all.x=F)
-AnnualWB<-merge(AnnualWB,CF_GCM,by="GCM",all.x=F)
+MonthlyWB<-merge(MonthlyWB,WB_GCMs,by="GCM")
+AnnualWB<-merge(AnnualWB,WB_GCMs,by="GCM")
 
 # Convert to Imperial units
 AnnualWB$deficit<-AnnualWB$sum_d * 0.039
