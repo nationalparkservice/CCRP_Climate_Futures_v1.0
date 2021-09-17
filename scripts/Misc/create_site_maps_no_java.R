@@ -20,8 +20,8 @@ ggmap(myMap)
 
 # MACA grid
 
-
-maca.shp <- st_read('./data/general/spatial-data/Climate_grid/MACA_grid.shp') 
+#maca_shp <- rasterToPolygons(maca) # Create new MACA shapefile that overlaps MACA raster - will add to spatial data on SHarepoint
+#maca.shp <- st_read('./data/general/spatial-data/Climate_grid/MACA_grid.shp') 
 maca_grid_sf <- st_as_sf(maca_shp)
 maca_grid_sf <- st_transform(maca_grid_sf, 4326)
 maca_crop <- st_crop(maca_grid_sf, box)
@@ -48,7 +48,7 @@ ggmap(myMap, aes(x=x, y=y)) +
         )
 
 
-  
+#st_write(maca_grid_sf, './data/general/spatial-data/Climate_grid/maca_grid.shp') 
 
 
 
