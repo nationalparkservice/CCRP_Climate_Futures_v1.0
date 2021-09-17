@@ -37,7 +37,15 @@ ggmap(myMap, aes(x=x, y=y)) +
   scale_color_manual(values = c("Park" = "black", 
                                 "MACA grid" = alpha("black", 0.25), 
                                 "Selected cell" = "orange")) + 
-  theme_classic()
+  theme_classic() + 
+  theme(axis.line = element_blank(), 
+        axis.title = element_blank(), 
+        axis.text = element_blank(), 
+        axis.ticks = element_blank(),
+        legend.title = element_blank(),
+        legend.margin = margin(0,0,0,0),
+        legend.position = "bottom"
+        )
 
 
   
