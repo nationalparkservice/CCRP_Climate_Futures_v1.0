@@ -45,24 +45,8 @@ Spatial data only has to be added one time for all parks in the continental US. 
             
      - Make sure your new files and folders do not appear beneath the 'Git' tab
 
-**Step 3: Install Java on your machine if you do not already have it. If you have trouble, see document* [Instructions_for_installing_Java_for_use_with_R.docx](https://doimspp.sharepoint.com/:w:/r/sites/NPS-CCRP-FCScienceAdaptation/_layouts/15/Doc.aspx?sourcedoc=%7B2E0D1A3C-7FA7-4E3E-BB4B-7943CCCAD699%7D&file=Instructions_for_installing_Java_for_use_with_R.docx&action=default&mobileredirect=true)
-
-*Note: Java and rJava are only used for creating maps within the get_params script. All analyses can be run without them.*
-
-    - Install Java from the following website: https://java.com/en/download/manual.jsp  
-        - Make sure you install the correct version (i.e, 64-bit for 64-bit machines). You want to select the 'offline' version that matches your machine. 
-        
-
-**Step 4: Return to RStudio and tell R where to find Java**
-
-    - Enter the following code to point R to the directory into which you installed Java:
-
-            Sys.setenv(JAVA_HOME='path/to/jreX.X.X_XXX')  * check the program file for the jre number.
-
-       * This is an example of where Java might be installed and what the code should look like: 
-                Sys.setenv(JAVA_HOME='C:/Program Files/Java/jre1.8.0_261')
                 
-**Step 5: Run the script!**
+**Step 3: Run the script!**
    
     - Enter park data and all parameters into the user-input chunk in the .Rmd script
     - Run the script! Select Run --> Run All or press Ctrl+Alt+R
