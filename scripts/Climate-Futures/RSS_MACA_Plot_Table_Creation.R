@@ -229,6 +229,9 @@ Future_Means %>% drop_na() %>% filter(CF %in% CFs) %>% select(c(GCM,CF)) -> WB_G
 
 rm(lx,ux,ly,uy,ww,wd,hw,hd, pts)
 
+## CHANGE CF NAMES FOR DRY/DAMP
+
+
 ################################ SUMMARIZE TEMPERATURE, PRECIP, RH BY MONTH & SEASON #######################
 Baseline_all$Month<-format(Baseline_all$Date,"%m")
 Baseline_all$Year<-format(Baseline_all$Date,"%Y")
