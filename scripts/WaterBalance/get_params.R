@@ -145,5 +145,5 @@ wb_sites # check to be sure values are populated correctly. There should not be 
 
 write.csv(wb_sites, file = paste('./data/park-specific/', SiteID, " WB site parameters ", Sys.Date(), ".csv", sep = ""), row.names = FALSE)
 
-rm(proj4, epsg, maca, dem, soil, wb_sites,US_States,US_Counties,state_and_park,State,slope,points,park_and_centroid,
-   nps_centroids,nps_boundary,maca.poly,maca_cell,latlong,centroid,aspect)
+rm(proj4, epsg, dem, soil, wb_sites,US_States,US_Counties,state_and_park,State,slope,points,park_and_centroid,
+   nps_centroids,nps_boundary,latlong,centroid,aspect)

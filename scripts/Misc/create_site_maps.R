@@ -102,4 +102,6 @@ ggmap(myMap2, aes(x=x, y=y)) +
                                   
 ggsave(filename = paste0(SiteID, "-map-MACA-zoomed-in", ".png"), device = "png", path = './figures/maps')                         
 
+rm(myMap,myMap2,Sp_park,park,maca.sf,maca.poly,maca_grid_shp,maca_grid_crop,maca_cell,maca,adjacent_poly_sf,
+   adjacent_poly,adjacent_cells)
 
