@@ -57,15 +57,15 @@ rm(list = ls())
 
 # When this document has finished running, the files will be copied to a local directory and all newly created files (e.g., figures) will be deleted from the repo
 
-project_root_dir <- 'C:/Users/adillon/Documents/Repos/CCRP_Climate_Futures_v1.0' # local directory where your repo is stored
-local_rss_dir <- 'C:/Users/adillon/Documents/RSS/CARE' # local directory where you want this repo copied. Should be something like 'C:/Users/adillon/Documents/RSS/CONG'
+project_root_dir <- 'C:/Users/achildress/Documents/Git-repos/CCRP_Climate_Futures_v1.0' # local directory where your repo is stored
+local_rss_dir <- 'C:/Users/achildress/OneDrive - DOI/RCF_cloud-run_rebuild/Testing/TICA' # local directory where you want this repo copied. Should be something like 'C:/Users/adillon/Documents/RSS/CONG'
 
 # -------------- Input site information -------------------------------------- #
 
-SiteID = "CARE" 
+SiteID = "TICA" 
 state <- "Utah"
-Lat = 38.383553
-Lon = -111.283004
+Lat = 40.44039704
+Lon = -111.7093944
 
 # -------------- Inputs for NOAA ClimGrid Extraction --------------------------#
 
@@ -75,8 +75,7 @@ data.dir <- "E:/nClimGrid" # Location where NOAA ClimGrid data is stored, e.g. "
 
 # Specify Climate Futures
 
-FutureSubset <- c("Warm Wet","Hot Dry") # Pick pair of climate futures.
-CFs<- c("Warm Wet", "Hot Dry") # Same as above
+FutureSubset <- c("Warm Wet","Hot Dry"); CFs = FutureSubset  # Pick pair of climate futures.
 
 colors2<- c("#9A9EE5","#E10720")  # Select pair of climate futures - WarmWet/HotDry
 #colors2<- c("#F3D3CB","#12045C")  # Select pair of climate futures - HotWet/WarmDry
@@ -261,6 +260,8 @@ source(here::here("scripts", "SummaryPlots", "Summary WB plots.R"))
 ```{r Additional-plots-and-tables, message= FALSE, warning=FALSE, echo=FALSE, results=HIDE}
 
 source(here::here("scripts", "Additional-tables-plots", "RSS_MACA_drought_char.R"))
+
+source(here:here("scripts", "Additional-tables-plots", "Return_Events"))
 
 source(here::here("scripts", "Additional-tables-plots", "FLI FBI phenology plots.R"))
 
