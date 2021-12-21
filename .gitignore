@@ -10,5 +10,4 @@ figures/
 packrat/lib*/
 data/general/spatial-data/
 data/park-specific/
-
-
+.RDataTmp
