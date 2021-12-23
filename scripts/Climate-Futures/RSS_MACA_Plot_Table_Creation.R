@@ -2,8 +2,8 @@
 
 ################################################## INITIALS ##################################################
 
-DataFile <- list.files(path = './data/park-specific/parsed-data', pattern = 'init_parsed.RData', full.names = TRUE) # Environment needs to be added if not parsing MACA data
-load(DataFile)
+Baseline_all <- read.csv(list.files(path = local_rss_dir, pattern = 'historical.csv', full.names = TRUE)) # gridmet data from Tercek run
+Future_all <- read.csv(list.files(path = local_rss_dir, pattern = 'data.csv', full.names = TRUE)) # maca data from Tercek run
 
 #Month and season names 
 months=factor(c("January","February","March","April","May","June","July","August","September","October","November","December"),levels = month.name)
@@ -12,6 +12,8 @@ levels(seasons)=seasons
 
 
 ################################################### SUBSET TIME PERIOD ########################################
+column.names <- c("Date", "GCM","PrecipCustom","TmaxCustom","TminCustom","RHmaxCustom","RHminCustom")
+names(Baseline_all) <- c("Date","TmaxCustom",)
 
 
 Baseline_all$Date = strptime(Baseline_all$Date, "%Y-%m-%d")
