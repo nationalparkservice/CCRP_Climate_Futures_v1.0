@@ -58,7 +58,6 @@ SiteID = "OCMU"
 # Lat = 40.44039704 # Can manually input lat/lon, otherwise run get_site_info.R
 # Lon = -111.7093944
 
-source(here::here("scripts", "Misc", "get_site_info.R"))
 # --------------- Input local folder information ----------------------------- #
 
 # When this document has finished running, the files will be copied to a local directory and all newly created files (e.g., figures) will be deleted from the repo
@@ -71,26 +70,17 @@ if(dir.exists(local_rss_dir) == FALSE){
   dir.create(local_rss_dir)
 }
 
-# -------------- Inputs for NOAA ClimGrid Extraction --------------------------#
+```
 
-data.dir <- "E:/nClimGrid" # Location where NOAA ClimGrid data is stored, e.g. "E:/nClimGrid" 
+# Site Info
+The get_params.R script extracts site parameters for inputting into Dave Thoma's Water Balance model (see 'Daily_WB_batch_v2.R'). The create_site_maps.R script creates a suite of maps from which the project lead can select the most appropriate for use with the RSS Powerpoint presentation. Maps output into the './figures/maps' folder. 
+```{r site-info, message=FALSE, warning=FALSE, echo = FALSE, results=HIDE}
 
-# -------------- Input information for Climate Futures analyses (MACA) ------- #
+source(here::here("scripts", "Misc", "get_site_info.R")) # Extract local inputs; seconds to run
 
-# Specify Climate Futures
+source(here::here("scripts", "WaterBalance", "get_params.R")) # Extract WB site parameters; 
 
-FutureSubset <- c("Warm Wet","Hot Dry"); CFs = FutureSubset  # Pick pair of climate futures.
-
-colors2<- c("#9A9EE5","#E10720")  # Select pair of climate futures - WarmWet/HotDry
-#colors2<- c("#F3D3CB","#12045C")  # Select pair of climate futures - HotWet/WarmDry
-
-# -------------- Input information for Water Balance model ------------------- #
-
-# WB_GCMs = c("MRI-CGCM3.rcp45","HadGEM2-ES365.rcp85") # Specific models need to be selected to run the Water Balance scripts
-
-col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
-#col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
-
+source(here::here("scripts", "Misc", "create_site_maps.R")) # Create site maps
 ```
 
 **Second user input chunk (information that should only be changed when directly specified)**
@@ -127,6 +117,22 @@ SPEI_end <- 2012
 
 ## Climate Futures (MACA)
 
+```{r WarmWet/HotDry, message=FALSE, warning=FALSE, include=FALSE, results=HIDE}
+# Specify Climate Futures
+
+FutureSubset <- c("Warm Wet","Hot Dry"); CFs = FutureSubset  # Pick pair of climate futures.
+
+colors2<- c("#9A9EE5","#E10720")  # Select pair of climate futures - WarmWet/HotDry
+#colors2<- c("#F3D3CB","#12045C")  # Select pair of climate futures - HotWet/WarmDry
+
+col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
+#col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
+
+ww_hd <- paste0(local_rss_dir,"/WarmWet_HotDry")
+dir.create(ww_hd)
+
+```
+
 ```{r Climate-Futures, message=FALSE, warning=FALSE, include=FALSE, results=HIDE}
 
 #source(here::here("scripts", "Climate-Futures", "CFT_CF_parsing_v1.R")) # Parse MACA data. Output = "_init_parsed.RData". # 9-8-21: CFT parsing script is not working due to an issue with the package or MACA servers. ACR to talk to CU Boulder about the issue. For now, add _init_parsed.RData file manually to parsed-data folder. 
@@ -145,15 +151,6 @@ source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts.R")) # 
 ```
 
 # Water Balance
-
-The get_params.R script extracts site parameters for inputting into Dave Thoma's Water Balance model (see 'Daily_WB_batch_v2.R'). The create_site_maps.R script creates a suite of maps from which the project lead can select the most appropriate for use with the RSS Powerpoint presentation. Maps output into the './figures/maps' folder. 
-
-```{r Water-Balance, message=FALSE, warning=FALSE, echo = FALSE, results=HIDE}
-
-source(here::here("scripts", "WaterBalance", "get_params.R")) # Extract site parameters
-
-source(here::here("scripts", "Misc", "create_site_maps.R")) # Create site maps
-```
 
 ```{r}
 
@@ -181,10 +178,10 @@ source(here::here("scripts", "Additional-tables-plots", "RSS_MACA_drought_char.R
 
 source(here:here("scripts", "Additional-tables-plots", "Return_Events"))
 
-source(here::here("scripts", "Additional-tables-plots", "FLI FBI phenology plots.R"))
-
-source(here::here("scripts", "Additional-tables-plots", "RSS Audubon summary.R"))
 ```
+
+
+
 # Create metadata and copy/delete files
 
 ```{r Copy-and-delete-files, message=FALSE, warning=FALSE}
