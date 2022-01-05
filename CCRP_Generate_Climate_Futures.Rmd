@@ -57,15 +57,15 @@ rm(list = ls())
 
 # When this document has finished running, the files will be copied to a local directory and all newly created files (e.g., figures) will be deleted from the repo
 
-project_root_dir <- 'C:/Users/achildress/Documents/Git-repos/CCRP_Climate_Futures_v1.0' # local directory where your repo is stored
-local_rss_dir <- 'C:/Users/achildress/OneDrive - DOI/RCF_cloud-run_rebuild/Testing/TICA' # local directory where you want this repo copied. Should be something like 'C:/Users/adillon/Documents/RSS/CONG'
+project_root_dir <- 'C:/Users/gknowlton/OneDrive - DOI/Documents/Repos/CCRP_Climate_Futures_v1.0' # local directory where your repo is stored
+local_rss_dir <- 'C:/Users/gknowlton/OneDrive - DOI/Documents/RSS/ANTI_new' # local directory where you want this repo copied. Should be something like 'C:/Users/adillon/Documents/RSS/CONG'
 
 # -------------- Input site information -------------------------------------- #
 
-SiteID = "TICA" 
-state <- "Utah"
-Lat = 40.44039704
-Lon = -111.7093944
+SiteID = "ANTI" 
+state <- "Maryland"
+Lat = 39.47010671
+Lon = -77.7380518
 
 # -------------- Inputs for NOAA ClimGrid Extraction --------------------------#
 
@@ -261,7 +261,7 @@ source(here::here("scripts", "SummaryPlots", "Summary WB plots.R"))
 
 source(here::here("scripts", "Additional-tables-plots", "RSS_MACA_drought_char.R"))
 
-source(here:here("scripts", "Additional-tables-plots", "Return_Events"))
+source(here::here("scripts", "Additional-tables-plots", "Return_Events.R"))
 
 source(here::here("scripts", "Additional-tables-plots", "FLI FBI phenology plots.R"))
 
