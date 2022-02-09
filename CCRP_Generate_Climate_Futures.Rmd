@@ -54,7 +54,7 @@ rm(list = ls())
 
 # -------------- Input site information -------------------------------------- #
 
-SiteID = "OCMU" 
+SiteID = "TUSK" 
 # Lat = 40.44039704 # Can manually input lat/lon, otherwise run get_site_info.R
 # Lon = -111.7093944
 
@@ -63,7 +63,7 @@ SiteID = "OCMU"
 # When this document has finished running, the files will be copied to a local directory and all newly created files (e.g., figures) will be deleted from the repo
 
 project_root_dir <- 'C:/Users/achildress/Documents/Git-repos/CCRP_Climate_Futures_v1.0' # local directory where your repo is stored
-local_rss_dir <- 'C:/Users/achildress/OneDrive - DOI/RCF_cloud-run_rebuild/Testing/' # local directory where you want this repo copied. Should be something like 'C:/Users/adillon/Documents/RSS/'. Next lines create folder for park
+local_rss_dir <- 'C:/Users/achildress/OneDrive - DOI/CF_management/RCF_cloud-run_rebuild/Testing/' # local directory where you want this repo copied. Should be something like 'C:/Users/adillon/Documents/RSS/'. Next lines create folder for park
 local_rss_dir <- paste0(local_rss_dir,SiteID)
 
 if(dir.exists(local_rss_dir) == FALSE){
