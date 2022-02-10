@@ -95,7 +95,7 @@ centroids_csv <- "Y" #Switch for using Tercek csvs or downloading own data
 
 # Specify parameters:
 
-Year = 2040 #Central year
+Yr = 2040 #Central year
 Range = 30  #Number of years to summarize (should be at least 30)
 
 # Threshold percentages for defining Climate futures. Default low/high:  0.25, 0.75
@@ -156,6 +156,10 @@ if (exists("FutureSubset") == FALSE) stop("Please specify Climate Futures") # At
 
 source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts.R")) # Requires "PARK_lat_long_Final_Environment.RData". Outputs plots and Excel Workbook 
 
+source(here::here("scripts", "Additional-tables-plots", "RSS_MACA_drought_char.R"))
+
+source(here:here("scripts", "Additional-tables-plots", "Return_Events"))
+
 ```
 
 # Water Balance
@@ -177,17 +181,6 @@ source(here::here("scripts", "SummaryPlots", "Summary plots.R"))
 
 source(here::here("scripts", "SummaryPlots", "Summary WB plots.R")) 
 ```
-
-# Additional Tables and Plots
-
-```{r Additional-plots-and-tables, message= FALSE, warning=FALSE, echo=FALSE, results=HIDE}
-
-source(here::here("scripts", "Additional-tables-plots", "RSS_MACA_drought_char.R"))
-
-source(here:here("scripts", "Additional-tables-plots", "Return_Events"))
-
-```
-
 
 
 # Create metadata and copy/delete files
