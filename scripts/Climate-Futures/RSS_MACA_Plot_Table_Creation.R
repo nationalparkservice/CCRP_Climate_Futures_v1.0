@@ -1,10 +1,6 @@
 # RSS_Plot_Table_Creation vxx.R
 
 ################################################## INITIALS ##################################################
-
-Baseline_all <- read.csv(list.files(path = local_rss_dir, pattern = 'historical.csv', full.names = TRUE)) # gridmet data from Tercek run
-Future_all <- read.csv(list.files(path = local_rss_dir, pattern = 'data.csv', full.names = TRUE)) # maca data from Tercek run
-
 #Month and season names 
 months=factor(c("January","February","March","April","May","June","July","August","September","October","November","December"),levels = month.name)
 seasons=factor(c("Winter", "Spring", "Summer", "Fall"))
@@ -12,25 +8,15 @@ levels(seasons)=seasons
 
 
 ################################################### SUBSET TIME PERIOD ########################################
-column.names <- c("Date", "GCM","PrecipCustom","TmaxCustom","TminCustom","RHmaxCustom","RHminCustom")
-names(Baseline_all) <- c("Date","TmaxCustom",)
-
-
-Baseline_all$Date = strptime(Baseline_all$Date, "%Y-%m-%d")
+Gridmet$Date = strptime(Gridmet$Date, "%Y-%m-%d")
 Future_all$Date = strptime(Future_all$Date, "%Y-%m-%d")
 
 # # Subset Future_all to only be near future (2025-2055) and Baseline_all to only but until 2000
-#BA<-Baseline_all
-#Baseline_all$GCM<-paste(Baseline_all$GCM,".rcp45",sep="");BA$GCM<-paste(BA$GCM,".rcp85",sep="")
-#Baseline_all<-rbind(Baseline_all,BA);rm(BA)
-ALL_HIST<-Baseline_all
-Baseline_all$Year<-format(as.Date(Baseline_all$Date, format="%Y-%m-%d"),"%Y")
-Baseline_all<-subset(Baseline_all,Year<2000)
-Baseline_all$Year<-NULL
+Baseline_all<-Gridmet
+Baseline_all<-subset(Baseline_all,Year<2013)
 
 ALL_FUTURE<-Future_all  
-Future_all$yr = Future_all$Date$year + 1900
-Future_all = subset(Future_all, yr >= Year - (Range/2) & yr <= (Year + (Range/2)))
+Future_all = subset(Future_all, Year >= Yr - (Range/2) & Year <= (Yr + (Range/2)))
 ################################################### FUNCTION DEFINITIONS ########################################
 
 #### FUNCTION TO CALCULATE SEASON FROM 'DATE' ####
@@ -131,26 +117,26 @@ heat_index <- function(temp, RH) {
 
 ################################# SUMMARIZE CHANGE IN FUTURE TEMP/PRECIP MEANS BY GCM ####################
 ####Set Average values for all four weather variables, using all baseline years and all climate models
-BaseMeanPr = mean(Baseline_all$PrecipCustom)
-BaseMeanTmx = mean(Baseline_all$TmaxCustom)
-BaseMeanTmn = mean(Baseline_all$TminCustom)
+BaseMeanPr = mean(Baseline_all$PrcpIn)
+BaseMeanTmx = mean(Baseline_all$TmaxF)
+BaseMeanTmn = mean(Baseline_all$TminF)
 
 ####Create Future/Baseline means data tables, with averages for all four weather variables, organized by GCM
-Future_Means = data.frame(aggregate(cbind(Future_all$PrecipCustom, Future_all$TmaxCustom, Future_all$TminCustom)
+Future_Means = data.frame(aggregate(cbind(Future_all$PrcpIn, Future_all$TmaxF, Future_all$TminF)
                                     ~ Future_all$GCM, Future_all, mean,na.rm=F))   # , Future_all$Wind
-names(Future_Means) = c("GCM", "PrecipCustom", "TmaxCustom", "TminCustom")    # , "Wind"
-Future_Means$TavgCustom = (Future_Means$TmaxCustom + Future_Means$TminCustom)/2
+names(Future_Means) = c("GCM", "PrcpIn", "TmaxF", "TminF")    # , "Wind"
+Future_Means$TavgF = (Future_Means$TmaxF + Future_Means$TminF)/2
 
-Baseline_Means = data.frame(aggregate(cbind(PrecipCustom, TmaxCustom, TminCustom)~GCM, 
+Baseline_Means = data.frame(aggregate(cbind(PrcpIn, TmaxF, TminF)~GCM, 
                                       Baseline_all[which(Baseline_all$GCM %in% unique(Future_all$GCM)),], mean))    #  ,Baseline_all$Wind)
-names(Baseline_Means) = c("GCM", "PrecipCustom", "TmaxCustom", "TminCustom")  #  , "Wind")
-Baseline_Means$TavgCustom = (Baseline_Means$TmaxCustom + Baseline_Means$TminCustom)/2
+names(Baseline_Means) = c("GCM", "PrcpIn", "TmaxF", "TminF")  #  , "Wind")
+Baseline_Means$TavgF = (Baseline_Means$TmaxF + Baseline_Means$TminF)/2
 
 #### add delta columns in order to classify CFs
-Future_Means$DeltaPr = Future_Means$PrecipCustom - Baseline_Means$PrecipCustom
-Future_Means$DeltaTmx = Future_Means$TmaxCustom - Baseline_Means$TmaxCustom
-Future_Means$DeltaTmn = Future_Means$TminCustom - Baseline_Means$TminCustom
-Future_Means$DeltaTavg = Future_Means$TavgCustom - Baseline_Means$TavgCustom
+Future_Means$DeltaPr = Future_Means$PrcpIn - Baseline_Means$PrcpIn
+Future_Means$DeltaTmx = Future_Means$TmaxF - Baseline_Means$TmaxF
+Future_Means$DeltaTmn = Future_Means$TminF - Baseline_Means$TminF
+Future_Means$DeltaTavg = Future_Means$TavgF - Baseline_Means$TavgF
 
 #### Set limits for CF classification
 Pr0 = as.numeric(quantile(Future_Means$DeltaPr, 0))
@@ -246,24 +232,24 @@ Baseline_all$season=getSeason(Baseline_all$Date)
 
 #### Create tables with monthly tmax/tmin/tmean/precip/RHmean delta by CF
 # Historical
-Tmax = aggregate(TmaxCustom~Month+GCM+CF,Baseline_all,mean,na.rm=TRUE)
-Tmin = aggregate(TminCustom~Month+GCM+CF,Baseline_all,mean,na.rm=TRUE)
-Tmean = aggregate(TavgCustom~Month+GCM+CF,Baseline_all,mean,na.rm=TRUE)
-Precip = aggregate(PrecipCustom~Month+Year+GCM+CF,Baseline_all,sum,na.rm=TRUE)
-Precip = aggregate(PrecipCustom~Month+GCM+CF,Precip,mean,na.rm=TRUE)
-Baseline_all$RHmean<-(Baseline_all$RHmaxCustom+Baseline_all$RHminCustom)/2
+Tmax = aggregate(TmaxF~Month+GCM+CF,Baseline_all,mean,na.rm=TRUE)
+Tmin = aggregate(TminF~Month+GCM+CF,Baseline_all,mean,na.rm=TRUE)
+Tmean = aggregate(TavgF~Month+GCM+CF,Baseline_all,mean,na.rm=TRUE)
+Precip = aggregate(PrcpIn~Month+Year+GCM+CF,Baseline_all,sum,na.rm=TRUE)
+Precip = aggregate(PrcpIn~Month+GCM+CF,Precip,mean,na.rm=TRUE)
+Baseline_all$RHmean<-(Baseline_all$RHmaxPct+Baseline_all$RHminPct)/2
 RHmean = aggregate(RHmean~Month+GCM+CF,Baseline_all,mean,na.rm=TRUE)
 
 H_Monthly<-Reduce(function(...)merge(...,all=T),list(Tmax,Tmin,Tmean,Precip,RHmean))
 rm(Tmax,Tmin,Tmean,Precip,RHmean)
 
 # Future
-Tmax = aggregate(TmaxCustom~Month+GCM+CF,Future_all,mean,na.rm=TRUE)
-Tmin = aggregate(TminCustom~Month+GCM+CF,Future_all,mean,na.rm=TRUE)
-Tmean = aggregate(TavgCustom~Month+GCM+CF,Future_all,mean,na.rm=TRUE)
-Precip = aggregate(PrecipCustom~Month+Year+GCM+CF,Future_all,sum,na.rm=TRUE)
-Precip = aggregate(PrecipCustom~Month+GCM+CF,Precip,mean,na.rm=TRUE)
-Future_all$RHmean<-(Future_all$RHmaxCustom+Future_all$RHminCustom)/2
+Tmax = aggregate(TmaxF~Month+GCM+CF,Future_all,mean,na.rm=TRUE)
+Tmin = aggregate(TminF~Month+GCM+CF,Future_all,mean,na.rm=TRUE)
+Tmean = aggregate(TavgF~Month+GCM+CF,Future_all,mean,na.rm=TRUE)
+Precip = aggregate(PrcpIn~Month+Year+GCM+CF,Future_all,sum,na.rm=TRUE)
+Precip = aggregate(PrcpIn~Month+GCM+CF,Precip,mean,na.rm=TRUE)
+Future_all$RHmean<-(Future_all$RHmaxPct+Future_all$RHminPct)/2
 RHmean = aggregate(RHmean~Month+GCM+CF,Future_all,mean,na.rm=TRUE)
 
 F_Monthly<-Reduce(function(...)merge(...,all=T),list(Tmax,Tmin,Tmean,Precip,RHmean))
@@ -272,24 +258,24 @@ rm(Tmax,Tmin,Tmean,Precip,RHmean)
 
 #### Create tables with seasonal tmax/tmin/tmean/precip/RHmean delta by CF
 # Historical
-Tmax = aggregate(TmaxCustom~season+GCM+CF,Baseline_all,mean,na.rm=TRUE)
-Tmin = aggregate(TminCustom~season+GCM+CF,Baseline_all,mean,na.rm=TRUE)
-Tmean = aggregate(TavgCustom~season+GCM+CF,Baseline_all,mean,na.rm=TRUE)
-Precip = aggregate(PrecipCustom~season+Year+GCM+CF,Baseline_all,sum,na.rm=TRUE)
-Precip = aggregate(PrecipCustom~season+GCM+CF,Precip,mean,na.rm=TRUE)
-Baseline_all$RHmean<-(Baseline_all$RHmaxCustom+Baseline_all$RHminCustom)/2
+Tmax = aggregate(TmaxF~season+GCM+CF,Baseline_all,mean,na.rm=TRUE)
+Tmin = aggregate(TminF~season+GCM+CF,Baseline_all,mean,na.rm=TRUE)
+Tmean = aggregate(TavgF~season+GCM+CF,Baseline_all,mean,na.rm=TRUE)
+Precip = aggregate(PrcpIn~season+Year+GCM+CF,Baseline_all,sum,na.rm=TRUE)
+Precip = aggregate(PrcpIn~season+GCM+CF,Precip,mean,na.rm=TRUE)
+Baseline_all$RHmean<-(Baseline_all$RHmaxPct+Baseline_all$RHminPct)/2
 RHmean = aggregate(RHmean~season+GCM+CF,Baseline_all,mean,na.rm=TRUE)
 
 H_Season<-Reduce(function(...)merge(...,all=T),list(Tmax,Tmin,Tmean,Precip,RHmean))
 rm(Tmax,Tmin,Tmean,Precip,RHmean)
 
 # Future
-Tmax = aggregate(TmaxCustom~season+GCM+CF,Future_all,mean,na.rm=TRUE)
-Tmin = aggregate(TminCustom~season+GCM+CF,Future_all,mean,na.rm=TRUE)
-Tmean = aggregate(TavgCustom~season+GCM+CF,Future_all,mean,na.rm=TRUE)
-Precip = aggregate(PrecipCustom~season+Year+GCM+CF,Future_all,sum,na.rm=TRUE)
-Precip = aggregate(PrecipCustom~season+GCM+CF,Precip,mean,na.rm=TRUE)
-Future_all$RHmean<-(Future_all$RHmaxCustom+Future_all$RHminCustom)/2
+Tmax = aggregate(TmaxF~season+GCM+CF,Future_all,mean,na.rm=TRUE)
+Tmin = aggregate(TminF~season+GCM+CF,Future_all,mean,na.rm=TRUE)
+Tmean = aggregate(TavgF~season+GCM+CF,Future_all,mean,na.rm=TRUE)
+Precip = aggregate(PrcpIn~season+Year+GCM+CF,Future_all,sum,na.rm=TRUE)
+Precip = aggregate(PrcpIn~season+GCM+CF,Precip,mean,na.rm=TRUE)
+Future_all$RHmean<-(Future_all$RHmaxPct+Future_all$RHminPct)/2
 RHmean = aggregate(RHmean~season+GCM+CF,Future_all,mean,na.rm=TRUE)
 
 F_Season<-Reduce(function(...)merge(...,all=T),list(Tmax,Tmin,Tmean,Precip,RHmean))
@@ -299,9 +285,9 @@ rm(Tmax,Tmin,Tmean,Precip,RHmean)
 ################################ SUMMARIZE TEMPERATURE AND PRECIP BY MONTH & SEASON #######################
 
 # Monthly abs
-H_MonMean<-aggregate(cbind(TmaxCustom,TminCustom,TavgCustom,PrecipCustom,RHmean)~Month,H_Monthly,mean)
+H_MonMean<-aggregate(cbind(TmaxF,TminF,TavgF,PrcpIn,RHmean)~Month,H_Monthly,mean)
 H_MonMean$CF<-"Historical";H_MonMean<-H_MonMean[,c("Month","CF",names(H_MonMean[,2:6]))]
-F_MonCF<-aggregate(cbind(TmaxCustom,TminCustom,TavgCustom,PrecipCustom,RHmean)~Month+CF,F_Monthly,mean)
+F_MonCF<-aggregate(cbind(TmaxF,TminF,TavgF,PrcpIn,RHmean)~Month+CF,F_Monthly,mean)
 Monthly<-rbind(H_MonMean,F_MonCF)
 Monthly$CF<-factor(Monthly$CF,levels = c(CFs_all,"Historical"))
 
@@ -313,9 +299,9 @@ for (i in 3:7){
 Monthly_delta$CF<-factor(Monthly_delta$CF,levels = c(CFs_all))
 
 # Seasonal abs
-H_SeasMean<-aggregate(cbind(TmaxCustom,TminCustom,TavgCustom,PrecipCustom,RHmean)~season,H_Season,mean)
+H_SeasMean<-aggregate(cbind(TmaxF,TminF,TavgF,PrcpIn,RHmean)~season,H_Season,mean)
 H_SeasMean$CF<-"Historical";H_SeasMean<-H_SeasMean[,c("season","CF",names(H_SeasMean[,2:6]))]
-F_SeasCF<-aggregate(cbind(TmaxCustom,TminCustom,TavgCustom,PrecipCustom,RHmean)~season+CF,F_Season,mean)
+F_SeasCF<-aggregate(cbind(TmaxF,TminF,TavgF,PrcpIn,RHmean)~season+CF,F_Season,mean)
 Season<-rbind(H_SeasMean,F_SeasCF)
 Season$CF<-factor(Season$CF,levels = c(CFs_all,"Historical"))
 Season$season = factor(Season$season, levels = c("Winter","Spring","Summer","Fall"))
@@ -336,76 +322,76 @@ Season_delta$season = factor(Season_delta$season, levels = c("Winter","Spring","
 
 HistYears = length(unique(Baseline_all$Date$year))
 
-HistTmax99 = quantile(Baseline_all$TmaxCustom, 0.99)
-HistTmaxHigh = quantile(Baseline_all$TmaxCustom, QuantileHigh)
-HistTminLow = quantile(Baseline_all$TminCustom, QuantileLow)
-HistPrecip95 = quantile(Baseline_all$PrecipCustom[which(Baseline_all$PrecipCustom > 0.05)], 0.95) #percentil of days receiving precip
-HistPr99 = quantile(Baseline_all$PrecipCustom[which(Baseline_all$PrecipCustom > 0.05)], 0.99)
+HistTmax99 = quantile(Baseline_all$TmaxF, 0.99)
+HistTmaxHigh = quantile(Baseline_all$TmaxF, QuantileHigh)
+HistTminLow = quantile(Baseline_all$TminF, QuantileLow)
+HistPrecip95 = quantile(Baseline_all$PrcpIn[which(Baseline_all$PrcpIn > 0.05)], 0.95) #percentil of days receiving precip
+HistPr99 = quantile(Baseline_all$PrcpIn[which(Baseline_all$PrcpIn > 0.05)], 0.99)
 
 Baseline_all$Julian = Baseline_all$Date$yday
 Baseline_all$halfyr = ifelse(Baseline_all$Julian<=182,1,2)
 Baseline_all<-Baseline_all[with(Baseline_all,order(Year,GCM,Julian)),]
-Baseline_all$TavgCustom = (Baseline_all$TmaxCustom + Baseline_all$TminCustom)/2
-Baseline_all$OverHotTemp = Baseline_all$TmaxCustom > HotTemp
-Baseline_all$OverHighQ = Baseline_all$TmaxCustom > HistTmaxHigh
-Baseline_all$Tmax99 = Baseline_all$TmaxCustom > HistTmax99
+Baseline_all$TavgF = (Baseline_all$TmaxF + Baseline_all$TminF)/2
+Baseline_all$OverHotTemp = Baseline_all$TmaxF > HotTemp
+Baseline_all$OverHighQ = Baseline_all$TmaxF > HistTmaxHigh
+Baseline_all$Tmax99 = Baseline_all$TmaxF > HistTmax99
 Baseline_all$HeatConsecutive=(Baseline_all$Tmax99)*unlist(lapply(rle(Baseline_all$Tmax99)$lengths, seq_len))
-Baseline_all$UnderColdTemp = Baseline_all$TminCustom < ColdTemp
-Baseline_all$UnderLowQ = Baseline_all$TminCustom < HistTminLow
+Baseline_all$UnderColdTemp = Baseline_all$TminF < ColdTemp
+Baseline_all$UnderLowQ = Baseline_all$TminF < HistTminLow
 Baseline_all$HeatConsecutive=(Baseline_all$OverHotTemp)*unlist(lapply(rle(Baseline_all$OverHotTemp)$lengths, seq_len))
 Baseline_all$ColdConsecutive=(Baseline_all$UnderColdTemp)*unlist(lapply(rle(Baseline_all$UnderColdTemp)$lengths, seq_len))
-Baseline_all$NoPrecip = Baseline_all$PrecipCustom < PrecipThreshold
+Baseline_all$NoPrecip = Baseline_all$PrcpIn < PrecipThreshold
 Baseline_all$NoPrecipLength = (Baseline_all$NoPrecip)*unlist(lapply(rle(Baseline_all$NoPrecip)$lengths, seq_len)) 
-Baseline_all$OverPrecip95 = Baseline_all$PrecipCustom > HistPrecip95
-Baseline_all$OverPrecip99 = Baseline_all$PrecipCustom > HistPr99
-Baseline_all$PrecipOver1 = Baseline_all$PrecipCustom > 1
-Baseline_all$PrecipOver2 = Baseline_all$PrecipCustom > 2
-Baseline_all$FThaw = Baseline_all$TminCustom<28 & Baseline_all$TmaxCustom>34
-Baseline_all$GDD = Baseline_all$TavgCustom>41 # 5 deg C
+Baseline_all$OverPrecip95 = Baseline_all$PrcpIn > HistPrecip95
+Baseline_all$OverPrecip99 = Baseline_all$PrcpIn > HistPr99
+Baseline_all$PrecipOver1 = Baseline_all$PrcpIn > 1
+Baseline_all$PrecipOver2 = Baseline_all$PrcpIn > 2
+Baseline_all$FThaw = Baseline_all$TminF<28 & Baseline_all$TmaxF>34
+Baseline_all$GDD = Baseline_all$TavgF>41 # 5 deg C
 Baseline_all$GDD_count = Baseline_all$GDD * unlist(lapply(rle(Baseline_all$GDD)$lengths, seq_len))
 Baseline_all$N_GDD_count = (Baseline_all$GDD == FALSE) * unlist(lapply(rle(Baseline_all$GDD)$lengths, seq_len))
-Baseline_all$HI = heat_index(Baseline_all$TmaxCustom,Baseline_all$RHminCustom)
+Baseline_all$HI = heat_index(Baseline_all$TmaxF,Baseline_all$RHminPct)
 Baseline_all$HI.EC = Baseline_all$HI >89 & Baseline_all$HI <103
 Baseline_all$HI.Dan = Baseline_all$HI >102 & Baseline_all$HI < 124
-Baseline_all$Frost = Baseline_all$GDD == TRUE & Baseline_all$TminCustom < 32
+Baseline_all$Frost = Baseline_all$GDD == TRUE & Baseline_all$TminF < 32
 
 Future_all$Julian = Future_all$Date$yday
 Future_all$halfyr = ifelse(Future_all$Julian<=182,1,2)
 Future_all<-Future_all[with(Future_all,order(Year,GCM,Julian)),]
-Future_all$TavgCustom = (Future_all$TmaxCustom + Future_all$TminCustom)/2
-Future_all$OverHotTemp = Future_all$TmaxCustom > HotTemp
-Future_all$OverHighQ = Future_all$TmaxCustom > HistTmaxHigh
-Future_all$Tmax99 = Future_all$TmaxCustom > HistTmax99
+Future_all$TavgF = (Future_all$TmaxF + Future_all$TminF)/2
+Future_all$OverHotTemp = Future_all$TmaxF > HotTemp
+Future_all$OverHighQ = Future_all$TmaxF > HistTmaxHigh
+Future_all$Tmax99 = Future_all$TmaxF > HistTmax99
 Future_all$HeatConsecutive=(Future_all$Tmax99)*unlist(lapply(rle(Future_all$Tmax99)$lengths, seq_len))
-Future_all$UnderColdTemp = Future_all$TminCustom < ColdTemp
-Future_all$UnderLowQ = Future_all$TminCustom < HistTminLow
+Future_all$UnderColdTemp = Future_all$TminF < ColdTemp
+Future_all$UnderLowQ = Future_all$TminF < HistTminLow
 Future_all$HeatConsecutive=(Future_all$OverHotTemp)*unlist(lapply(rle(Future_all$OverHotTemp)$lengths, seq_len))
 Future_all$ColdConsecutive=(Future_all$UnderColdTemp)*unlist(lapply(rle(Future_all$UnderColdTemp)$lengths, seq_len))
-Future_all$NoPrecip = Future_all$PrecipCustom < PrecipThreshold
+Future_all$NoPrecip = Future_all$PrcpIn < PrecipThreshold
 Future_all$NoPrecipLength = (Future_all$NoPrecip)*unlist(lapply(rle(Future_all$NoPrecip)$lengths, seq_len)) 
-Future_all$OverPrecip95 = Future_all$PrecipCustom > HistPrecip95
-Future_all$OverPrecip99 = Future_all$PrecipCustom > HistPr99
-Future_all$PrecipOver1 = Future_all$PrecipCustom > 1
-Future_all$PrecipOver2 = Future_all$PrecipCustom > 2
-Future_all$FThaw = Future_all$TminCustom<28 & Future_all$TmaxCustom>34
-Future_all$GDD = Future_all$TavgCustom>41 # 5 deg C
+Future_all$OverPrecip95 = Future_all$PrcpIn > HistPrecip95
+Future_all$OverPrecip99 = Future_all$PrcpIn > HistPr99
+Future_all$PrecipOver1 = Future_all$PrcpIn > 1
+Future_all$PrecipOver2 = Future_all$PrcpIn > 2
+Future_all$FThaw = Future_all$TminF<28 & Future_all$TmaxF>34
+Future_all$GDD = Future_all$TavgF>41 # 5 deg C
 Future_all$GDD_count = Future_all$GDD * unlist(lapply(rle(Future_all$GDD)$lengths, seq_len))
 Future_all$N_GDD_count = (Future_all$GDD == FALSE) * unlist(lapply(rle(Future_all$GDD)$lengths, seq_len))
-Future_all$HI = heat_index(Future_all$TmaxCustom,Future_all$RHminCustom)
+Future_all$HI = heat_index(Future_all$TmaxF,Future_all$RHminPct)
 Future_all$HI.EC = Future_all$HI >89 & Future_all$HI <103
 Future_all$HI.Dan = Future_all$HI >102 & Future_all$HI < 124
-Future_all$Frost = Future_all$GDD == TRUE & Future_all$TminCustom < 32
+Future_all$Frost = Future_all$GDD == TRUE & Future_all$TminF < 32
 
 #### Historical Dataframes aggregated by Year+GCM ###########
-H_annual<-aggregate(cbind(PrecipCustom,OverHotTemp, OverHighQ, Tmax99, UnderColdTemp,UnderLowQ,  
+H_annual<-aggregate(cbind(PrcpIn,OverHotTemp, OverHighQ, Tmax99, UnderColdTemp,UnderLowQ,  
                           NoPrecip, NoPrecipLength, OverPrecip95, OverPrecip99, PrecipOver1, PrecipOver2,
                           FThaw, GDD,HI.EC,HI.Dan)~CF+GCM+Year,Baseline_all,sum, na.action = 'na.pass')
 
-Hmeans<-aggregate(cbind(TmaxCustom,TminCustom,TavgCustom,RHmean)~CF+GCM+Year,Baseline_all,FUN=mean, na.action = 'na.pass')
+Hmeans<-aggregate(cbind(TmaxF,TminF,TavgF,RHmean)~CF+GCM+Year,Baseline_all,FUN=mean, na.action = 'na.pass')
 H_annual<-merge(H_annual,Hmeans,by=c("CF","GCM","Year"));rm(Hmeans)
 
 # Agrregate mean w/ temps only W months
-H.WinterTemp<-aggregate(TavgCustom~CF+GCM+Year,data=subset(Baseline_all,Month<3 | Month>11), mean, na.action = 'na.pass')
+H.WinterTemp<-aggregate(TavgF~CF+GCM+Year,data=subset(Baseline_all,Month<3 | Month>11), mean, na.action = 'na.pass')
 colnames(H.WinterTemp)[4]<-"W.Temp"
 H_annual <- merge(H_annual,H.WinterTemp,by=c("CF","GCM","Year")); rm(H.WinterTemp)
 
@@ -429,15 +415,15 @@ H_annual <- merge(H_annual,H.WinterTemp,by=c("CF","GCM","Year")); rm(H.WinterTem
 
 
 #### Future Dataframes aggregated by Year+GCM ###########
-F_annual<-aggregate(cbind(PrecipCustom,OverHotTemp, OverHighQ, Tmax99, UnderColdTemp,UnderLowQ,  
+F_annual<-aggregate(cbind(PrcpIn,OverHotTemp, OverHighQ, Tmax99, UnderColdTemp,UnderLowQ,  
                           NoPrecip, NoPrecipLength, OverPrecip95, OverPrecip99, PrecipOver1, PrecipOver2,
                           FThaw, GDD,HI.EC,HI.Dan)~CF+GCM+Year,Future_all,sum)
 
-Fmeans<-aggregate(cbind(TmaxCustom,TminCustom,TavgCustom,RHmean)~CF+GCM+Year,Future_all,FUN=mean)
+Fmeans<-aggregate(cbind(TmaxF,TminF,TavgF,RHmean)~CF+GCM+Year,Future_all,FUN=mean)
 F_annual<-merge(F_annual,Fmeans,by=c("CF","GCM","Year"));rm(Fmeans)
 
 # Agrregate mean w/ temps only W months
-F.WinterTemp<-aggregate(TavgCustom~CF+GCM+Year,data=subset(Future_all,Month<3 | Month>11), mean)
+F.WinterTemp<-aggregate(TavgF~CF+GCM+Year,data=subset(Future_all,Month<3 | Month>11), mean)
 colnames(F.WinterTemp)[4]<-"W.Temp"
 F_annual <- merge(F_annual,F.WinterTemp,by=c("CF","GCM","Year")); rm(F.WinterTemp)
 
