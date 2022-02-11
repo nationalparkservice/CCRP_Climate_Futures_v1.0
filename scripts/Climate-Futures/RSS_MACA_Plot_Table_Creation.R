@@ -122,15 +122,13 @@ BaseMeanTmx = mean(Baseline_all$TmaxF)
 BaseMeanTmn = mean(Baseline_all$TminF)
 
 ####Create Future/Baseline means data tables, with averages for all four weather variables, organized by GCM
-Future_Means = data.frame(aggregate(cbind(Future_all$PrcpIn, Future_all$TmaxF, Future_all$TminF)
+Future_Means = data.frame(aggregate(cbind(Future_all$PrcpIn, Future_all$TmaxF, Future_all$TminF, Future_all$TavgF)
                                     ~ Future_all$GCM, Future_all, mean,na.rm=F))   # , Future_all$Wind
-names(Future_Means) = c("GCM", "PrcpIn", "TmaxF", "TminF")    # , "Wind"
-Future_Means$TavgF = (Future_Means$TmaxF + Future_Means$TminF)/2
+names(Future_Means) = c("GCM", "PrcpIn", "TmaxF", "TminF", "TavgF")    # , "Wind"
 
-Baseline_Means = data.frame(aggregate(cbind(PrcpIn, TmaxF, TminF)~GCM, 
-                                      Baseline_all[which(Baseline_all$GCM %in% unique(Future_all$GCM)),], mean))    #  ,Baseline_all$Wind)
-names(Baseline_Means) = c("GCM", "PrcpIn", "TmaxF", "TminF")  #  , "Wind")
-Baseline_Means$TavgF = (Baseline_Means$TmaxF + Baseline_Means$TminF)/2
+Baseline_Means = data.frame(aggregate(cbind(PrcpIn, TmaxF, TminF, TavgF)~GCM, 
+                                      Baseline_all, mean))    
+names(Baseline_Means) = c("GCM", "PrcpIn", "TmaxF", "TminF", "TavgF") 
 
 #### add delta columns in order to classify CFs
 Future_Means$DeltaPr = Future_Means$PrcpIn - Baseline_Means$PrcpIn
@@ -178,12 +176,7 @@ Future_Means$CF5 = NULL
 Future_Means$emissions[grep("rcp85",Future_Means$GCM)] = "RCP 8.5"
 Future_Means$emissions[grep("rcp45",Future_Means$GCM)] = "RCP 4.5"
 
-####Add column with CF classification to Future_all/Baseline_all
-CF_GCM = data.frame(GCM = Future_Means$GCM, CF = Future_Means$CF)
-Future_all = merge(Future_all, CF_GCM[1:2], by="GCM")
-Baseline_all$CF = "Historical"
-
-#### Select WB_GCMs
+#### Select Corner GCMs
 lx = min(Future_Means$DeltaTavg)
 ux = max(Future_Means$DeltaTavg)
 ly = min(Future_Means$DeltaPr)
@@ -212,12 +205,59 @@ Future_Means %>% mutate(corners = ifelse(GCM == ww,"Warm Wet",
                                          ifelse(GCM == wd, "Warm Dry",
                                                 ifelse(GCM == hw, "Hot Wet",
                                                        ifelse( GCM == hd, "Hot Dry",NA))))) -> Future_Means
+#### Select WB GCMs
+WB_Means <- subset(Future_Means, GCM %in% unique(WBdat$GCM))
+lx = min(WB_Means$DeltaTavg)
+ux = max(WB_Means$DeltaTavg)
+ly = min(WB_Means$DeltaPr)
+uy = max(WB_Means$DeltaPr)
 
-Future_Means %>% drop_na() %>% filter(CF %in% CFs) %>% select(c(GCM,CF)) -> WB_GCMs
+#convert to points
+ww = c(lx,uy)
+wd = c(lx,ly)
+hw = c(ux,uy)
+hd = c(ux,ly)
 
-rm(lx,ux,ly,uy,ww,wd,hw,hd, pts)
+pts <- WB_Means
 
+#calc Euclidian dist of each point from corners
+pts$WW.distance <- sqrt((pts$DeltaTavg - ww[1])^2 + (pts$DeltaPr - ww[2])^2)
+pts$WD.distance <- sqrt((pts$DeltaTavg - wd[1])^2 + (pts$DeltaPr - wd[2])^2)
+pts$HW.distance <- sqrt((pts$DeltaTavg - hw[1])^2 + (pts$DeltaPr - hw[2])^2)
+pts$HD.distance <- sqrt((pts$DeltaTavg - hd[1])^2 + (pts$DeltaPr - hd[2])^2)
+
+pts %>% filter(CF == "Warm Wet") %>% slice(which.min(WW.distance)) %>% .$GCM -> ww
+pts %>% filter(CF == "Warm Dry") %>% slice(which.min(WD.distance)) %>% .$GCM -> wd
+pts %>% filter(CF == "Hot Wet") %>% slice(which.min(HW.distance)) %>% .$GCM -> hw
+pts %>% filter(CF == "Hot Dry") %>% slice(which.min(HD.distance)) %>% .$GCM -> hd
+
+WB_Means %>% mutate(WB_GCM = ifelse(GCM == ww,"Warm Wet",
+                                         ifelse(GCM == wd, "Warm Dry",
+                                                ifelse(GCM == hw, "Hot Wet",
+                                                       ifelse( GCM == hd, "Hot Dry",NA))))) -> WB_Means
+
+WB_Means %>% drop_na() %>% filter(CF %in% CFs) %>% select(c(GCM,CF)) -> WB_GCMs
+
+Future_Means<-left_join(Future_Means, WB_Means[,c("GCM","WB_GCM")], by="GCM")
+
+rm(lx,ux,ly,uy,ww,wd,hw,hd, pts, WB_Means)
+
+CFs=c("Warm Wet","Hot Dry")
+#######################
 ## CHANGE CF NAMES FOR DRY/DAMP
+dry.quadrant = CFs[grepl('Dry', CFs)]
+split <- Future_Means %>% filter(CF == dry.quadrant) %>% summarise(PrcpMean=mean(DeltaPr*365))
+CFs <- if(split$PrcpMean>0.5) {gsub("Dry","Damp",CFs)} else(CFs)
+Future_Means <- Future_Means %>% rowwise() %>% 
+  mutate(CF = ifelse(split$PrcpMean>0, gsub("Dry","Damp",CF),CF)) %>% 
+  mutate(corners = ifelse(split$PrcpMean>0, gsub("Dry","Damp",corners),corners)) %>% 
+  mutate(WB_GCM = ifelse(split$PrcpMean>0, gsub("Dry","Damp",WB_GCM),WB_GCM))
+
+####Add column with CF classification to Future_all/Baseline_all
+CF_GCM = data.frame(GCM = Future_Means$GCM, CF = Future_Means$CF)
+Future_all = merge(Future_all, CF_GCM[1:2], by="GCM")
+Baseline_all$CF = "Historical"
+
 
 
 ################################ SUMMARIZE TEMPERATURE, PRECIP, RH BY MONTH & SEASON #######################
