@@ -105,6 +105,10 @@ CFHigh = 0.75
 QuantileLow = 0.05   #Quantiles for temperature threshold calculations
 QuantileHigh = 0.95
 
+HotTemp = 95
+ColdTemp = 32
+PrecipThreshold = 0.05
+
 # ------------ Information for drought analyses ------------------------ #
 
 ## SPEI variables
