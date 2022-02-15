@@ -269,14 +269,14 @@ dev.off()
 
 #################################### DIAGNOSTIC CHANGE PLOTS ##############################################
 #Bar graph of monthly precip/tmax/tmin by CF
-
+colors5.2 <- c("#9A9EE5", "#12045C", "white", "#F3D3CB", "#E10720")
 
 ggplot(Monthly_delta, aes(x=Month,y=PrcpIn,fill=CF)) +
   geom_bar(stat="identity",position="dodge",colour="black") +
   PlotTheme +
-  labs(title = paste(SiteID, "- Change in average monthly precipitation in", Yr,"vs 1950-2005"), 
+  labs(title = paste(SiteID, "- Change in average monthly precipitation in", Yr,"vs 1979-2012"), 
        x = "Month", y = "Change in Precipitation (in)") +
-  scale_fill_manual(name="Climate Future",values = colors5) + 
+  scale_fill_manual(name="Climate Future",values = colors5.2) + 
   scale_x_discrete(labels = MonthLabels)
 
 ggsave(sprintf("%s_Avg_Monthly_Precip_Delta_Bar.png", SiteID), width = PlotWidth, height = PlotHeight, path = './figures/MACA')
@@ -285,11 +285,11 @@ ggsave(sprintf("%s_Avg_Monthly_Precip_Delta_Bar.png", SiteID), width = PlotWidth
 ggplot(Season_delta, aes(x=season,y=PrcpIn,fill=CF)) +
   geom_bar(stat="identity",position="dodge",colour="black") +
   PlotTheme +
-  labs(ltitle = paste(SiteID, "- Change in average seasonal precipitation in", Year,"vs 1950-2005"), 
+  labs(ltitle = paste(SiteID, "- Change in average seasonal precipitation in", Yr,"vs 1979-2012"), 
             x = "Season", y = "Change in Precipitation (in)") +
-  scale_fill_manual(name="Climate Future",values = colors5)
+  scale_fill_manual(name="Climate Future",values = colors5.2)
 
-ggsave(sprintf("%s_%s_%s_Avg_Seasonal_Precip_Delta_Bar.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight, path = './figures/MACA')
+ggsave(sprintf("%s_Avg_Seasonal_Precip_Delta_Bar.png", SiteID), width = PlotWidth, height = PlotHeight, path = './figures/MACA')
 
 
 #Line plot of change in MaxTemp by CF/month
@@ -297,15 +297,15 @@ ggplot(Monthly_delta, aes(x=Month, y=TmaxF, group=CF, colour = CF)) +
   geom_line(size = 2, stat = "identity") + 
   geom_point(colour= "black", size=4, aes(fill = factor(CF), shape = factor(CF))) +
   PlotTheme +
-  labs(title = paste(SiteID, "- Change in average monthly maximum temperature \nin", Year,"vs 1950-2005"), 
+  labs(title = paste(SiteID, "- Change in average monthly maximum temperature \nin", Yr,"vs 1979-2012"), 
             x = "Month", y = "Deg F") +
-  scale_color_manual(name="Climate Future",values = colors5) +
-  scale_fill_manual(name="Climate Future",values = colors5) +
+  scale_color_manual(name="Climate Future",values = colors5.2) +
+  scale_fill_manual(name="Climate Future",values = colors5.2) +
   scale_shape_manual(name="Climate Future",values = c(21,22,23,24,25)) +
   scale_y_continuous(limits=c(0, ceiling(max(Monthly_delta$TmaxF)))) + 
   scale_x_discrete(labels = MonthLabels)
 
-ggsave(sprintf("%s_%s_%s_Avg_Monthly_Tmax_Delta_Line.png", SiteID, Lat, Lon), width = PlotWidth, height =PlotHeight, path = './figures/MACA')
+ggsave(sprintf("%s_Avg_Monthly_Tmax_Delta_Line.png", SiteID), width = PlotWidth, height =PlotHeight, path = './figures/MACA')
 
 
 ####Line Plot of change in MinTemp by CF/Month
@@ -313,7 +313,7 @@ ggplot(Monthly_delta, aes(x=Month, y=TminF, group=CF, colour = CF)) +
   geom_line(size = 2, stat = "identity") + 
   geom_point(colour= "black", size=4, aes(fill = factor(CF), shape = factor(CF))) +
   PlotTheme +
-  labs(title = paste(SiteID, "- Change in average monthly minimum temperature \nin", Year,"vs 1950-2005"),
+  labs(title = paste(SiteID, "- Change in average monthly minimum temperature \nin", Yr,"vs 1979-2012"),
             x = "Month", y = "Deg F") +
   scale_color_manual(name="Climate Future",values = colors5) +
   scale_fill_manual(name="Climate Future",values = colors5) +
@@ -321,7 +321,7 @@ ggplot(Monthly_delta, aes(x=Month, y=TminF, group=CF, colour = CF)) +
   scale_y_continuous(limits=c(0, ceiling(max(Monthly_delta$TminF))))+ 
   scale_x_discrete(labels = MonthLabels)
 
-ggsave(sprintf("%s_%s_%s_Avg_Monthly_Tmin_Delta_Line.png", SiteID, Lat, Lon), width = PlotWidth, height = PlotHeight, path = './figures/MACA')
+ggsave(sprintf("%s_Avg_Monthly_Tmin_Delta_Line.png", SiteID), width = PlotWidth, height = PlotHeight, path = './figures/MACA')
 
 
 ###PROGRAM COMPLETE###
