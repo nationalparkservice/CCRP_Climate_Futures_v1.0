@@ -248,6 +248,7 @@ CFs=c("Warm Wet","Hot Dry")
 dry.quadrant = CFs[grepl('Dry', CFs)]
 split <- Future_Means %>% filter(CF == dry.quadrant) %>% summarise(PrcpMean=mean(DeltaPr*365))
 CFs <- if(split$PrcpMean>0.5) {gsub("Dry","Damp",CFs)} else(CFs)
+CFs_all <- if(split$PrcpMean>0.5) {gsub("Dry","Damp",CFs_all)} else(CFs_all)
 Future_Means <- Future_Means %>% rowwise() %>% 
   mutate(CF = ifelse(split$PrcpMean>0, gsub("Dry","Damp",CF),CF)) %>% 
   mutate(corners = ifelse(split$PrcpMean>0, gsub("Dry","Damp",corners),corners)) %>% 
