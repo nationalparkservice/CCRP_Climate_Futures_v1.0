@@ -162,8 +162,6 @@ Future_Means$CF[Future_Means$CF2==1]=CFs_all[2]
 Future_Means$CF[Future_Means$CF3==1]=CFs_all[3]
 Future_Means$CF[Future_Means$CF4==1]=CFs_all[4]
 Future_Means$CF[Future_Means$CF5==1]=CFs_all[5]
-Future_Means$CF=as.factor(Future_Means$CF)
-Future_Means$CF = factor(Future_Means$CF,ordered=TRUE,levels=CFs_all)
 
 #     Remove extraneous Climate Future columns
 Future_Means$CF1 = NULL
@@ -242,26 +240,28 @@ Future_Means<-left_join(Future_Means, WB_Means[,c("GCM","WB_GCM")], by="GCM")
 
 rm(lx,ux,ly,uy,ww,wd,hw,hd, pts, WB_Means)
 
-CFs=c("Warm Wet","Hot Dry")
 #######################
 ## CHANGE CF NAMES FOR DRY/DAMP
 dry.quadrant = CFs[grepl('Dry', CFs)]
 split <- Future_Means %>% filter(CF == dry.quadrant) %>% summarise(PrcpMean=mean(DeltaPr*365))
 CFs <- if(split$PrcpMean>0.5) {gsub("Dry","Damp",CFs)} else(CFs)
 CFs_all <- if(split$PrcpMean>0.5) {gsub("Dry","Damp",CFs_all)} else(CFs_all)
-Future_Means <- Future_Means %>% rowwise() %>% 
-  mutate(CF = ifelse(split$PrcpMean>0, gsub("Dry","Damp",CF),CF)) %>% 
-  mutate(corners = ifelse(split$PrcpMean>0, gsub("Dry","Damp",corners),corners)) %>% 
-  mutate(WB_GCM = ifelse(split$PrcpMean>0, gsub("Dry","Damp",WB_GCM),WB_GCM))
+
+Future_Means %>% rowwise() %>% 
+  mutate(CF = ifelse(split$PrcpMean>0.5, gsub("Dry","Damp",CF),CF)) %>% 
+  mutate(corners = ifelse(split$PrcpMean>0.5, gsub("Dry","Damp",corners),corners)) %>% 
+  mutate(WB_GCM = ifelse(split$PrcpMean>0.5, gsub("Dry","Damp",WB_GCM),WB_GCM))
+
+Future_Means$CF=as.factor(Future_Means$CF)
+Future_Means$CF = factor(Future_Means$CF,ordered=TRUE,levels=CFs_all)
 
 ####Add column with CF classification to Future_all/Baseline_all
 CF_GCM = data.frame(GCM = Future_Means$GCM, CF = Future_Means$CF)
 Future_all = merge(Future_all, CF_GCM[1:2], by="GCM")
 Baseline_all$CF = "Historical"
 WBdat <- merge(WBdat, CF_GCM[1:2], by="GCM",all.x=T)
-WBdat$CF[is.na(WBdat$CF)] <-"Historical"
-
-
+WBdat$CF = factor(WBdat$CF, levels=c(levels(WBdat$CF), "Historical"))
+WBdat$CF[is.na(WBdat$CF)] = "Historical"
 
 ################################ SUMMARIZE TEMPERATURE, PRECIP, RH BY MONTH & SEASON #######################
 Baseline_all$Month<-format(Baseline_all$Date,"%m")
