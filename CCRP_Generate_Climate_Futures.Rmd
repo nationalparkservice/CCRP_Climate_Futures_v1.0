@@ -70,6 +70,11 @@ if(dir.exists(local_rss_dir) == FALSE){
   dir.create(local_rss_dir)
 }
 
+OutDir = './data/park-specific/output' # for .csv's
+if(dir.exists(OutDir) == FALSE){
+  dir.create(OutDir)
+}
+
 ```
 
 # Site Info
