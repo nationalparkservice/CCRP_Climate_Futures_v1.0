@@ -315,8 +315,8 @@ ggplot(Monthly_delta, aes(x=Month, y=TminF, group=CF, colour = CF)) +
   PlotTheme +
   labs(title = paste(SiteID, "- Change in average monthly minimum temperature \nin", Yr,"vs 1979-2012"),
             x = "Month", y = "Deg F") +
-  scale_color_manual(name="Climate Future",values = colors5) +
-  scale_fill_manual(name="Climate Future",values = colors5) +
+  scale_color_manual(name="Climate Future",values = colors5.2) +
+  scale_fill_manual(name="Climate Future",values = colors5.2) +
   scale_shape_manual(name="Climate Future",values = c(21,22,23,24,25)) +
   scale_y_continuous(limits=c(0, ceiling(max(Monthly_delta$TminF))))+ 
   scale_x_discrete(labels = MonthLabels)
