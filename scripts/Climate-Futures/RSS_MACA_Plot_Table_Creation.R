@@ -440,7 +440,7 @@ H_annual <- merge(H_annual,H.WinterTemp,by=c("CF","GCM","Year")); rm(H.WinterTem
 
 # Further Growing Season Calculations
 Historical_GS <- as.data.table(subset(Baseline_all,select=c(Year,CF,GCM,Julian,GDD_count,N_GDD_count,halfyr)))
-Historical_GU<-Historical_GS[GDD_count==7,.SD[1],by=.(Year,CF,GCM)]
+Historical_GU<-Historical_GS[GDD_count==7 & halfyr==1,.SD[1],by=.(Year,CF,GCM)]
 Historical_SE<-Historical_GS[N_GDD_count==6 & halfyr==2,.SD[1],by=.(Year,CF,GCM)]
 Historical_SE$adjusted<-Historical_SE$Julian - 6
 H<-aggregate(cbind(Julian)~CF+GCM+Year,data=Historical_GU,mean,na.rm=TRUE)
@@ -473,7 +473,7 @@ F_annual <- merge(F_annual,F.WinterTemp,by=c("CF","GCM","Year")); rm(F.WinterTem
 
 # # Further Growing Season Calculations
 Future_GS <- as.data.table(subset(Future_all,select=c(Year,CF,GCM,Julian,GDD_count,N_GDD_count,halfyr)))
-Future_GU<-Future_GS[GDD_count==7,.SD[1],by=.(Year,CF,GCM)]
+Future_GU<-Future_GS[GDD_count==7 & halfyr==1,.SD[1],by=.(Year,CF,GCM)]
 Future_SE<-Future_GS[N_GDD_count==6 & halfyr == 2,.SD[1],by=.(Year,CF,GCM)]
 Future_SE$adjusted<-Future_SE$Julian - 6
 F<-aggregate(cbind(Julian)~CF+GCM+Year,data=Future_GU,mean,na.rm=TRUE)
