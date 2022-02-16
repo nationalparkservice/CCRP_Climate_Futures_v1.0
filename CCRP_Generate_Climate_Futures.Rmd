@@ -198,6 +198,8 @@ source(here::here("scripts", "SummaryPlots", "Summary WB plots.R"))
 
 # This script is for copying and pasting files and folders unique to an RSS to a local folder, for the purposes of using, sharing, or archiving products. Files are then deleted from the Climate_Futures repo so that files are not inadvertently overwritten or confused with products from a different site.
 
+# remove climate csv files
+
 source(here::here("scripts", "Misc", "write_metadata.R"))
 
 source(here::here("scripts", "Misc", "copy_paste_delete_files.R")) # copies files and folders to specified local folder
