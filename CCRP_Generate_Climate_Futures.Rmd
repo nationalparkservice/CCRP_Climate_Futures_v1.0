@@ -102,6 +102,7 @@ centroids_csv <- "Y" #Switch for using Tercek csvs or downloading own data
 
 Yr = 2040 #Central year
 Range = 30  #Number of years to summarize (should be at least 30)
+rollLen = 10 #rolling mean length for timeseries plots
 
 # Threshold percentages for defining Climate futures. Default low/high:  0.25, 0.75
 CFLow = 0.25     
@@ -138,6 +139,7 @@ FutureSubset <- c("Warm Wet","Hot Dry"); CFs = FutureSubset  # Pick pair of clim
 colors2<- c("#9A9EE5","#E10720")  # Select pair of climate futures - WarmWet/HotDry
 #colors2<- c("#F3D3CB","#12045C")  # Select pair of climate futures - HotWet/WarmDry
 
+colors3<-c("white",colors2)
 col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
 #col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
 
@@ -171,17 +173,10 @@ source(here:here("scripts", "Additional-tables-plots", "Return_Events"))
 
 source(here::here("scripts", "WaterBalance", "WBgrid_plotting.R")) # Run the Water Balance Model
 
-```
-
-
-# Summary Plots
-
-```{r Summary-Plots, message=FALSE, warning=FALSE, echo = FALSE, results=HIDE}
-
 source(here::here("scripts", "SummaryPlots", "Summary plots.R"))
 
-source(here::here("scripts", "SummaryPlots", "Summary WB plots.R")) 
 ```
+
 
 
 # Create metadata and copy/delete files
