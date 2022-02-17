@@ -345,7 +345,7 @@ ggsave(paste(SiteID, "Duration.png"), path = './figures/MACA', height=PlotHeight
 #Drought severity barplot
 ggplot(Drought_all, aes(x=CF, y=as.numeric(Severity), fill=CF)) + geom_bar(stat="identity", col="black") + 
   scale_y_continuous() + 
-  labs(x="", y="Severity (SPEI * duration)", 
+  labs(x="", y="Severity (intensity * duration)", 
        title=paste(SiteID, "- Average Drought Severity")) + 
   scale_fill_manual(values = colors3) + 
   BarPlotTheme
