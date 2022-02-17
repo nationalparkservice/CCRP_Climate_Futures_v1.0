@@ -2,8 +2,6 @@
 
 ################ INITIALS ##########################
 
-# Need to check all the subsets
-colors3<-c("white",colors2)
 
 ##Plot parameters
 
