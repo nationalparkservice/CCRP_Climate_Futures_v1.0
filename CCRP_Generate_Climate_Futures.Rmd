@@ -169,15 +169,7 @@ source(here::here("scripts", "Additional-tables-plots", "RSS_MACA_drought_char.R
 
 source(here:here("scripts", "Additional-tables-plots", "Return_Events"))
 
-```
-
-# Water Balance
-
-```{r}
-
-if (exists("WB_GCMs") == FALSE) stop("Please specify GCMs for Water Balance")
-
-source(here::here("scripts", "WaterBalance", "Daily_WB_batch_v2.R")) # Run the Water Balance Model
+source(here::here("scripts", "WaterBalance", "WBgrid_plotting.R")) # Run the Water Balance Model
 
 ```
 
@@ -198,7 +190,9 @@ source(here::here("scripts", "SummaryPlots", "Summary WB plots.R"))
 
 # This script is for copying and pasting files and folders unique to an RSS to a local folder, for the purposes of using, sharing, or archiving products. Files are then deleted from the Climate_Futures repo so that files are not inadvertently overwritten or confused with products from a different site.
 
+
 # remove climate csv files
+source(here::here("scripts", "Misc", "var_summary_stats.R")) #read in output/Plot_data for each CF
 
 source(here::here("scripts", "Misc", "write_metadata.R"))
 
