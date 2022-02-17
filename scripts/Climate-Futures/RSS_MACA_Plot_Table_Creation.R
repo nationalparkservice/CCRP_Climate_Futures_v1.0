@@ -491,7 +491,7 @@ F_annual<-merge(F_annual,Sp.Frost,by=c("CF","GCM","Year"));rm(Sp.Frost)
 
 
 ######################################## END THRESHOLD CALCULATIONS ##############################
-
+write.csv(Future_Means, "./data/park-specific/output/Future_Means.csv",row.names = F)
 ##### Save Current workspace environment
 save.image(sprintf("./data/park-specific/output/%s_Final_Environment.RData",SiteID))
 
