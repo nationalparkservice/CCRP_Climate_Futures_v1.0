@@ -2,7 +2,7 @@
 ###   Pulling local parameters from park files ######
 #####################################################################
 
-epsg <- 5070 # North American Albers Equal Area Conic
+epsg <- 5070 # North American Albers Equal Area Coni
 
 # shapefiles - can use epsg code or existing object to define projection
 

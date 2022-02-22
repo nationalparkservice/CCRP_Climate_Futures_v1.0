@@ -3,8 +3,8 @@
 
 ###### Map of MACA cell in context of the park  #############################
 
-maca <- raster('./data/general/spatial-data/Climate_grid/tdn_90d.nc') 
-maca <- projectRaster(maca, crs = proj4)
+maca <- raster('./data/general/spatial-data/Climate_grid/tdn_90d.nc')
+maca <- projectRaster(maca, crs = park)
 # Park
 nps_boundary <- st_read('./data/general/spatial-data/nps_boundary/nps_boundary.shp')
 nps_boundary <- st_transform(nps_boundary, st_crs(maca))
@@ -73,7 +73,7 @@ ggmap(myMap, aes(x=x, y=y)) +
         )
 
 
-ggsave(filename = paste0(SiteID, "-map-MACA-zoomed-out", ".png"), device = "png", path = './figures/maps')
+ggsave(filename = "MACA-map-zoomed-out.png", device = "png", path = OutDir)
 
 ############    MACA cell zoomed-in   #############################################################################
 
@@ -120,8 +120,8 @@ ggmap(myMap2, aes(x=x, y=y)) +
   )
   
                                   
-ggsave(filename = paste0(SiteID, "-map-MACA-zoomed-in", ".png"), device = "png", path = './figures/maps')                         
+ggsave(filename = "MACA-map-zoomed-in.png", device = "png", path = OutDir)                         
 
 rm(myMap,myMap2,Sp_park,park,maca.sf,maca.poly,maca_grid_shp,maca_grid_crop,maca_cell,maca,adjacent_poly_sf,
-   adjacent_poly,adjacent_cells, nps_boundary, maca, nps_centroids, park, centroid, box, Sp_park, cell, maca.poly, maca_grid_sf,)
+   adjacent_poly,adjacent_cells, nps_boundary, nps_centroids, centroid, box, cell, maca_grid_sf,)
 
