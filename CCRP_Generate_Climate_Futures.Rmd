@@ -70,9 +70,14 @@ if(dir.exists(local_rss_dir) == FALSE){
   dir.create(local_rss_dir)
 }
 
-OutDir = './data/park-specific/output' # for .csv's
+OutDir = paste0('./',SiteID) # for .csv's
 if(dir.exists(OutDir) == FALSE){
   dir.create(OutDir)
+}
+
+DataDir = paste0(OutDir,'/input-data') # for .csv's
+if(dir.exists(DataDir) == FALSE){
+  dir.create(DataDir)
 }
 
 ```
@@ -82,8 +87,6 @@ The get_params.R script extracts site parameters for inputting into Dave Thoma's
 ```{r site-info, message=FALSE, warning=FALSE, echo = FALSE, results=HIDE}
 
 source(here::here("scripts", "Misc", "get_site_info.R")) # Extract local inputs; seconds to run
-
-# source(here::here("scripts", "WaterBalance", "get_params.R")) # Extract WB site parameters; 
 
 source(here::here("scripts", "Misc", "create_site_maps.R")) # Create site maps
 ```
@@ -145,6 +148,21 @@ col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
 
 ww_hd <- paste0(local_rss_dir,"/WarmWet_HotDry")
 dir.create(ww_hd)
+
+CFDir = paste0(OutDir,"/WarmWet_HotDry") # for .csv's
+if(dir.exists(CFDir) == FALSE){
+  dir.create(CFDir)
+}
+
+TableDir = paste0(CFDir,"/tables") # for .csv's
+if(dir.exists(TableDir) == FALSE){
+  dir.create(TableDir)
+}
+
+FigDir = paste0(CFDir,"/figures") # for .csv's
+if(dir.exists(FigDir) == FALSE){
+  dir.create(FigDir)
+}
 
 ```
 
