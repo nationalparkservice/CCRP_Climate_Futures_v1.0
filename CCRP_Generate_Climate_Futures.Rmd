@@ -70,12 +70,12 @@ if(dir.exists(local_rss_dir) == FALSE){
   dir.create(local_rss_dir)
 }
 
-OutDir = paste0('./',SiteID) # for .csv's
+OutDir = paste0('./PARK/',SiteID) # for .csv's
 if(dir.exists(OutDir) == FALSE){
   dir.create(OutDir)
 }
 
-DataDir = paste0(OutDir,'/input-data') # for .csv's
+DataDir = paste0(OutDir,'input-data/') # for .csv's
 if(dir.exists(DataDir) == FALSE){
   dir.create(DataDir)
 }
@@ -133,6 +133,20 @@ SPEI_end <- 2012
 
 
 ## Climate Futures (MACA)
+```{r Climate-Futures, message=FALSE, warning=FALSE, include=FALSE, results=HIDE}
+
+if(centroids_csv == "Y") {
+  source(here::here("scripts", "Climate-Futures", "download_Tercek.csvs.R"), local = knitr::knit_global())
+} else {
+  #source(here::here("scripts", "Climate-Futures", "CFT_CF_parsing_v1.R")) # Parse MACA data. Output = "_init_parsed.RData". # 9-8-21: CFT parsing script is not working due to an issue with the package or MACA servers. ACR to talk to CU Boulder about the issue. For now, add _init_parsed.RData file manually to parsed-data folder. 
+}
+
+source(here::here("scripts", "Climate-Futures", "RSS_MACA_Plot_Table_Creation.R"), local = knitr::knit_global()) # Requires "PARK_init_parsed.RData"; Output = "PARK_lat_long_Final_Environment.RData". 
+
+source(here::here("scripts", "Climate-Futures", "RSS_MACA_Scatter and diagnostic.R"), local = knitr::knit_global()) # Creates scatter and diagnostic plots. Outputs to Figs MACA folder. 
+```
+
+## WW/HD CFs
 
 ```{r WarmWet/HotDry, message=FALSE, warning=FALSE, include=FALSE, results=HIDE}
 # Specify Climate Futures
@@ -149,7 +163,55 @@ col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
 ww_hd <- paste0(local_rss_dir,"/WarmWet_HotDry")
 dir.create(ww_hd)
 
-CFDir = paste0(OutDir,"/WarmWet_HotDry") # for .csv's
+CFDir = paste0(OutDir,"WarmWet_HotDry/") # for .csv's
+if(dir.exists(CFDir) == FALSE){
+  dir.create(CFDir)
+}
+
+TableDir = paste0(CFDir,"tables/") # for .csv's
+if(dir.exists(TableDir) == FALSE){
+  dir.create(TableDir)
+}
+
+FigDir = paste0(CFDir,"figures/") # for .csv's
+if(dir.exists(FigDir) == FALSE){
+  dir.create(FigDir)
+}
+
+if (exists("FutureSubset") == FALSE) stop("Please specify Climate Futures") # At the top of the script, please enter a combination of futures, e.g. Warm Wet/Hot Dry
+
+source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts.R")) # Requires "PARK_lat_long_Final_Environment.RData". Outputs plots and Excel Workbook 
+
+source(here::here("scripts", "Additional-tables-plots", "RSS_MACA_drought_char.R"))
+
+source(here:here("scripts", "Additional-tables-plots", "Return_Events"))
+
+source(here::here("scripts", "WaterBalance", "WBgrid_plotting.R")) # Run the Water Balance Model
+
+source(here::here("scripts", "SummaryPlots", "Summary plots.R"))
+
+```
+
+
+
+## WW/HD CFs
+
+```{r WarmWet/HotDry, message=FALSE, warning=FALSE, include=FALSE, results=HIDE}
+# Specify Climate Futures
+
+FutureSubset <- c("Warm Dry","Hot Wet"); CFs = FutureSubset  # Pick pair of climate futures.
+
+# colors2<- c("#9A9EE5","#E10720")  # Select pair of climate futures - WarmWet/HotDry
+colors2<- c("#F3D3CB","#12045C")  # Select pair of climate futures - HotWet/WarmDry
+
+colors3<-c("white",colors2)
+col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
+#col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
+
+ww_hd <- paste0(local_rss_dir,"/WarmDry_HotWet")
+dir.create(ww_hd)
+
+CFDir = paste0(OutDir,"/WarmDry_HotWet") # for .csv's
 if(dir.exists(CFDir) == FALSE){
   dir.create(CFDir)
 }
@@ -163,23 +225,6 @@ FigDir = paste0(CFDir,"/figures") # for .csv's
 if(dir.exists(FigDir) == FALSE){
   dir.create(FigDir)
 }
-
-```
-
-```{r Climate-Futures, message=FALSE, warning=FALSE, include=FALSE, results=HIDE}
-
-if(centroids_csv == "Y") {
-  source(here::here("scripts", "Climate-Futures", "download_Tercek.csvs.R"), local = knitr::knit_global())
-} else {
-  #source(here::here("scripts", "Climate-Futures", "CFT_CF_parsing_v1.R")) # Parse MACA data. Output = "_init_parsed.RData". # 9-8-21: CFT parsing script is not working due to an issue with the package or MACA servers. ACR to talk to CU Boulder about the issue. For now, add _init_parsed.RData file manually to parsed-data folder. 
-}
-
-source(here::here("scripts", "Climate-Futures", "RSS_MACA_Plot_Table_Creation.R"), local = knitr::knit_global()) # Requires "PARK_init_parsed.RData"; Output = "PARK_lat_long_Final_Environment.RData". 
-
-source(here::here("scripts", "Climate-Futures", "RSS_MACA_Scatter and diagnostic.R"), local = knitr::knit_global()) # Creates scatter and diagnostic plots. Outputs to Figs MACA folder. 
-```
-
-```{r CF-plots}
 
 if (exists("FutureSubset") == FALSE) stop("Please specify Climate Futures") # At the top of the script, please enter a combination of futures, e.g. Warm Wet/Hot Dry
 

@@ -6,10 +6,10 @@
 #################################################
 #################   Functions  ##################     
 checkFile <- function(fName, fileURL=F){
-  tmpFiles <- list.files("./data/park-specific/")
+  tmpFiles <- list.files(DataDir)
   if(fName %in% tmpFiles){
     print(paste(fName, " File exists. Not downloaded"))
-    if("zip" == tolower(str_sub(fName, str_length(fName)-2, str_length(fName))))unzip(paste("./data/park-specific/",fName,sep=''), exdir="./data/park-specific") 
+    if("zip" == tolower(str_sub(fName, str_length(fName)-2, str_length(fName))))unzip(paste(DataDir,fName,sep=''), exdir=OutDir) 
     return(1)
   }  # 1 file exists
   # no file so go get it
@@ -18,10 +18,11 @@ checkFile <- function(fName, fileURL=F){
   getName <- paste("https://parkfutures.s3.us-west-2.amazonaws.com/maca-tprh-data/",fName, sep='')
   
   if(fileURL!=F)getName <- paste(fileURL, fName, sep='')
-  download.file(getName, destfile=paste("./data/park-specific/",fName,sep=''), mode="wb")
+  download.file(getName, destfile=paste(DataDir,fName,sep=''), mode="wb")
   # unzip if necessary
-  if("zip" == tolower(str_sub(fName, str_length(fName)-2, str_length(fName))))unzip(paste("./data/park-specific/",fName,sep=''), exdir="./data/park-specific")
+  if("zip" == tolower(str_sub(fName, str_length(fName)-2, str_length(fName))))unzip(paste(DataDir,fName,sep=''), exdir=OutDir)
 }   # end checkFile
+
 
 TFtoC <- function(T){(T-32)/1.8}
 
@@ -48,7 +49,7 @@ VPD <- function(TminF, TmaxF, RHmin, RHmax){
 histInFile <-  paste(SiteID,"_historical.csv", sep='')        # histInFile <- file.choose()    #  browse to path/file
 projInFile <- paste(SiteID,"_future.csv", sep='')
 checkFile(histInFile)
-Gridmet<- read.csv(paste("./data/park-specific/", histInFile, sep=''))
+Gridmet<- read.csv(paste(DataDir, histInFile, sep=''))
 names(Gridmet) <- c("Date","GCM","PrcpIn","TmaxF","TminF","RHmaxPct","RHminPct","TavgF")
 Gridmet <- Gridmet %>% mutate(Year = year(Date),
                               RCP = "Hist",
@@ -56,7 +57,7 @@ Gridmet <- Gridmet %>% mutate(Year = year(Date),
                               DOY = yday(Date))   # for plotting
 
 checkFile(projInFile)
-Future_all <- read.csv(paste("./data/park-specific/", projInFile, sep=""))
+Future_all <- read.csv(paste(DataDir, projInFile, sep=""))
 Future_all$Year <- year(Future_all$Date)
 Future_all$RCP <- str_sub(Future_all$GCM, str_length(Future_all$GCM)-1, str_length(Future_all$GCM))
 
@@ -78,8 +79,14 @@ checkFile(hName,WBFileURL)
 fName <- paste(SiteID, "_water_balance_future.zip", sep='')
 checkFile(fName,WBFileURL)
 
-histWB <- read.csv(paste("./data/park-specific/", SiteID, "_water_balance_historical.csv", sep=''))
-futWB <- read.csv(paste("./data/park-specific/", SiteID, "_water_balance_future.csv", sep=''))
+file.rename(paste0(OutDir,"/",SiteID,"_water_balance_historical.csv"),paste0(DataDir,SiteID,"_water_balance_historical.csv"))
+file.rename(paste0(OutDir,"/",SiteID,"_water_balance_future.csv"),paste0(DataDir,SiteID,"_water_balance_future.csv"))
+file.remove(list.files(path = DataDir, pattern = '.zip', full.names = TRUE))
+
+histWB <- read.csv(paste(DataDir, SiteID,"_water_balance_historical.csv", sep=''))
+futWB <- read.csv(paste(DataDir, SiteID, "_water_balance_future.csv", sep=''))
+
+
 rm(hName, fName)
 
 WBdat <- rbind(histWB, futWB)
