@@ -4,6 +4,8 @@
 MonthLabels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")
 SeasonLabels = c("Winter", "Spring","Summer", "Fall")
 
+degF <- "(\u00B0F)"
+
 #ggplot theme to control formatting parameters for plots with month on the x-axis
 PlotTheme = theme(axis.text=element_text(size=20),    #Text size for axis tick mark labels
                   axis.title.x=element_blank(),               #Text size and alignment for x-axis label
@@ -19,4 +21,72 @@ BarPlotTheme = theme(axis.text.x=element_text(size=24),    #Text size for axis t
                      axis.title.y=element_text(size=24, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20)),              #Text size and alignment for y-axis label
                      plot.title=element_text(size=26,face="bold",hjust=0.5, margin=margin(t=20, r=20, b=20, l=20)),      #Text size and alignment for plot title
                      legend.position = "none") 
+
+############ PLOT FUNCTIONS #############
+Month_line_plot <- function(data, xvar, yvar, grp, cols, title,xlab, ylab){
+ggplot(data, aes(x={{xvar}}, y={{yvar}}, group={{grp}}, colour = {{grp}})) +
+  geom_line(size = 2, stat = "identity",colour="black") + 
+  geom_line(size = 1.5, stat = "identity") +
+  geom_point(colour= "black", size=4, aes(fill = factor({{grp}}), shape = factor({{grp}}))) +
+  PlotTheme +
+  labs(title = title,
+       x = xlab, y = ylab) +
+  scale_color_manual(name="",values = cols) +
+  scale_fill_manual(name="",values = cols) +
+  scale_shape_manual(name="",values = c(seq(21,21+length(cols)-1,1))) +
+  scale_y_continuous(limits=c(0, ceiling(max(eval(parse(text=paste0(d,"$",v))))))) +
+  scale_x_discrete(labels = MonthLabels)
+}
+
+
+
+Month_bar_plot <- function(data, xvar, yvar, grp, cols, title,xlab, ylab,labels){
+  ggplot(data, aes(x={{xvar}},y={{yvar}},fill={{grp}})) +
+    geom_bar(stat="identity",position="dodge",colour="black") +
+    PlotTheme +
+    labs(title = title, 
+         x = xlab, y = ylab) +
+    scale_fill_manual(name="",values = cols) +
+    scale_x_discrete(labels = labels)
+}
+
+
+var_bar_plot <- function(data,var, cols, title, ylab){
+At<-aggregate(eval(parse(text=var))~CF,data=data,mean);
+names(At)<-c("CF",var)
+ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
+  geom_bar(stat="identity",position="dodge",colour="black") +
+  BarPlotTheme +
+  # coord_cartesian(ylim=c(0, 40)) +
+  labs(title = title, 
+       y = ylab, colour = "Climate Future")  +
+  scale_fill_manual(name="",values = cols) +
+  coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
+}
+
+
+var_box_plot <- function(data,var, cols, title, ylab){
+  p<-ggplot(data, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) + 
+    geom_boxplot(colour="black",aes(fill = factor(CF)), outlier.shape=NA)+ 
+    geom_jitter(shape = 21, size = 5, aes(fill = factor(CF),colour=factor(me.col)), position=position_jitter(0.2)) +
+    BarPlotTheme +
+    labs(title = title, 
+         y = ylab) +
+    scale_color_manual(name="",values = c("black","white"),guide=FALSE) +
+    scale_fill_manual(name="",values = cols)
+  dat<-ggplot_build(p)$data[[1]];dat1<-dat[3,]
+  p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
+                                  y=middle, yend=middle), colour="grey", size=1)
+}
+
+
+var_line_plot <- function(data,var, cols, title, ylab) {
+ggplot(data, aes(x=as.numeric(Year), y={{var}}, col=CF, fill=CF)) + 
+  geom_line(size=2) + geom_point(col="black", size=2, shape=16) +
+  geom_point() +
+  labs(title = title, x="Year", y=ylab) +
+  scale_color_manual(name="Climate Future",values=cols) +
+  scale_fill_manual(name="Climate Future",values=cols) + PlotTheme 
+}
+
 

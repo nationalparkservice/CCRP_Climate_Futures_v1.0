@@ -87,161 +87,59 @@ dualscatter  + geom_text_repel(aes(label=GCM)) +
 
 ggsave("scatter-CFmeansStar-IndivCircled.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
-ggplot(Monthly_delta, aes(x=Month, y=TavgF, group=CF, colour = CF)) +
-  geom_line(size = 2, stat = "identity",colour="black") + 
-  geom_line(size = 1.5, stat = "identity") +
-  geom_point(colour= "black", size=4, aes(fill = factor(CF), shape = factor(CF))) +
-  PlotTheme +
-  labs(title = paste(SiteID, "- Change in avg. daily temperature in ", Yr, " vs 1979-2012"),
-       x = "Month", y = "Change in Temperature (Deg F)") +
-  scale_color_manual(name="",values = colors2) +
-  scale_fill_manual(name="",values = colors2) +
-  scale_shape_manual(name="",values = c(21,22)) +
-  scale_y_continuous(limits=c(0, ceiling(max(Monthly_delta$TavgF)))) +
-  scale_x_discrete(labels = MonthLabels)
 
-##Line Plot of change in MinTemp by CF/Month
-ggplot(Monthly_delta, aes(x=Month, y=TavgF, group=CF, colour = CF)) +
-  geom_line(size = 2, stat = "identity",colour="black") + 
-  geom_line(size = 1.5, stat = "identity") +
-  geom_point(colour= "black", size=4, aes(fill = factor(CF), shape = factor(CF))) +
-  PlotTheme +
-  labs(title = paste(SiteID, "- Change in avg. daily temperature in ", Yr, " vs 1979-2012"),
-       x = "Month", y = "Change in Temperature (Deg F)") +
-  scale_color_manual(name="",values = colors2) +
-  scale_fill_manual(name="",values = colors2) +
-  scale_shape_manual(name="",values = c(21,22)) +
-  scale_y_continuous(limits=c(0, ceiling(max(Monthly_delta$TavgF)))) +
-  scale_x_discrete(labels = MonthLabels)
+################################## Monthly/Seasonal delta plots #####################################
 
-ggsave(sprintf("%s_Avg_Monthly_Tavg_Delta_Line.png", SiteID), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
+Month_line_plot(Monthly_delta,xvar=Month,yvar=TavgF,grp=CF,cols=colors2,
+                title=paste0("Change in avg daily temperature in ",Yr," vs ", BasePeriod),
+                xlab = "Month", ylab="Change in temperature (\u00B0F)")
+ggsave("Monthly-line-TavgFDelta.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
+Month_line_plot(Monthly_delta,xvar=Month,yvar=TminF,grp=CF,cols=colors2,
+                title=paste0("Change in avg daily min temperature in ",Yr," vs ", BasePeriod),
+                xlab = "Month", ylab="Change in temperature (\u00B0F)")
+ggsave("Monthly-line-TminFDelta.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
-#################################################### MONTHLY/SEASONAL DELTA PLOTS ###############################################################3
-#Bar graph of change in average monthly precip by CF
-ggplot(Monthly_delta, aes(x=Month,y=PrcpIn,fill=CF)) +
-  geom_bar(stat="identity",position="dodge",colour="black") +
-  PlotTheme +
-  labs(title = paste(SiteID, "- Change in avg. monthly precip. in ", Yr, " vs 1979-2012"), 
-       x = "Month", y = "Change in Precipitation (in)") +
-  scale_fill_manual(name="",values = colors2) +
-  scale_x_discrete(labels = MonthLabels)
+Month_line_plot(Monthly_delta,xvar=Month,yvar=TmaxF,grp=CF,cols=colors2,
+                title=paste0("Change in avg daily max temperature in ",Yr," vs ", BasePeriod),
+                xlab = "Month", ylab="Change in temperature (\u00B0F)")
+ggsave("Monthly-line-TmaxFDelta.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
-ggsave(sprintf("%s_Avg_Monthly_Precip_Delta_Bar.png", SiteID), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
+Month_bar_plot(Monthly_delta,xvar=Month,yvar=PrcpIn,grp=CF,cols=colors2,
+               title=paste0("Change in avg monthly precipitation in ",Yr," vs ", BasePeriod),
+               xlab = "Month", ylab="Change in precipitation (in)",label=MonthLabels)
+ggsave("Monthly-bar-PrcpInDelta.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
-#Bar graph of change in average seasonal precip by CF
-ggplot(Season_delta, aes(x=season,y=PrcpIn,fill=CF)) +
-  geom_bar(stat="identity",position="dodge",colour="black") +
-  PlotTheme +
-  labs(title = paste(SiteID, "- Change in avg. seasonal precip. in ", Yr, " vs 1979-2012"), 
-       x = "Season", y = "Change in Precipitation (in)") +
-  scale_fill_manual(name="",values = colors2) 
+Month_bar_plot(Season_delta,xvar=season,yvar=PrcpIn,grp=CF,cols=colors2,
+               title=paste0("Change in avg seasonal precipitation in ",Yr," vs ", BasePeriod),
+               xlab = "Season", ylab="Change in precipitation (in)",label=SeasonLabels)
+ggsave("Seasonal-bar-PrcpInDelta.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
-ggsave(sprintf("%s_Avg_Season_Precip_Delta_Bar.png", SiteID), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
+Month_bar_plot(Monthly_delta,xvar=Month,yvar=RHmean,grp=CF,cols=colors2,
+               title=paste0("Change in avg monthly relative humidity in ",Yr," vs ", BasePeriod),
+               xlab = "Month", ylab="Change in relative humidity (%)",label=MonthLabels)
+ggsave("Monthly-bar-RHmeanDelta.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
-
-#Line plot of change in MaxTemp by CF/month
-ggplot(Monthly_delta, aes(x=Month, y=TmaxF, group=CF, colour = CF)) +
-  geom_line(size = 2, stat = "identity",colour="black") + 
-  geom_line(size = 1.5, stat = "identity") +
-  geom_point(colour= "black", size=4, aes(fill = factor(CF), shape = factor(CF))) +
-  PlotTheme +
-  labs(title = paste(SiteID, "- Change in avg. daily Tmax in ", Yr, " vs 1979-2012"), 
-            x = "Month", y = "Change in Temperature (Deg F)") +
-  scale_color_manual(name="",values = colors2) +
-  scale_fill_manual(name="",values = colors2) +
-  scale_shape_manual(name="",values = c(21,22)) +
-  scale_y_continuous(limits=c(0, ceiling(max(Monthly_delta$TmaxF)))) + 
-  scale_x_discrete(labels = MonthLabels)
-
-ggsave(sprintf("%s_Avg_Monthly_Tmax_Delta_Line.png", SiteID), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
-
-
-##Line Plot of change in MinTemp by CF/Month
-ggplot(Monthly_delta, aes(x=Month, y=TminF, group=CF, colour = CF)) +
-  geom_line(size = 2, stat = "identity",colour="black") + 
-  geom_line(size = 1.5, stat = "identity") +
-  geom_point(colour= "black", size=4, aes(fill = factor(CF), shape = factor(CF))) +
-  PlotTheme +
-  labs(title = paste(SiteID, "- Change in avg. daily Tmin in ", Yr, " vs 1979-2012"),
-            x = "Month", y = "Change in Temperature (Deg F)") +
-  scale_color_manual(name="",values = colors2) +
-  scale_fill_manual(name="",values = colors2) +
-  scale_shape_manual(name="",values = c(21,22)) +
-  scale_y_continuous(limits=c(0, ceiling(max(Monthly_delta$TminF)))) +
-  scale_x_discrete(labels = MonthLabels)
-
-ggsave(sprintf("%s_Avg_Monthly_Tmin_Delta_Line.png", SiteID), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
-
-
-##Line Plot of change in MinTemp by CF/Month
-ggplot(Monthly_delta, aes(x=Month, y=TavgF, group=CF, colour = CF)) +
-  geom_line(size = 2, stat = "identity",colour="black") + 
-  geom_line(size = 1.5, stat = "identity") +
-  geom_point(colour= "black", size=4, aes(fill = factor(CF), shape = factor(CF))) +
-  PlotTheme +
-  labs(title = paste(SiteID, "- Change in avg. daily temperature in ", Yr, " vs 1979-2012"),
-       x = "Month", y = "Change in Temperature (Deg F)") +
-  scale_color_manual(name="",values = colors2) +
-  scale_fill_manual(name="",values = colors2) +
-  scale_shape_manual(name="",values = c(21,22)) +
-  scale_y_continuous(limits=c(0, ceiling(max(Monthly_delta$TavgF)))) +
-  scale_x_discrete(labels = MonthLabels)
-ggsave(sprintf("%s_Avg_Monthly_Tavg_Delta_Line.png", SiteID), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
-
-#Bar graph of change in average monthly RHmean by CF
-ggplot(Monthly_delta, aes(x=Month,y=RHmean,fill=CF)) +
-  geom_bar(stat="identity",position="dodge",colour="black") +
-  PlotTheme +
-  labs(title = paste(SiteID, "- Change in avg. monthly relative humidity\n in ", Yr, " vs 1979-2012"), 
-       x = "Month", y = "Change in relative humidity (%)") +
-  scale_fill_manual(name="",values = colors2) +
-  scale_x_discrete(labels = MonthLabels)
-
-ggsave(sprintf("%s_Avg_Monthly_RHmean_Delta_Bar.png", SiteID), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
-
-#Bar graph of change in average seasonal RHmean by CF
-ggplot(Season_delta, aes(x=season,y=RHmean,fill=CF)) +
-  geom_bar(stat="identity",position="dodge",colour="black") +
-  PlotTheme +
-  labs(title = paste(SiteID, "- Change in avg. seasonal relative humidity\n in ", Yr, " vs 1979-2012"), 
-       x = "Season", y = "Change in relative humidity (%)") +
-  scale_fill_manual(name="",values = colors2) 
-
-ggsave(sprintf("%s_Avg_Season_RHmean_Delta_Bar.png", SiteID), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
+Month_bar_plot(Season_delta,xvar=season,yvar=RHmean,grp=CF,cols=colors2,
+               title=paste0("Change in avg seasonal relative humidity in ",Yr," vs ", BasePeriod),
+               xlab = "Season", ylab="Change in relative humidity (%)",label=SeasonLabels)
+ggsave("Seasonal-bar-RHmeanDelta.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
 ############################################### BAR PLOTS ######################################################################
-# create dataset for bar graph of total number of days/year over hot temperature threshold
 
 ####################
 #Total number of days/year over hot temperature threshold
-var<-"OverHotTemp"
-At<-aggregate(eval(parse(text=var))~CF,Annual,mean);
-names(At)<-c("CF",var)
-ggplot(At, aes(x=CF,y=(eval(parse(text=var))),fill=CF)) +
-  geom_bar(stat="identity",position="dodge",colour="black") +
-  BarPlotTheme +
-  # coord_cartesian(ylim=c(0, 40)) +
-  labs(title = paste(SiteID, "- Avg. Days/Yr >", HotTemp, "Deg in in ", Yr, " vs 1979-2012"), 
-       y = "Days/Yr", colour = "Climate Future")  +
-  scale_fill_manual(name="",values = colors3) +
-  coord_cartesian(ylim = c(min(eval(parse(text=paste("At$",var,sep="")))), max(eval(parse(text=paste("At$",var,sep=""))))))
+var_bar_plot(Annual, "OverHotTemp", cols=colors3, ylab="Days/Yr",
+             title=paste0("Average Days/Yr > ", HotTemp, " (\u00B0F) in ", Yr, " vs ", BasePeriod))
+ggsave("Annual-bar-OverHotTemp.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
-ggsave(sprintf("%s_Days_Over_HotTemp.png", SiteID), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
+var_box_plot(Annual, "OverHotTemp", cols=colors3, ylab="Days/Yr",
+             title=paste0("Average Days/Yr > ", HotTemp, " (\u00B0F) in ", Yr, " vs ", BasePeriod))
+ggsave("Annual-box-OverHotTemp.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
-# Boxplot
-p<-ggplot(Annual, aes(x=CF, y=(eval(parse(text=var))), colour=CF)) + 
-  geom_boxplot(colour="black",aes(fill = factor(CF)), outlier.shape=NA)+ 
-  geom_jitter(shape = 21, size = 5, aes(fill = factor(CF),colour=factor(me.col)), position=position_jitter(0.2)) +
-  BarPlotTheme +
-  labs(title = paste(SiteID, "- Avg. Days/Yr >", HotTemp, "Deg in ", Yr, " vs 1979-2012"), 
-       y = "Days/Yr") +
-  scale_color_manual(name="",values = c("black","white"),guide=FALSE) +
-  scale_fill_manual(name="",values = colors3)
-dat<-ggplot_build(p)$data[[1]];dat1<-dat[3,]
-p + geom_segment(data=dat1, aes(x=xmin, xend=xmax, 
-                                y=middle, yend=middle), colour="grey", size=1)
-ggsave(sprintf("%s_Days_Over_HotTemp-Boxplot.png", SiteID), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
+var_line_plot(Annual, var=OverHotTemp, cols=col, title=paste0("Average Days/Yr > ", HotTemp, " (\u00B0F)"),
+                                                              ylab="Days/Yr")
+ggsave("Annual-line-OverHotTemp.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
 ####################
 #Total number of days/year under cold temperature threshold
