@@ -1,8 +1,6 @@
 WBData <- subset(WBdat, GCM %in% WB_GCMs$GCM | GCM == "gridmet.historical")
 WBData <- subset(WBData, Year >= Yr-Range/2 & Year <= Yr+Range/2 | Year <= 2012)
 
-MonthLabels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")
-
 ######################################################### AGGREGATE OUTPUTS TO MONTLY/ANNUAL ################################################################
 
 WBData$yrmon = strftime(WBData$Date, "%Y%m")
@@ -30,8 +28,8 @@ AnnualWB$sum_aet.in = aggregate(AET.in ~ Year+GCM, data=aggregate(AET.in~Year+GC
 AnnualWB$sum_d.in = aggregate(D.in ~ Year+GCM, data=aggregate(D.in~Year+GCM,data=WBData,sum), mean)[,3]
 
 
-write.csv(MonthlyWB,"./data/park-specific/output/MonthlyWB.csv",row.names=F)
-write.csv(AnnualWB,"./data/park-specific/output/AnnualWB.csv",row.names=F)
+write.csv(MonthlyWB,paste0(TableDir,"MonthlyWB.csv"),row.names=FALSE)
+write.csv(AnnualWB,paste0(TableDir, "AnnualWB.csv"),row.names=FALSE)
 
 
 #######################################################################################################################
@@ -46,7 +44,6 @@ AnnualWB$CF[is.na(AnnualWB$CF)] <- "Historical"
 
 
 ggplot(AnnualWB, aes(x=sum_d.in, y=sum_aet.in, colour=CF)) + geom_point(size=3)+ geom_smooth(method="lm", se=FALSE, size=2)+
-  
   scale_colour_manual("Scenario",values=col) +
   labs(
     y = "Annual Actual Evapotranspiration (in)",
@@ -58,35 +55,18 @@ ggplot(AnnualWB, aes(x=sum_d.in, y=sum_aet.in, colour=CF)) + geom_point(size=3)+
   theme(axis.text = element_text(size=20), axis.title = element_text(size=20), legend.text=element_text(size=14),
         plot.title=element_text(size=22)) #+xlim(20,45)+ylim(2,16)
 
-ggsave(paste("Water Balance-",SiteID,".png",sep=""), path = "./figures/MACA", width = 15, height = 9)
+ggsave("WaterBalance.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
-ggplot(AnnualWB, aes(x=sum_d.in, colour=CF,fill=CF,linetype=CF),show.legend=F) +geom_density(alpha=0.3,size=1.5) +
-  scale_colour_manual(values=col) +
-  scale_fill_manual(values=col) +  
-  scale_linetype_manual(values=seq(1,length(unique(AnnualWB$CF)),1)) +
-  labs(y = "Density",
-       x = "Annual moisture deficit (in)",
-       title = paste(SiteID,"Water Deficit for GCMs in", Yr,  "and Historical Period (1979-2012)",sep=" ")) +
-  theme(axis.text = element_text(size=20), axis.title = element_text(size=20), legend.text=element_text(size=20), legend.background=element_rect(fill = "White", size = 0.5),
-        plot.title=element_text(size=22, hjust=0),legend.position = c(.8,.8)) 
+density_plot(AnnualWB, xvar=sum_d.in,cols=col,title=paste(SiteID,"Water Deficit for GCMs in", Yr,  "and Historical Period (", BasePeriod,")",sep=" "),
+             xlab="Annual deficit (in)")
+ggsave("Density-sum_d.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
-ggsave(paste(SiteID,"-Deficit_density_panel.png",sep=""), path = "./figures/MACA", width = 15, height = 9)
-
-ggplot(AnnualWB, aes(x=avg_SM.in, colour=CF,fill=CF,linetype=CF),show.legend=F) +geom_density(alpha=0.3,size=1.5) +
-  scale_colour_manual(values=col) +
-  scale_fill_manual(values=col) +  
-  scale_linetype_manual(values=seq(1,length(unique(AnnualWB$CF)),1)) +
-  labs(y = "Density",
-       x = "Annual soil moisture (in)",
-       title = paste(SiteID,"Soil Moisture for GCMs in", Yr , "and Historical Period (1979-2012)",sep=" ")) +
-  theme(axis.text = element_text(size=20), axis.title = element_text(size=20), legend.text=element_text(size=14),
-        plot.title=element_text(size=22, hjust=0),legend.position = c(.8,.8)) 
-
-ggsave(paste(SiteID,"-SOIL_in_density_panel.png",sep=""), path = "./figures/MACA", width = 15, height = 9)
+density_plot(AnnualWB, xvar=avg_SM.in,cols=col,title=paste(SiteID,"Soil Moisture for GCMs in", Yr,  "and Historical Period (", BasePeriod,")",sep=" "),
+             xlab="Annual soil moisture (in)")
+ggsave("Density-avg_SM.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
 
-
-### Monthly
+### Monthly Plots
 MonthlyWB$Month <- substr(MonthlyWB$yrmon, 5, 7)
 MonthlyWB_mean <- aggregate(.~CF+Month, MonthlyWB[,3:11],mean)
 MonthlyWB_H <- subset(MonthlyWB_mean, CF == "Historical")
@@ -102,95 +82,61 @@ MonthlyWB_delta <- subset(MonthlyWB_delta, CF %in% CFs)
 MonthlyWB_delta$CF<-droplevels(MonthlyWB_delta$CF)
 
 
+## avg_SM.in
+Month_line_plot(MonthlyWB_delta, Month, avg_SM.in, grp=CF, cols=colors2, 
+                title= paste("Change in average monthly soil moisture in", Yr, "vs Historical (",BasePeriod,")"),
+                xlab="Month", ylab="Change in soil moisture (inches)")
+ggsave("Monthly-line-avg_SM.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
-ggplot(MonthlyWB_delta, aes(x=Month, y=avg_SM.in, group=CF, colour = CF)) +
-  geom_line(colour = "black",size=2.5, stat = "identity") + # adds black outline
-  geom_line(size = 2, stat = "identity") + 
-  geom_point(colour = "black", size = 4, aes(fill = factor(CF), shape = factor(CF))) +
-  theme(axis.text=element_text(size=16),
-        axis.title.x=element_text(size=16,vjust=-0.2),
-        axis.title.y=element_text(size=20,vjust=1.0),
-        plot.title=element_text(size=24,face="bold",vjust=2,hjust=0.5),
-        legend.text=element_text(size=20)) +
-  scale_x_discrete(labels=month.abb) +
-  labs(title = paste("Change in average monthly soil moisture in", Yr, "vs Historical (1979-2012)"),
-       x = "Month", y = "Change in soil moisture (inches)") +
-  scale_color_manual(name="",values = colors2) +
-  scale_fill_manual(name="",values = colors2) +
-  scale_shape_manual(name="",values = c(21,22))
+dot_plot(MonthlyWB_delta, avg_SM.in, Month, grp=CF, cols=colors2,
+         title = paste("Change in average monthly soil moisture in", Yr, "vs Historical (",BasePeriod,")"),
+         xlab="Change in soil moisture (inches)",labels=MonthLabels)
+ggsave("Monthly-dot-avg_SM.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
-ggsave("MonthlySoil Moisture.png", path = "./figures/MACA", width = 15, height = 9)
+## sum_d.in
+Month_line_plot(MonthlyWB_delta, Month, sum_d.in, grp=CF, cols=colors2, 
+                title= paste("Change in average monthly water deficit in", Yr, "vs Historical (",BasePeriod,")"),
+                xlab="Month", ylab="Change in deficit (inches)")
+ggsave("Monthly-line-sum_d.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
-ggplot(MonthlyWB_delta, aes(x=Month, y=sum_d.in, group=CF, colour = CF)) +
-  geom_line(colour = "black",size=2.5, stat = "identity") + # adds black outline
-  geom_line(size = 2, stat = "identity") + 
-  geom_point(colour = "black", size = 4, aes(fill = factor(CF), shape = factor(CF))) +
-  theme(axis.text=element_text(size=16),
-        axis.title.x=element_text(size=16,vjust=-0.2),
-        axis.title.y=element_text(size=20,vjust=1.0),
-        plot.title=element_text(size=24,face="bold",vjust=2,hjust=0.5),
-        legend.text=element_text(size=20)) +
-  scale_x_discrete(labels=month.abb) +
-  labs(title = paste("Change in average monthly water deficit in", Yr, "vs Historical (1979-2012)"),
-       x = "Month", y = "Change in deficit (inches)") +
-  scale_color_manual(name="",values = colors2) +
-  scale_fill_manual(name="",values = colors2) +
-  scale_shape_manual(name="",values = c(21,22))
-
-ggsave("Monthly Deficit.png", path = "./figures/MACA", width = 15, height = 9)
+dot_plot(MonthlyWB_delta, sum_d.in, Month, grp=CF, cols=colors2,
+         title = paste("Change in average monthly water deficit in", Yr, "vs Historical (",BasePeriod,")"),
+         xlab="Change in deficit (inches)",labels=MonthLabels)
+ggsave("Monthly-dot-sum_d.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
 
-ggplot(MonthlyWB_delta, aes(x=Month, y=sum_runoff.in, group=CF, colour = CF)) +
-  geom_line(colour = "black",size=2.5, stat = "identity") + # adds black outline
-  geom_line(size = 2, stat = "identity") + 
-  geom_point(colour = "black", size = 4, aes(fill = factor(CF), shape = factor(CF))) +
-  theme(axis.text=element_text(size=16),
-        axis.title.x=element_text(size=16,vjust=-0.2),
-        axis.title.y=element_text(size=20,vjust=1.0),
-        plot.title=element_text(size=24,face="bold",vjust=2,hjust=0.5),
-        legend.text=element_text(size=20)) +
-  scale_x_discrete(labels=month.abb) +
-  labs(title = paste("Change in average monthly runoff in", Yr, "vs Historical (1979-2012)"),
-       x = "Month", y = "Change in runoff (inches)") +
-  scale_color_manual(name="",values = colors2) +
-  scale_fill_manual(name="",values = colors2) +
-  scale_shape_manual(name="",values = c(21,22))
+## sum_runoff.in
+Month_line_plot(MonthlyWB_delta, Month, sum_runoff.in, grp=CF, cols=colors2, 
+                title= paste("Change in average monthly runoff in", Yr, "vs Historical (",BasePeriod,")"),
+                xlab="Month", ylab="Change in runoff (inches)")
+ggsave("Monthly-line-sum_runoff.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
-ggsave("Monthly Runoff.png", path = "./figures/MACA", width = 15, height = 9)
+dot_plot(MonthlyWB_delta, sum_runoff.in, Month, grp=CF, cols=colors2,
+         title = paste("Change in average monthly runoff in", Yr, "vs Historical (",BasePeriod,")"),
+         xlab="Change in runoff (inches)",labels=MonthLabels)
+ggsave("Monthly-dot-sum_runoff.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
 
-ggplot(MonthlyWB_delta, aes(x=Month, y=sum_SWEaccum.in, group=CF, colour = CF)) +
-  geom_line(colour = "black",size=2.5, stat = "identity") + # adds black outline
-  geom_line(size = 2, stat = "identity") + 
-  geom_point(colour = "black", size = 4, aes(fill = factor(CF), shape = factor(CF))) +
-  theme(axis.text=element_text(size=16),
-        axis.title.x=element_text(size=16,vjust=-0.2),
-        axis.title.y=element_text(size=20,vjust=1.0),
-        plot.title=element_text(size=24,face="bold",vjust=2,hjust=0.5),
-        legend.text=element_text(size=20)) +
-  scale_x_discrete(labels=month.abb) +
-  labs(title = paste("Change in average monthly SWE in", Yr, "vs Historical (1979-2012)"),
-       x = "Month", y = "Change in SWE (inches)") +
-  scale_color_manual(name="",values = colors2) +
-  scale_fill_manual(name="",values = colors2) +
-  scale_shape_manual(name="",values = c(21,22))
+## sum_SWEaccum.in
+Month_line_plot(MonthlyWB_delta, Month, sum_SWEaccum.in, grp=CF, cols=colors2, 
+                title= paste("Change in average monthly SWE in", Yr, "vs Historical (",BasePeriod,")"),
+                xlab="Month", ylab="Change in SWE (inches)")
+ggsave("Monthly-line-sum_SWEaccum.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
-ggsave("Monthly SWE.png", path = "./figures/MACA", width = 15, height = 9)
+dot_plot(MonthlyWB_delta, sum_SWEaccum.in, Month, grp=CF, cols=colors2,
+         title = paste("Change in average monthly SWE in", Yr, "vs Historical (",BasePeriod,")"),
+         xlab="Change in SWE (inches)",labels=MonthLabels)
+ggsave("Monthly-dot-sum_SWEaccum.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
-ggplot(MonthlyWB_delta, aes(x=Month, y=sum_aet.in, group=CF, colour = CF)) +
-  geom_line(colour = "black",size=2.5, stat = "identity") + # adds black outline
-  geom_line(size = 2, stat = "identity") + 
-  geom_point(colour = "black", size = 4, aes(fill = factor(CF), shape = factor(CF))) +
-  theme(axis.text=element_text(size=16),
-        axis.title.x=element_text(size=16,vjust=-0.2),
-        axis.title.y=element_text(size=20,vjust=1.0),
-        plot.title=element_text(size=24,face="bold",vjust=2,hjust=0.5),
-        legend.text=element_text(size=20)) +
-  scale_x_discrete(labels=month.abb) +
-  labs(title = paste("Change in average monthly AET in", Yr, "vs Historical (1979-2012)"),
-       x = "Month", y = "Change in AET (inches)") +
-  scale_color_manual(name="",values = colors2) +
-  scale_fill_manual(name="",values = colors2) +
-  scale_shape_manual(name="",values = c(21,22))
 
-ggsave("Monthly AET.png", path = "./figures/MACA", width = 15, height = 9)
+## sum_aet.in
+Month_line_plot(MonthlyWB_delta, Month, sum_aet.in, grp=CF, cols=colors2, 
+                title= paste("Change in average monthly AET in", Yr, "vs Historical (",BasePeriod,")"),
+                xlab="Month", ylab="Change in AET (inches)")
+ggsave("Monthly-line-sum_aet.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
+
+dot_plot(MonthlyWB_delta, sum_aet.in, Month, grp=CF, cols=colors2,
+         title = paste("Change in average monthly AET in", Yr, "vs Historical (",BasePeriod,")"),
+         xlab="Change in AET (inches)",labels=MonthLabels)
+ggsave("Monthly-dot-sum_aet.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
+
