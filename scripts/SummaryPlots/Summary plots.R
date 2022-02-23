@@ -35,10 +35,6 @@ PlotTheme = theme(axis.text=element_text(size=20),    #Text size for axis tick m
                   axis.line = element_line(colour = "black"), #Add axis lines
                   panel.background = element_blank(), #Background white
                   panel.grid.major = element_line("light grey",0.3)) #add grid back
-#Height and width 
-PlotWidth = 15
-PlotHeight = 9
-
 
 
 
