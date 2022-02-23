@@ -105,6 +105,7 @@ centroids_csv <- "Y" #Switch for using Tercek csvs or downloading own data
 
 Yr = 2040 #Central year
 Range = 30  #Number of years to summarize (should be at least 30)
+BasePeriod = "1979-2012"
 rollLen = 10 #rolling mean length for timeseries plots
 
 # Threshold percentages for defining Climate futures. Default low/high:  0.25, 0.75
@@ -144,6 +145,9 @@ if(centroids_csv == "Y") {
 }
 
 source(here::here("scripts", "Climate-Futures", "RSS_MACA_Plot_Table_Creation.R"), local = knitr::knit_global()) # Requires "PARK_init_parsed.RData"; Output = "PARK_lat_long_Final_Environment.RData". 
+
+source(here::here("scripts", "Climate-Futures", "Plotting_Functions.R"), local = knitr::knit_global())
+
 
 source(here::here("scripts", "Climate-Futures", "RSS_MACA_Scatter and diagnostic.R"), local = knitr::knit_global()) # Creates scatter and diagnostic plots. Outputs to Figs MACA folder. 
 ```
