@@ -34,10 +34,23 @@ ggplot(data, aes(x={{xvar}}, y={{yvar}}, group={{grp}}, colour = {{grp}})) +
   scale_color_manual(name="",values = cols) +
   scale_fill_manual(name="",values = cols) +
   scale_shape_manual(name="",values = c(seq(21,21+length(cols)-1,1))) +
-  scale_y_continuous(limits=c(0, ceiling(max(eval(parse(text=paste0(d,"$",v))))))) +
+  # scale_y_continuous(limits=c(0, ceiling(max(eval(parse(text=paste0(data,"$",yvar))))))) +
   scale_x_discrete(labels = MonthLabels)
 }
 
+
+dot_plot <- function(data, xvar, yvar, grp, cols, title,xlab,labels){
+  ggplot(data, aes(x={{xvar}},y={{yvar}},fill={{grp}})) +
+    geom_vline(xintercept=0, linetype="dashed", color = "black") + 
+    geom_point(stat="identity",size=8,colour="black",aes(fill = factor({{grp}}), shape = factor({{grp}}))) +
+    PlotTheme +
+    theme(axis.title.x=element_text(size=24, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20))) +
+    labs(title = title, 
+         x = xlab, y = "") +
+    scale_fill_manual(name="",values =cols) +
+    scale_shape_manual(name="",values = c(seq(21,21+length(cols)-1,1))) +
+    scale_y_discrete(labels=rev(labels), limits=rev)
+}
 
 
 Month_bar_plot <- function(data, xvar, yvar, grp, cols, title,xlab, ylab,labels){
@@ -89,4 +102,14 @@ ggplot(data, aes(x=as.numeric(Year), y={{var}}, col=CF, fill=CF)) +
   scale_fill_manual(name="Climate Future",values=cols) + PlotTheme 
 }
 
+density_plot <- function(data, xvar, cols,title, xlab) {
+  ggplot(data, aes(x={{xvar}}, colour=CF,fill=CF,linetype=CF),show.legend=F) +geom_density(alpha=0.3,size=1.5) +
+    scale_colour_manual(name="",values=cols) +
+    scale_fill_manual(name="",values=cols) +  
+    scale_linetype_manual(name="",values=seq(1,1+length(CFs),1)) +
+    labs(y = "Density",
+         x = xlab,
+         title = title) +
+    PlotTheme
+}
 
