@@ -9,27 +9,6 @@ exceedance <- function(df, var) { #var name must be in paren
   }
 d<-exceedance(df=Base_max,var="PrcpIn")
 
-#Height and width 
-PlotWidth = 18
-PlotHeight = 9
-
-#ggplot theme to control formatting parameters for plots with month on the x-axis
-PlotTheme = theme(axis.text=element_text(size=20),    #Text size for axis tick mark labels
-                  axis.title.x=element_text(size=24, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20)),               #Text size and alignment for x-axis label
-                  axis.title.y=element_text(size=24, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20)),              #Text size and alignment for y-axis label
-                  plot.title=element_text(size=26,face="bold",hjust=0.5, margin=margin(t=20, r=20, b=20, l=20)),      #Text size and alignment for plot title
-                  legend.title=element_text(size=24),                                                                    #Text size of legend category labels
-                  legend.text=element_text(size=22),                                                                   #Text size of legend title
-                  legend.position = "bottom")  
-
-BarPlotTheme = theme(axis.text.x=element_text(size=24),    #Text size for axis tick mark labels
-                     axis.text.y=element_text(size=20),
-                     axis.title.x=element_blank(),               #Text size and alignment for x-axis label
-                     axis.title.y=element_text(size=24, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20)),              #Text size and alignment for y-axis label
-                     plot.title=element_text(size=26,face="bold",hjust=0.5, margin=margin(t=20, r=20, b=20, l=20)),      #Text size and alignment for plot title
-                     legend.position = "none") 
-
-####################################################################################
 ############### Analysis on MACA data###########################
 # Historical data
 # Annual max and plot for cF1
@@ -44,7 +23,7 @@ max100base$modeled<-predict(regression,newdata=max100base)
 max100base$GCM<-"Historical"
 
 return50base<-data.frame(return=50)
-return50base$modeled<-predict(regression,newdata=return20base)
+return50base$modeled<-predict(regression,newdata=return50base)
 return50base$GCM<-"Historical"
 
 ### CFs future 
@@ -94,15 +73,10 @@ return50future <- merge(return50future, WB_GCMs, by="GCM")
 allreturns<-rbind(return50base, return50future)
 allreturns$CF<-factor(allreturns$CF, levels=c("Historical",CFs))
 
-#Bar graph 20-year return int for a 24-hour event
-ggplot(allreturns, aes(x=CF, y=modeled,fill=CF)) +
-  geom_bar(stat="identity",position="dodge",colour="black") +
-  BarPlotTheme +
-  labs(title = paste(SiteID, " - 50-year recurrence interval",sep=""), 
-       x ="50-year recurrence interval", y ="Precipitation (inches/day)") +
-  scale_fill_manual(name="",values = colors3) 
-
-ggsave("50yr-bar-plot.png", path='./figures/MACA', width = PlotWidth, height = PlotHeight)
+#Bar graph 50-year return int for a 24-hour event
+var_bar_plot(allreturns,"modeled", cols=colors3, title="50-year recurrence interval", 
+             ylab="Precipitation (inches/day)")
+ggsave("Bar-50yrRecurrence.png", path=FigDir, width = PlotWidth, height = PlotHeight)
 
 
 ######line plot of return int regressions
@@ -124,8 +98,7 @@ ggplot(allregressions, aes(x=return, y=modeled, group=CF, colour = CF)) +
   scale_color_manual(name="",values = colors3) +
   scale_fill_manual(name="",values = colors3) +
   scale_shape_manual(name="",values = c(21,22,23))
+ggsave("line-recurrence-interval-curve.png", path=FigDir, width = PlotWidth, height = PlotHeight)
 
-ggsave("recurrence-interval-curve.png", path='./figures/MACA', width = PlotWidth, height = PlotHeight)
-
-write.csv(allregressions, "./figures/MACA/precip_recurrence_interval.csv",row.names=F)
+write.csv(allregressions, paste0(TableDir,"precip_recurrence_interval.csv"),row.names = FALSE)
 
