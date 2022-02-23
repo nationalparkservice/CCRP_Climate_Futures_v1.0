@@ -1,3 +1,18 @@
+### Drought timeseries bar plot function
+
+SPEI_annual_bar <- function(data, period.box=T, title){
+  ggplot(data = data, aes(x=as.numeric(as.character(Year)), y=SPEI,fill = col)) + 
+    {if(period.box==T) geom_rect(xmin=Yr-Range/2, xmax=Yr+Range/2, ymin=-Inf, ymax=Inf, alpha=0.1, fill="darkgray", col="darkgray")} +
+    geom_bar(stat="identity",aes(fill=col),col="black") + 
+    geom_hline(yintercept=-.5,linetype=2,colour="black",size=1) +
+    scale_fill_manual(name="",values =c("blue","red")) +
+    labs(title = title, 
+         x = "Date", y = "SPEI") +
+    guides(color=guide_legend(override.aes = list(size=7))) + PlotTheme
+}
+
+
+
 
 
 ############################### FORMAT DATAFRAMES  ############################################
@@ -71,40 +86,13 @@ all2$SPEI[which(is.infinite(all2$SPEI))]<- -5 #getting some -Inf values that are
 all3<-aggregate(cbind(Prcpmm,SPEI)~Year+CF,all2,mean)
 
 ###################################### PLOT ANNUAL TIME-SERIES #################################################
-############################################# Plotting ###########################################################
-PlotTheme = theme(axis.text=element_text(size=20),    #Text size for axis tick mark labels
-                  axis.title.x=element_blank(),               #Text size and alignment for x-axis label
-                  axis.title.y=element_text(size=24, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20)),              #Text size and alignment for y-axis label
-                  plot.title=element_text(size=26,face="bold",hjust=0.5, margin=margin(t=20, r=20, b=20, l=20)),      #Text size and alignment for plot title
-                  legend.title=element_text(size=24),                                                                    #Text size of legend category labels
-                  legend.text=element_text(size=22),                                                                   #Text size of legend title
-                  legend.position = "bottom",
-                  panel.background = element_blank(), #Background white
-                  panel.grid.major = element_line("light grey",0.3)) #add grid back
-
-BarPlotTheme = theme(axis.text.x=element_text(size=24),    #Text size for axis tick mark labels
-                     axis.text.y=element_text(size=20),
-                     axis.title.x=element_blank(),               #Text size and alignment for x-axis label
-                     axis.title.y=element_text(size=24, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20)),              #Text size and alignment for y-axis label
-                     plot.title=element_text(size=26,face="bold",hjust=0.5, margin=margin(t=20, r=20, b=20, l=20)),      #Text size and alignment for plot title
-                     legend.position = "none") 
-#Height and width 
-PlotWidth = 15
-PlotHeight = 9
-
 # Gridmet
 drt3$col[drt3$SPEI>=0]<-"wet"
 drt3$col[drt3$SPEI<0]<-"dry"
 drt3$col<-factor(drt3$col, levels=c("wet","dry"))
 
-ggplot(data = drt3, aes(x=as.numeric(as.character(Year)), y=SPEI,fill = col)) + 
-  geom_bar(stat="identity",aes(fill=col),col="black") + 
-  geom_hline(yintercept=-.5,linetype=2,colour="black",size=1) +
-  scale_fill_manual(name="",values =c("blue","red")) +
-  labs(title = "SPEI values for Historical Period (gridMET)", 
-       x = "Date", y = "SPEI") +
-  guides(color=guide_legend(override.aes = list(size=7))) + PlotTheme
-ggsave("Recent Drought.png", path = './figures/MACA', width = 18, height = 9)
+SPEI_annual_bar(drt3, period.box=F,title="SPEI values for Historical Period (gridMET)")
+ggsave("Annual-bar-SPEI-gridmet.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
 # MACA prep dataframe
 all3$col[all3$SPEI>=0]<-"wet"
@@ -115,49 +103,24 @@ all3$Year<-as.numeric(all3$Year)
 # CF 
 CF1<-subset(all3, CF %in% CFs[1] )
 
-ggplot(data = subset(CF1,Year>=Yr-Range/2 & Year<=Yr+Range/2), aes(x=as.numeric(as.character(Year)), y=SPEI,fill = col)) + 
-  geom_rect(xmin=Yr-Range/2, xmax=Yr+Range/2, ymin=-Inf, ymax=Inf, alpha=0.1, fill="darkgray", col="darkgray") +
-  geom_bar(stat="identity",aes(fill=col),col="black") +
-  geom_hline(yintercept=-.5,linetype=2,colour="black",size=1) +
-  scale_fill_manual(name="",values =c("blue","red")) +
-  labs(title = paste("SPEI values for", CFs[1], "climate future", sep = " " ), 
-       x = "Date", y = "SPEI") +
-  guides(color=guide_legend(override.aes = list(size=7))) + PlotTheme
-ggsave(paste(CFs[1], "Drought.png",sep=" "), path = './figures/MACA', width = PlotWidth, height = PlotHeight)
+SPEI_annual_bar(subset(CF1,Year>=Yr-Range/2 & Year<=Yr+Range/2), period.box=T,
+                title=paste("SPEI values for", CFs[1], "climate future", sep = " " )) 
+ggsave("Annual-bar-SPEI-CF1.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
-ggplot(data = CF1, aes(x=as.numeric(as.character(Year)), y=SPEI,fill = col)) + 
-  geom_rect(xmin=Yr-Range/2, xmax=Yr+Range/2, ymin=-Inf, ymax=Inf, alpha=0.1, fill="darkgray", col="darkgray") +
-  geom_bar(stat="identity",aes(fill=col),col="black") +
-  geom_hline(yintercept=-.5,linetype=2,colour="black",size=1) +
-  scale_fill_manual(name="",values =c("blue","red")) +
-  labs(title = paste("SPEI values for", CFs[1], "(Gridmet + MACA)", sep = " " ), 
-       x = "Date", y = "SPEI") +
-  guides(color=guide_legend(override.aes = list(size=7))) + PlotTheme
-ggsave(paste(CFs[1], "Drought+Gridmet.png",sep=" "), path = './figures/MACA', width = 18, height = 9)
+SPEI_annual_bar(CF1, period.box=T,
+                title=paste("SPEI values for", CFs[1], "climate future", sep = " " )) 
+ggsave("Annual-bar-SPEI-CF1-gridmet.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
 # CF 2
-
 CF2<-subset(all3, CF %in% CFs[2] )
 
-ggplot(data = subset(CF2,Year>=Yr-Range/2 & Year<=Yr+Range/2), aes(x=as.numeric(as.character(Year)), y=SPEI,fill = col)) + 
-  geom_rect(xmin=Yr-Range/2, xmax=Yr+Range/2, ymin=-Inf, ymax=Inf, alpha=0.1, fill="darkgray", col="darkgray") +
-  geom_bar(stat="identity",aes(fill=col),col="black") +
-  geom_hline(yintercept=-.5,linetype=2,colour="black",size=1) +
-  scale_fill_manual(name="",values =c("blue","red")) +
-  labs(title = paste("SPEI values for", CFs[2], "climate future", sep = " " ), 
-       x = "Date", y = "SPEI") +
-  guides(color=guide_legend(override.aes = list(size=7))) + PlotTheme
-ggsave(paste(CFs[2], "Drought.png",sep=" "), path = './figures/MACA', width = 18, height = 9)
+SPEI_annual_bar(subset(CF2,Year>=Yr-Range/2 & Year<=Yr+Range/2), period.box=T,
+                title=paste("SPEI values for", CFs[2], "climate future", sep = " " )) 
+ggsave("Annual-bar-SPEI-CF2.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
-ggplot(data = CF2, aes(x=as.numeric(as.character(Year)), y=SPEI,fill = col)) + 
-  geom_rect(xmin=Yr-Range/2, xmax=Yr+Range/2, ymin=-Inf, ymax=Inf, alpha=0.1, fill="darkgray", col="darkgray") +
-  geom_bar(stat="identity",aes(fill=col),col="black") +
-    geom_hline(yintercept=-.5,linetype=2,colour="black",size=1) +
-  scale_fill_manual(name="",values =c("blue","red")) +
-  labs(title = paste("SPEI values for", CFs[2], "(Gridmet + MACA)", sep = " " ), 
-       x = "Date", y = "SPEI") +
-  guides(color=guide_legend(override.aes = list(size=7))) + PlotTheme
-ggsave(paste(CFs[2], "Drought+Gridmet.png",sep=" "), path = './figures/MACA', width = 18, height = 9)
+SPEI_annual_bar(CF2, period.box=T,
+                title=paste("SPEI values for", CFs[2], "climate future", sep = " " )) 
+ggsave("Annual-bar-SPEI-CF2-gridmet.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
 
 # Split into periods
@@ -293,7 +256,7 @@ for (i in 1:length(CF.split)){
 head(HistoricalDrought)
 head(FutureDrought)
 Drought<-rbind(HistoricalDrought,FutureDrought)
-write.csv(Drought,"./data/park-specific/output/Drt.all.csv",row.names=FALSE)  # csv with all drought events
+write.csv(Drought,paste0(TableDir,"Drt.all.csv"),row.names=FALSE)  # csv with all drought events
 
 Hist_char<-setNames(data.frame(matrix(ncol=6,nrow=1)),c("CF","per","Duration","Severity","Intensity","Frequency"))
 Hist_char$CF<-"Historical"
@@ -318,54 +281,25 @@ for (i in 1:length(Drought_char$CF)){
 Drought_char<-rbind(Hist_char,Drought_char) 
 
 # csv for averages for each CF for hist and future periods
-write.csv(Drought_char,"./data/park-specific/output/Drought_char.csv",row.names=FALSE)
+write.csv(Drought_char,paste0(TableDir,"Drought_char.csv"),row.names=FALSE)
+
+
 ########################################### BAR PLOTS ###############################################
 #Drought duration barplot
 Drought_all = Drought_char
 Drought_all$CF = factor(Drought_all$CF, levels = c("Historical",CFs))
 
-#Change NaN's to 0's 
-Drought_char_H[is.na(Hist_char) == TRUE] = 0
-Drought_delta = data.frame(CF=Drought_char_F$CF)
-Drought_delta$Duration = Drought_char_F$Duration - Drought_char_H$Duration
-Drought_delta$Severity = Drought_char_F$Severity - Drought_char_H$Severity
-Drought_delta$Intensity = Drought_char_F$Intensity - Drought_char_H$Intensity
-Drought_delta$Frequency = Drought_char_F$Frequency - Drought_char_H$Frequency
-Drought_delta$CF = factor(Drought_delta$CF, levels = c(CFs))
-
-#Drought duraton barplot
-ggplot(Drought_all, aes(x=CF, y=as.numeric(Duration), fill=CF)) + geom_bar(stat="identity", col="black") + 
-  scale_y_continuous() + 
-  labs(x="", y="Years", 
-       title=paste(SiteID, "- Average Drought Duration")) + 
-  scale_fill_manual(values = colors3) + 
-  BarPlotTheme
-ggsave(paste(SiteID, "Duration.png"), path = './figures/MACA', height=PlotHeight, width=PlotWidth, dpi=600)
-
 #Drought severity barplot
-ggplot(Drought_all, aes(x=CF, y=as.numeric(Severity), fill=CF)) + geom_bar(stat="identity", col="black") + 
-  scale_y_continuous() + 
-  labs(x="", y="Severity (intensity * duration)", 
-       title=paste(SiteID, "- Average Drought Severity")) + 
-  scale_fill_manual(values = colors3) + 
-  BarPlotTheme
-ggsave(paste(SiteID, "Severity.png"), path = './figures/MACA', height=PlotHeight, width=PlotWidth, dpi=600)
+var_bar_plot(Drought_all,"Duration", colors3, "Average Drought Duration", "Years")
+ggsave("Bar-DroughtDuration.png", path = FigDir, height=PlotHeight, width=PlotWidth)
 
 #Drought intensity barplot
-ggplot(Drought_all, aes(x=CF, y=as.numeric(Intensity), fill=CF)) + geom_bar(stat="identity", col="black") + 
-  scale_y_continuous() + 
-  labs(x="", y="Intensity (Minimum SPEI values)", 
-       title=paste(SiteID, "- Average Drought Intensity")) + 
-  scale_fill_manual(values = colors3) + 
-  BarPlotTheme
-ggsave(paste(SiteID, "Intensity.png"), path = './figures/MACA', height=PlotHeight, width=PlotWidth, dpi=600)
+var_bar_plot(Drought_all,"Intensity", colors3, "Average Drought Intensity", 
+             "Intensity (Minimum SPEI values)")
+ggsave("Bar-DroughtIntensity.png", path = FigDir, height=PlotHeight, width=PlotWidth)
 
 #Drought-free interval barplot
-ggplot(Drought_all, aes(x=CF, y=as.numeric(Frequency), fill=CF)) + geom_bar(stat="identity", col="black") + 
-  scale_y_continuous() + 
-  labs(x="", y="Years", 
-       title=paste(SiteID, "- Average Drought-Free Interval")) + 
-  scale_fill_manual(values = colors3) + 
-  BarPlotTheme
-ggsave(paste(SiteID, "Frequency.png"), path = './figures/MACA', height=PlotHeight, width=PlotWidth, dpi=600)
+var_bar_plot(Drought_all,"Frequency", colors3, "Average Drought-Free Interval", 
+             "Years")
+ggsave("Bar-DroughtFrequency.png", path = FigDir, height=PlotHeight, width=PlotWidth)
 
