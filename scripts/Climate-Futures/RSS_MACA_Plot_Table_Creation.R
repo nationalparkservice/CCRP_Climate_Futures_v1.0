@@ -7,21 +7,11 @@ seasons=factor(c("Winter", "Spring", "Summer", "Fall"))
 levels(seasons)=seasons
 
 
-################################################### SUBSET TIME PERIOD ########################################
-Gridmet$Date = strptime(Gridmet$Date, "%Y-%m-%d")
-Future_all$Date = strptime(Future_all$Date, "%Y-%m-%d")
-
-# # Subset Future_all to only be near future (2025-2055) and Baseline_all to only but until 2000
-Baseline_all<-Gridmet
-Baseline_all<-subset(Baseline_all,Year<2013)
-
-ALL_FUTURE<-Future_all  
-Future_all = subset(Future_all, Year >= Yr - (Range/2) & Year <= (Yr + (Range/2)))
 ################################################### FUNCTION DEFINITIONS ########################################
 
 #### FUNCTION TO CALCULATE SEASON FROM 'DATE' ####
 
-getSeason <- function(DATES) {
+getSeason.date <- function(DATES) {
   WS <- as.Date("2012-12-21", format = "%Y-%m-%d") # Winter Solstice
   SE <- as.Date("2012-3-21",  format = "%Y-%m-%d") # Spring Equinox
   SS <- as.Date("2012-6-21",  format = "%Y-%m-%d") # Summer Solstice
@@ -33,6 +23,18 @@ getSeason <- function(DATES) {
   ifelse (d >= WS | d < SE, "Winter",
           ifelse (d >= SE & d < SS, "Spring",
                   ifelse (d >= SS & d < FE, "Summer", "Fall")))
+}
+
+#### END FUNCTION ####
+
+#### FUNCTION TO ASSIGN SEASON BY MONTH ####
+
+getSeason <- function(MONTH) {
+  MONTH = as.integer(MONTH)
+  season = ifelse (MONTH > 2 & MONTH < 6, "Spring",
+          ifelse (MONTH > 5 & MONTH < 9, "Summer",
+                  ifelse (MONTH > 8 & MONTH < 12, "Fall", "Winter")))
+  return(season)
 }
 
 #### END FUNCTION ####
@@ -115,6 +117,16 @@ heat_index <- function(temp, RH) {
 
 ################################ END FUNCTION DEFINITIONS #########################################
 
+################################################### SUBSET TIME PERIOD ########################################
+Gridmet$Date = strptime(Gridmet$Date, "%Y-%m-%d")
+Future_all$Date = strptime(Future_all$Date, "%Y-%m-%d")
+
+# # Subset Future_all to only be near future (2025-2055) and Baseline_all to only but until 2000
+Baseline_all<-Gridmet
+Baseline_all<-subset(Baseline_all,Year<2013)
+
+ALL_FUTURE<-Future_all  
+Future_all = subset(Future_all, Year >= Yr - (Range/2) & Year <= (Yr + (Range/2)))
 ################################# SUMMARIZE CHANGE IN FUTURE TEMP/PRECIP MEANS BY GCM ####################
 ####Set Average values for all four weather variables, using all baseline years and all climate models
 BaseMeanPr = mean(Baseline_all$PrcpIn)
@@ -270,8 +282,8 @@ Future_all$Month<-format(Future_all$Date,"%m")
 Future_all$Year<-format(Future_all$Date,"%Y")
 
 #Add season variable for all data in Future_all and Baseline_all
-Future_all$season=getSeason(Future_all$Date)
-Baseline_all$season=getSeason(Baseline_all$Date)
+Future_all$season=getSeason(Future_all$Month)
+Baseline_all$season=getSeason(Baseline_all$Month)
 
 #### Create tables with monthly tmax/tmin/tmean/precip/RHmean delta by CF
 # Historical

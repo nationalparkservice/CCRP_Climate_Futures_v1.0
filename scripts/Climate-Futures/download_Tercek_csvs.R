@@ -79,8 +79,8 @@ checkFile(hName,WBFileURL)
 fName <- paste(SiteID, "_water_balance_future.zip", sep='')
 checkFile(fName,WBFileURL)
 
-file.rename(paste0(OutDir,"/",SiteID,"_water_balance_historical.csv"),paste0(DataDir,SiteID,"_water_balance_historical.csv"))
-file.rename(paste0(OutDir,"/",SiteID,"_water_balance_future.csv"),paste0(DataDir,SiteID,"_water_balance_future.csv"))
+file.rename(paste0(OutDir,SiteID,"_water_balance_historical.csv"),paste0(DataDir,SiteID,"_water_balance_historical.csv"))
+file.rename(paste0(OutDir,SiteID,"_water_balance_future.csv"),paste0(DataDir,SiteID,"_water_balance_future.csv"))
 file.remove(list.files(path = DataDir, pattern = '.zip', full.names = TRUE))
 
 histWB <- read.csv(paste(DataDir, SiteID,"_water_balance_historical.csv", sep=''))

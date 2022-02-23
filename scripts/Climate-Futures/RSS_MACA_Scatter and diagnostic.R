@@ -4,40 +4,17 @@
 
 #Create output directory for MACA figs
 
-DataFile <- list.files(path = './data/park-specific/output', pattern = 'Final_Environment.RData', full.names = TRUE) # Environment needs to be added if not parsing MACA data
+DataFile <- list.files(path = OutDir, pattern = 'Final_Environment.RData', full.names = TRUE) # Environment needs to be added if not parsing MACA data
 load(DataFile)
-
-
-WD_plots = './figures/MACA'
-if(dir.exists(WD_plots) == FALSE){
-  dir.create(WD_plots)
-}
 
 ##Color schemes
 
 #Colors for CF values plotted side by side (match order of CFs vector)
 colors5 <-  c("#9A9EE5","#12045C","#F3D3CB","#E10720","white")
+colors5.2 <- c("#9A9EE5", "#12045C", "white", "#F3D3CB", "#E10720")
 
 #Colors for RCP 4.5, RCP 8.5
 col.RCP2 = c("blue", "red")
-
-##Plot parameters
-
-#Height and width 
-PlotWidth = 15
-PlotHeight = 9
-
-#ggplot theme to control formatting parameters for plots with month on the x-axis
-PlotTheme = theme(axis.text=element_text(size=20),    #Text size for axis tick mark labels
-                  axis.title.x=element_blank(),               #Text size and alignment for x-axis label
-                  axis.title.y=element_text(size=24, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20)),              #Text size and alignment for y-axis label
-                  plot.title=element_text(size=26,face="bold",hjust=0.5, margin=margin(t=20, r=20, b=20, l=20)),      #Text size and alignment for plot title
-                  legend.title=element_text(size=24),                                                                    #Text size of legend category labels
-                  legend.text=element_text(size=22),                                                                   #Text size of legend title
-                  legend.position = "bottom")                                                                            #Legend position
-
-#X-axis labels for monthly plots
-MonthLabels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")
                  
 ######## END INITIALS ########
 
@@ -55,33 +32,8 @@ Future_Means$DeltaPr<-Future_Means$DeltaPr
 # No color
 dualscatter = ggplot(Future_Means, aes(DeltaTavg, DeltaPr*365, xmin=Tavg25, xmax=Tavg75, ymin=Pr25*365, ymax=Pr75*365))
 
-plot1 <- dualscatter  + geom_text_repel(aes(label=GCM)) +
-  geom_point(colour="black",size=4) +
-  theme(axis.text=element_text(size=18),
-        axis.title.x=element_text(size=18,vjust=-0.2),
-        axis.title.y=element_text(size=18,vjust=0.2),
-        plot.title=element_text(size=18,face="bold",vjust=2,hjust=0.5),
-        legend.text=element_text(size=18), legend.title=element_text(size=16)) + 
-  ###
-  labs(title =paste(SiteID," Changes in climate means in ", Yr, " by GCM run",sep=""), 
-       x = paste("Changes in ",Longx,sep=""), # Change
-       y = paste("Changes in ",Longy,sep="")) + #change
-  scale_color_manual(name="Scenarios", values=c("black")) +
-  # scale_fill_manual(name="Scenarios",values = c("black")) + 
-  theme(legend.position="none") +
-  geom_rect(color = "black", alpha=0) + 
-  geom_hline(aes(yintercept=mean(DeltaPr*365)),linetype=2) + #change
-  geom_vline(aes(xintercept=mean(DeltaTavg)),linetype=2) #change
-
-ggsave(paste(SiteID,"-Scatter-",x,"--",y,".png",sep=""), width = 15, height = 9, path = './figures/MACA', )
-
-#### quadrant means
-dualscatter = ggplot(Future_Means, aes(DeltaTavg, DeltaPr*365, xmin=Tavg25, xmax=Tavg75, ymin=Pr25*365, ymax=Pr75*365))
-
 dualscatter  + geom_text_repel(aes(label=GCM)) +
   geom_point(colour="black",size=4) +
-  geom_point(aes(x=mean(DeltaTavg[which(CF==CFs[1])]), y=mean(365*DeltaPr[which(CF==CFs[1])])), shape=8, size=7, stroke=3, colour=colors2[1]) +
-  geom_point(aes(x=mean(DeltaTavg[which(CF==CFs[2])]), y=mean(365*DeltaPr[which(CF==CFs[2])])), shape=8, size=7, stroke=3, colour=colors2[2]) +
   theme(axis.text=element_text(size=18),
         axis.title.x=element_text(size=18,vjust=-0.2),
         axis.title.y=element_text(size=18,vjust=0.2),
@@ -98,36 +50,7 @@ dualscatter  + geom_text_repel(aes(label=GCM)) +
   geom_hline(aes(yintercept=mean(DeltaPr*365)),linetype=2) + #change
   geom_vline(aes(xintercept=mean(DeltaTavg)),linetype=2) #change
 
-ggsave(paste(SiteID,"-Scatter-quadrant-means",x,"--",y,".png",sep=""), width = 15, height = 9, path = './figures/MACA', )
-
-#### quadrant means + WB selected models
-dualscatter = ggplot(Future_Means, aes(DeltaTavg, DeltaPr*365, xmin=Tavg25, xmax=Tavg75, ymin=Pr25*365, ymax=Pr75*365))
-
-dualscatter  + geom_text_repel(aes(label=GCM)) +
-  geom_point(colour="black",size=4) +
-  geom_point(aes(x=mean(DeltaTavg[which(CF==CFs[1])]), y=mean(365*DeltaPr[which(CF==CFs[1])])), shape=8, size=7, stroke=3, colour=colors2[1]) +
-  geom_point(aes(x=mean(DeltaTavg[which(CF==CFs[2])]), y=mean(365*DeltaPr[which(CF==CFs[2])])), shape=8, size=7, stroke=3, colour=colors2[2]) +
-  geom_point(aes(x=mean(DeltaTavg[which(WB_GCM==CFs[1])]), y=mean(365*DeltaPr[which(WB_GCM==CFs[1])])), shape=21, size=10, stroke=3, colour=colors2[1]) +
-  geom_point(aes(x=mean(DeltaTavg[which(WB_GCM==CFs[2])]), y=mean(365*DeltaPr[which(WB_GCM==CFs[2])])), shape=21, size=10, stroke=3, colour=colors2[2]) +
-  geom_point(aes(x=mean(DeltaTavg[which(WB_GCM==CFs[1])]), y=mean(365*DeltaPr[which(WB_GCM==CFs[1])])), shape=20, size=2,  colour=colors2[1]) +
-  geom_point(aes(x=mean(DeltaTavg[which(WB_GCM==CFs[2])]), y=mean(365*DeltaPr[which(WB_GCM==CFs[2])])), shape=20, size=2,  colour=colors2[2]) +
-  theme(axis.text=element_text(size=18),
-        axis.title.x=element_text(size=18,vjust=-0.2),
-        axis.title.y=element_text(size=18,vjust=0.2),
-        plot.title=element_text(size=18,face="bold",vjust=2,hjust=0.5),
-        legend.text=element_text(size=18), legend.title=element_text(size=16)) + 
-  ###
-  labs(title =paste(SiteID," Changes in climate means in ", Yr, " by GCM run",sep=""), 
-       x = paste("Changes in ",Longx,sep=""), # Change
-       y = paste("Changes in ",Longy,sep="")) + #change
-  scale_color_manual(name="Scenarios", values=c("black")) +
-  # scale_fill_manual(name="Scenarios",values = c("black")) + 
-  theme(legend.position="none") +
-  geom_rect(color = "black", alpha=0) + 
-  geom_hline(aes(yintercept=mean(DeltaPr*365)),linetype=2) + #change
-  geom_vline(aes(xintercept=mean(DeltaTavg)),linetype=2) #change
-
-ggsave(paste(SiteID,"-Scatter-quadrant-WBmodels",x,"--",y,".png",sep=""), width = 15, height = 9, path = './figures/MACA', )
+ggsave("scatter1.png", width = PlotWidth, height = PlotHeight, path = OutDir)
 
 ####### Scatterplot with CF color
 FM<-Future_Means
@@ -148,7 +71,7 @@ ggplot(FM, aes(DeltaTavg, DeltaPr*365, xmin=Tavg25, xmax=Tavg75, ymin=Pr25*365, 
         plot.title=element_text(size=20,face="bold",vjust=2,hjust=0.5),
         legend.text=element_text(size=20), legend.title=element_text(size=20)) + 
   ###
-  labs(title =" Changes in climate means in ", Yr, " by GCM run", 
+  labs(title =paste0(" Changes in climate means in ", Yr, " by GCM run"), 
        x = paste("Change in ",Longx,sep=""), # Change
        y = paste("Change in ",Longy,sep="")) + #change
   scale_color_manual(name="Climate Futures", values=colors5) +
@@ -158,7 +81,7 @@ ggplot(FM, aes(DeltaTavg, DeltaPr*365, xmin=Tavg25, xmax=Tavg75, ymin=Pr25*365, 
   geom_hline(aes(yintercept=mean(FM$DeltaPr*365)),linetype=2) + #change
   geom_vline(aes(xintercept=mean(FM$DeltaTavg)),linetype=2)  #change
 
-ggsave(paste(SiteID, "Scatter BY SCENARIO-",x,"--",y,".png",sep=""), width = 15, height = 9, path = './figures/MACA')
+ggsave("scatter2.png", width = PlotWidth, height = PlotHeight, path = OutDir)
 
 #~~~~~~~~~~~~~~
 # Presetation only scatterplots
@@ -177,7 +100,7 @@ dualscatter  + geom_point(colour="black",size=4) +
             y = paste("Changes in ",Longy,sep="")) + #change
   theme(legend.position="none") +
   xlim(0, max(Future_Means$DeltaTavg))
-ggsave(paste(SiteID,"-Scatter-POINTS ONLY",x,"--",y,".png",sep=""), width = 15, height = 9, path = './figures/MACA')  
+ggsave("scatter3.png", width = PlotWidth, height = PlotHeight, path = OutDir)
 
 # Points only w/ box
 dualscatter = ggplot(Future_Means, aes(DeltaTavg, DeltaPr*365, xmin=Tavg25, xmax=Tavg75, ymin=Pr25*365, ymax=Pr75*365))
@@ -197,7 +120,7 @@ dualscatter  + geom_point(colour="black",size=4) +
   geom_rect(color = "black", alpha=0) + 
   geom_hline(aes(yintercept=mean(DeltaPr*365)),linetype=2) + #change
   geom_vline(aes(xintercept=mean(DeltaTavg)),linetype=2)  #change
-ggsave(paste(SiteID,"-Scatter-POINTS&BOX",x,"--",y,".png",sep=""), width = 15, height = 9, path = './figures/MACA')
+ggsave("scatter4.png", width = PlotWidth, height = PlotHeight, path = OutDir)
 
 
 
@@ -214,11 +137,11 @@ scatter + geom_point(aes(color=emissions),size=4) +
   scale_colour_manual(values=c("blue", "red"))+
   guides(color=guide_legend(title="Emissions\nScenarios\n")) +
   geom_rect(color = "blue", alpha=0) + 
-  geom_hline(aes(yintercept=365*mean(Future_Means$DeltaPr)),linetype=2) + 
-  geom_vline(aes(xintercept=mean(Future_Means$DeltaTavg)),linetype=2)  
+  geom_hline(aes(yintercept=365*mean(DeltaPr)),linetype=2) + 
+  geom_vline(aes(xintercept=mean(DeltaTavg)),linetype=2)  
 #scale_y_continuous(limits=c(-3.75,3.75))
 
-ggsave(sprintf("%s_GCM_Scatter_Plot.png", SiteID), width = PlotWidth, height = PlotHeight, path = './figures/MACA')
+ggsave("scatter5.png", width = PlotWidth, height = PlotHeight, path = OutDir)
 
 ###Scatter plot showing delta precip and tavg, color by emissions scenario, x-axis scaled 0-max
 scatter = ggplot(Future_Means, aes(DeltaTavg, 365*DeltaPr, xmin=Tavg25, xmax=Tavg75, ymin=365*Pr25, ymax=365*Pr75))
@@ -232,12 +155,12 @@ scatter + geom_point(aes(color=emissions),size=4) +
   geom_point(aes(x=mean(DeltaTavg), y=mean(365*DeltaPr)), shape=23, size=10, fill='black', colour='black') +
   scale_x_continuous(limits=c(0, max(Future_Means$DeltaTavg)+.25))
 
-ggsave(sprintf("%s_GCM_Scatter_noBox_Plot.png", SiteID,), width = PlotWidth, height = PlotHeight, path = './figures/MACA')
+ggsave("scatter6.png", width = PlotWidth, height = PlotHeight, path = OutDir)
 
 #  scatter plots with GCM name identifying points. For all, and separate 4.5 and 8.5 plots
 
-plot_name <- sprintf("%s_GCM_Scatter_8.5-4.5 w GCM labels.png", SiteID)
-OFName <- paste('./figures/MACA/', plot_name)
+plot_name <- "scatter7.png"
+OFName <- paste(OutDir, plot_name)
 
 png(filename = OFName, width = 1280, height = 1280)
 plot(Future_Means$DeltaTavg, 365*Future_Means$DeltaPr, pch=20, main=paste("RCP 4.5 & 8.5", Yr), 
@@ -249,8 +172,8 @@ text(365*DeltaPr ~ DeltaTavg,data=Future_Means, subset = emissions == "RCP 8.5",
 dev.off()
 
 
-plot_name <- sprintf("%s_GCM_Scatter_4.5 w GCM labels.png", SiteID)
-OFName <- paste('./figures/MACA/', plot_name)
+plot_name <- "scatter8.png"
+OFName <- paste(OutDir, plot_name)
 
 png(OFName, width = 1280, height = 1280)
 plot(365*DeltaPr ~ DeltaTavg, data=Future_Means, subset = emissions == "RCP 4.5", pch=20, main= paste("RCP 4.5", Yr), 
@@ -258,8 +181,8 @@ plot(365*DeltaPr ~ DeltaTavg, data=Future_Means, subset = emissions == "RCP 4.5"
 text(365*DeltaPr ~ DeltaTavg, data=Future_Means, subset = emissions == "RCP 4.5", label=GCM, pos=3, cex=1.5, col="blue")
 dev.off()
 
-plot_name <- sprintf("%s_GCM_Scatter_8.5 w GCM labels.png", SiteID)
-OFName <- paste('./figures/MACA/', plot_name)
+plot_name <- "scatter9.png"
+OFName <- paste(OutDir, plot_name)
 
 png(OFName, width = 1280, height = 1280)
 plot(365*DeltaPr ~ DeltaTavg, data=Future_Means, subset = emissions == "RCP 8.5",
@@ -269,8 +192,6 @@ dev.off()
 
 #################################### DIAGNOSTIC CHANGE PLOTS ##############################################
 #Bar graph of monthly precip/tmax/tmin by CF
-colors5.2 <- c("#9A9EE5", "#12045C", "white", "#F3D3CB", "#E10720")
-
 ggplot(Monthly_delta, aes(x=Month,y=PrcpIn,fill=CF)) +
   geom_bar(stat="identity",position="dodge",colour="black") +
   PlotTheme +
@@ -279,7 +200,7 @@ ggplot(Monthly_delta, aes(x=Month,y=PrcpIn,fill=CF)) +
   scale_fill_manual(name="Climate Future",values = colors5.2) + 
   scale_x_discrete(labels = MonthLabels)
 
-ggsave(sprintf("%s_Avg_Monthly_Precip_Delta_Bar.png", SiteID), width = PlotWidth, height = PlotHeight, path = './figures/MACA')
+ggsave("Monthly-bar-PrcpInDelta.png", width = PlotWidth, height = PlotHeight, path = OutDir)
 
 #Bar graph of seasonal precip by CF
 ggplot(Season_delta, aes(x=season,y=PrcpIn,fill=CF)) +
@@ -289,7 +210,7 @@ ggplot(Season_delta, aes(x=season,y=PrcpIn,fill=CF)) +
             x = "Season", y = "Change in Precipitation (in)") +
   scale_fill_manual(name="Climate Future",values = colors5.2)
 
-ggsave(sprintf("%s_Avg_Seasonal_Precip_Delta_Bar.png", SiteID), width = PlotWidth, height = PlotHeight, path = './figures/MACA')
+ggsave("Seasonal-bar-PrcpInDelta.png", width = PlotWidth, height = PlotHeight, path = OutDir)
 
 
 #Line plot of change in MaxTemp by CF/month
@@ -305,7 +226,7 @@ ggplot(Monthly_delta, aes(x=Month, y=TmaxF, group=CF, colour = CF)) +
   scale_y_continuous(limits=c(0, ceiling(max(Monthly_delta$TmaxF)))) + 
   scale_x_discrete(labels = MonthLabels)
 
-ggsave(sprintf("%s_Avg_Monthly_Tmax_Delta_Line.png", SiteID), width = PlotWidth, height =PlotHeight, path = './figures/MACA')
+ggsave("Monthly-line-TmaxFDelta.png", width = PlotWidth, height = PlotHeight, path = OutDir)
 
 
 ####Line Plot of change in MinTemp by CF/Month
@@ -321,7 +242,7 @@ ggplot(Monthly_delta, aes(x=Month, y=TminF, group=CF, colour = CF)) +
   scale_y_continuous(limits=c(0, ceiling(max(Monthly_delta$TminF))))+ 
   scale_x_discrete(labels = MonthLabels)
 
-ggsave(sprintf("%s_Avg_Monthly_Tmin_Delta_Line.png", SiteID), width = PlotWidth, height = PlotHeight, path = './figures/MACA')
+ggsave("Monthly-line-TminFDelta.png", width = PlotWidth, height = PlotHeight, path = OutDir)
 
 
 ###PROGRAM COMPLETE###

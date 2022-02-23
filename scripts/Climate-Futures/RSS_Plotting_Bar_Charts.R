@@ -1,36 +1,7 @@
 # RSS_Plotting_Bar_Charts.R
+DataFile <- list.files(path = DataDir, pattern = 'Final_Environment.RData', full.names = TRUE) # Environment needs to be added if not parsing MACA data
+load(DataFile)
 
-################ INITIALS ##########################
-
-
-##Plot parameters
-
-#Height and width 
-PlotWidth = 15
-PlotHeight = 9
-
-#ggplot theme to control formatting parameters for plots with month on the x-axis
-PlotTheme = theme(axis.text=element_text(size=20),    #Text size for axis tick mark labels
-                  axis.title.x=element_blank(),               #Text size and alignment for x-axis label
-                  axis.title.y=element_text(size=24, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20)),              #Text size and alignment for y-axis label
-                  plot.title=element_text(size=26,face="bold",hjust=0.5, margin=margin(t=20, r=20, b=20, l=20)),      #Text size and alignment for plot title
-                  legend.title=element_text(size=24),                                                                    #Text size of legend category labels
-                  legend.text=element_text(size=22),                                                                   #Text size of legend title
-                  legend.position = "bottom")  
-
-BarPlotTheme = theme(axis.text.x=element_text(size=24),    #Text size for axis tick mark labels
-                     axis.text.y=element_text(size=20),
-                     axis.title.x=element_blank(),               #Text size and alignment for x-axis label
-                     axis.title.y=element_text(size=24, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20)),              #Text size and alignment for y-axis label
-                     plot.title=element_text(size=26,face="bold",hjust=0.5, margin=margin(t=20, r=20, b=20, l=20)),      #Text size and alignment for plot title
-                     legend.position = "none") 
-
-#X-axis labels for monthly plots
-MonthLabels = c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")
-SeasonLabels = c("Winter", "Spring","Summer", "Fall")
-
-
-#################### END INITIALS ##########################
 #################################################### SUBSET DATAFRAMES ###################################################
 Monthly<-subset(Monthly,CF %in% FutureSubset); Monthly$CF<-factor(Monthly$CF, levels=c("Historical",FutureSubset))
 # Monthly$Month<-factor(Monthly$Month,levels=c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"))
@@ -60,6 +31,74 @@ Annual$me.col[which(Annual$CF=="Hot Wet")]<-"w" #If not using HW, will get error
 
 
 ############################################################### Begin output plots ############################################
+## Quadrant means scatterplots
+
+#### quadrant means
+dualscatter = ggplot(Future_Means, aes(DeltaTavg, DeltaPr*365, xmin=Tavg25, xmax=Tavg75, ymin=Pr25*365, ymax=Pr75*365))
+
+dualscatter  + geom_text_repel(aes(label=GCM)) +
+  geom_point(colour="black",size=4) +
+  geom_point(aes(x=mean(DeltaTavg[which(CF==CFs[1])]), y=mean(365*DeltaPr[which(CF==CFs[1])])), shape=8, size=7, stroke=3, colour=colors2[1]) +
+  geom_point(aes(x=mean(DeltaTavg[which(CF==CFs[2])]), y=mean(365*DeltaPr[which(CF==CFs[2])])), shape=8, size=7, stroke=3, colour=colors2[2]) +
+  theme(axis.text=element_text(size=18),
+        axis.title.x=element_text(size=18,vjust=-0.2),
+        axis.title.y=element_text(size=18,vjust=0.2),
+        plot.title=element_text(size=18,face="bold",vjust=2,hjust=0.5),
+        legend.text=element_text(size=18), legend.title=element_text(size=16)) + 
+  ###
+  labs(title =paste(SiteID," Changes in climate means in ", Yr, " by GCM run",sep=""), 
+       x = paste("Changes in ",Longx,sep=""), # Change
+       y = paste("Changes in ",Longy,sep="")) + #change
+  scale_color_manual(name="Scenarios", values=c("black")) +
+  # scale_fill_manual(name="Scenarios",values = c("black")) + 
+  theme(legend.position="none") +
+  geom_rect(color = "black", alpha=0) + 
+  geom_hline(aes(yintercept=mean(DeltaPr*365)),linetype=2) + #change
+  geom_vline(aes(xintercept=mean(DeltaTavg)),linetype=2) #change
+
+ggsave("scatter-CFmeansStar.png", width = PlotWidth, height = PlotHeight, path = FigDir)
+
+#### quadrant means + WB selected models
+dualscatter = ggplot(Future_Means, aes(DeltaTavg, DeltaPr*365, xmin=Tavg25, xmax=Tavg75, ymin=Pr25*365, ymax=Pr75*365))
+
+dualscatter  + geom_text_repel(aes(label=GCM)) +
+  geom_point(colour="black",size=4) +
+  geom_point(aes(x=mean(DeltaTavg[which(CF==CFs[1])]), y=mean(365*DeltaPr[which(CF==CFs[1])])), shape=8, size=7, stroke=3, colour=colors2[1]) +
+  geom_point(aes(x=mean(DeltaTavg[which(CF==CFs[2])]), y=mean(365*DeltaPr[which(CF==CFs[2])])), shape=8, size=7, stroke=3, colour=colors2[2]) +
+  geom_point(aes(x=mean(DeltaTavg[which(WB_GCM==CFs[1])]), y=mean(365*DeltaPr[which(WB_GCM==CFs[1])])), shape=21, size=10, stroke=3, colour=colors2[1]) +
+  geom_point(aes(x=mean(DeltaTavg[which(WB_GCM==CFs[2])]), y=mean(365*DeltaPr[which(WB_GCM==CFs[2])])), shape=21, size=10, stroke=3, colour=colors2[2]) +
+  geom_point(aes(x=mean(DeltaTavg[which(WB_GCM==CFs[1])]), y=mean(365*DeltaPr[which(WB_GCM==CFs[1])])), shape=20, size=2,  colour=colors2[1]) +
+  geom_point(aes(x=mean(DeltaTavg[which(WB_GCM==CFs[2])]), y=mean(365*DeltaPr[which(WB_GCM==CFs[2])])), shape=20, size=2,  colour=colors2[2]) +
+  theme(axis.text=element_text(size=18),
+        axis.title.x=element_text(size=18,vjust=-0.2),
+        axis.title.y=element_text(size=18,vjust=0.2),
+        plot.title=element_text(size=18,face="bold",vjust=2,hjust=0.5),
+        legend.text=element_text(size=18), legend.title=element_text(size=16)) + 
+  ###
+  labs(title =paste(SiteID," Changes in climate means in ", Yr, " by GCM run",sep=""), 
+       x = paste("Changes in ",Longx,sep=""), # Change
+       y = paste("Changes in ",Longy,sep="")) + #change
+  scale_color_manual(name="Scenarios", values=c("black")) +
+  # scale_fill_manual(name="Scenarios",values = c("black")) + 
+  theme(legend.position="none") +
+  geom_rect(color = "black", alpha=0) + 
+  geom_hline(aes(yintercept=mean(DeltaPr*365)),linetype=2) + #change
+  geom_vline(aes(xintercept=mean(DeltaTavg)),linetype=2) #change
+
+ggsave("scatter-CFmeansStar-IndivCircled.png", width = PlotWidth, height = PlotHeight, path = FigDir)
+
+ggplot(Monthly_delta, aes(x=Month, y=TavgF, group=CF, colour = CF)) +
+  geom_line(size = 2, stat = "identity",colour="black") + 
+  geom_line(size = 1.5, stat = "identity") +
+  geom_point(colour= "black", size=4, aes(fill = factor(CF), shape = factor(CF))) +
+  PlotTheme +
+  labs(title = paste(SiteID, "- Change in avg. daily temperature in ", Yr, " vs 1979-2012"),
+       x = "Month", y = "Change in Temperature (Deg F)") +
+  scale_color_manual(name="",values = colors2) +
+  scale_fill_manual(name="",values = colors2) +
+  scale_shape_manual(name="",values = c(21,22)) +
+  scale_y_continuous(limits=c(0, ceiling(max(Monthly_delta$TavgF)))) +
+  scale_x_discrete(labels = MonthLabels)
 
 ##Line Plot of change in MinTemp by CF/Month
 ggplot(Monthly_delta, aes(x=Month, y=TavgF, group=CF, colour = CF)) +
