@@ -7,7 +7,6 @@ exceedance <- function(df, var) { #var name must be in paren
     DF$EP <- 1/DF$return
     DF
   }
-d<-exceedance(df=Base_max,var="PrcpIn")
 
 ############### Analysis on MACA data###########################
 # Historical data
