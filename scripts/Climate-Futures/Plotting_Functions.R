@@ -114,10 +114,10 @@ density_plot <- function(data, xvar, cols,title, xlab) {
     PlotTheme
 }
 
-spaghetti_plot <- function(data, var, col){
+spaghetti_plot <- function(data, var, col,CF){
   df <- deparse(substitute(data))
     ggplot() +
-      geom_line(data=data,aes(x=DOY,y=eval(parse(text=var)),group=Year),colour=col,size=.7) +
+      geom_line(data=data,aes(x=DOY,y=eval(parse(text=var)),group=Year),colour=col,size=1) +
       geom_vline(xintercept=91, linetype="dashed", color = "black") +
       geom_text(aes(x=91, label="Apr 1\n", y=max(eval(parse(text=paste0("WBData", "$",var))))), 
                 colour="black", angle=90, text=element_text(size=11),hjust=1) +
@@ -125,25 +125,9 @@ spaghetti_plot <- function(data, var, col){
       geom_text(aes(x=274, label="\nOct 1", y=max(eval(parse(text=paste0("WBData", "$",var))))),
                 colour="black", angle=90, text=element_text(size=11),hjust=1) +
       coord_cartesian(ylim = c(0, max(eval(parse(text=paste0("WBData","$",var))))))+
-      PlotTheme +
-      labs(title = "", 
+      PlotTheme + 
+      theme(plot.title=element_text(size=16,hjust=0.5,face="plain", margin=margin(t=1, r=1, b=1, l=1))) +
+      labs(title = CF, 
            x = "", y = "")
 }
 
-
-ggplot() +
-  geom_line(data=WBData,aes(x=DOY,y=SWEaccum.in,group=Year),colour="red",size=.7) +
-  geom_vline(xintercept=91, linetype="dashed", color = "black") +
-  geom_text(aes(x=91, label="Apr 1\n", y=max(WBData$SWEaccum.in)), colour="black", angle=90, text=element_text(size=11),hjust=1) +
-  geom_vline(xintercept=274, linetype="dashed", color = "black") +
-  geom_text(aes(x=274, label="\nOct 1", y=max(WBData$SWEaccum.in)), colour="black", angle=90, text=element_text(size=11),hjust=1) +
-  theme(axis.text=element_text(size=16),
-        # axis.text.x=element_blank(),
-        axis.title.x=element_text(size=16,vjust=1.0),
-        axis.title.y=element_text(size=16,vjust=1.0),
-        plot.title=element_blank(),
-        legend.text=element_text(size=14), legend.title=element_text(size=14),
-        legend.position = "bottom") +
-  labs(title = "", 
-       x = "", y = "") +
-  ylim(0,max(WBData$SWEaccum.in))
