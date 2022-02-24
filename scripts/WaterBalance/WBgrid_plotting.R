@@ -44,16 +44,13 @@ AnnualWB$CF[is.na(AnnualWB$CF)] <- "Historical"
 
 
 ggplot(AnnualWB, aes(x=sum_d.in, y=sum_aet.in, colour=CF)) + geom_point(size=3)+ geom_smooth(method="lm", se=FALSE, size=2)+
-  scale_colour_manual("Scenario",values=col) +
+  scale_colour_manual("",values=col) +
   labs(
     y = "Annual Actual Evapotranspiration (in)",
-    x = "Annual moisture deficit (in)",
+    x = "Annual water deficit (in)",
     colour = "GCM",
     title = paste("Water Balance for ",SiteID,sep="")  
-  ) + theme(plot.title = element_text(hjust = 0.5)) + #+ geom_vline(xintercept=mean(Historical.wb$deficit), colour="black") +geom_vline(xintercept=mean(Future.wb$deficit), colour="blue")
-  # size is pts
-  theme(axis.text = element_text(size=20), axis.title = element_text(size=20), legend.text=element_text(size=14),
-        plot.title=element_text(size=22)) #+xlim(20,45)+ylim(2,16)
+  ) + PlotTheme + axis.title.x=element_text(size=24, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20))
 
 ggsave("WaterBalance.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
