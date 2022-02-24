@@ -47,23 +47,27 @@ ggsave("LT-SWEaccum.in.png", path = FigDir, height=PlotHeight, width=PlotWidth)
 ###### PANELS ##########
 
 #Temp and Precip
-grid.arrange(t,p, nrow=2)
-g <- arrangeGrob(t,p, nrow=2)
-ggsave("LT-TavgF-PrcpIn.png", g, path = FigDir, height=PlotHeight, width=PlotWidth)
+legend <- grid_arrange_shared_legend(t,p,nrow=2,ncol=1,position="bottom")
+g <- grid.arrange(legend,top = textGrob(paste0("Historical and future projections for ", SiteID),
+                                        gp=gpar(fontface="bold", col="black", fontsize=26)))
+ggsave("LT-TavgF-PrcpIn.png", g, path = FigDir, height=PanelHeight, width=PanelWidth)
 
 #Temp and Deficit
-grid.arrange(t,d, nrow=2)
-g <- arrangeGrob(t,d, nrow=2)
-ggsave("LT-TavgF_D.in.png", g, path = FigDir, height=PlotHeight, width=PlotWidth)
+legend <- grid_arrange_shared_legend(t,d,nrow=2,ncol=1,position="bottom")
+g <- grid.arrange(legend,top = textGrob(paste0("Historical and future projections for ", SiteID),
+                                        gp=gpar(fontface="bold", col="black", fontsize=26)))
+ggsave("LT-TavgF_D.in.png", g, path = FigDir, height=PanelHeight, width=PanelWidth)
 
 #Temp and Runoff
-grid.arrange(t,r, nrow=2)
-g <- arrangeGrob(t,r, nrow=2)
-ggsave("LT-TavgF_Runoff.in.png", g, path = FigDir, height=PlotHeight, width=PlotWidth)
+legend <- grid_arrange_shared_legend(t,r,nrow=2,ncol=1,position="bottom")
+g <- grid.arrange(legend,top = textGrob(paste0("Historical and future projections for ", SiteID),
+                                        gp=gpar(fontface="bold", col="black", fontsize=26)))
+ggsave("LT-TavgF_Runoff.in.png", g, path = FigDir, height=PanelHeight, width=PanelWidth)
 
 #Temp and SWE
-grid.arrange(t,s, nrow=2)
-g <- arrangeGrob(t,s, nrow=2)
-ggsave("LT-TavgF_SWEaccum.in.png", g, path = FigDir, height=PlotHeight, width=PlotWidth)
+legend <- grid_arrange_shared_legend(t,s,nrow=2,ncol=1,position="bottom")
+g <- grid.arrange(legend,top = textGrob(paste0("Historical and future projections for ", SiteID),
+                                        gp=gpar(fontface="bold", col="black", fontsize=26)))
+ggsave("LT-TavgF_SWEaccum.in.png", g, path = FigDir, height=PanelHeight, width=PanelWidth)
 
 ##################
