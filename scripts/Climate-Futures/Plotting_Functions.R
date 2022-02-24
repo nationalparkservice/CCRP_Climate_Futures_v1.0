@@ -44,7 +44,7 @@ dot_plot <- function(data, xvar, yvar, grp, cols, title,xlab,labels){
     geom_vline(xintercept=0, linetype="dashed", color = "black") + 
     geom_point(stat="identity",size=8,colour="black",aes(fill = factor({{grp}}), shape = factor({{grp}}))) +
     PlotTheme +
-    theme(axis.title.x=element_text(size=24, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20))) +
+    theme(axis.title.x=element_text(size=20, vjust=0.5)) +
     labs(title = title, 
          x = xlab, y = "") +
     scale_fill_manual(name="",values =cols) +
@@ -102,6 +102,7 @@ ggplot(data, aes(x=as.numeric(Year), y={{var}}, col=CF, fill=CF)) +
   scale_fill_manual(name="Climate Future",values=cols) + PlotTheme 
 }
 
+
 density_plot <- function(data, xvar, cols,title, xlab) {
   ggplot(data, aes(x={{xvar}}, colour=CF,fill=CF,linetype=CF),show.legend=F) +geom_density(alpha=0.3,size=1.5) +
     scale_colour_manual(name="",values=cols) +
@@ -113,3 +114,36 @@ density_plot <- function(data, xvar, cols,title, xlab) {
     PlotTheme
 }
 
+spaghetti_plot <- function(data, var, col){
+  df <- deparse(substitute(data))
+    ggplot() +
+      geom_line(data=data,aes(x=DOY,y=eval(parse(text=var)),group=Year),colour=col,size=.7) +
+      geom_vline(xintercept=91, linetype="dashed", color = "black") +
+      geom_text(aes(x=91, label="Apr 1\n", y=max(eval(parse(text=paste0("WBData", "$",var))))), 
+                colour="black", angle=90, text=element_text(size=11),hjust=1) +
+      geom_vline(xintercept=274, linetype="dashed", color = "black") +
+      geom_text(aes(x=274, label="\nOct 1", y=max(eval(parse(text=paste0("WBData", "$",var))))),
+                colour="black", angle=90, text=element_text(size=11),hjust=1) +
+      coord_cartesian(ylim = c(0, max(eval(parse(text=paste0("WBData","$",var))))))+
+      PlotTheme +
+      labs(title = "", 
+           x = "", y = "")
+}
+
+
+ggplot() +
+  geom_line(data=WBData,aes(x=DOY,y=SWEaccum.in,group=Year),colour="red",size=.7) +
+  geom_vline(xintercept=91, linetype="dashed", color = "black") +
+  geom_text(aes(x=91, label="Apr 1\n", y=max(WBData$SWEaccum.in)), colour="black", angle=90, text=element_text(size=11),hjust=1) +
+  geom_vline(xintercept=274, linetype="dashed", color = "black") +
+  geom_text(aes(x=274, label="\nOct 1", y=max(WBData$SWEaccum.in)), colour="black", angle=90, text=element_text(size=11),hjust=1) +
+  theme(axis.text=element_text(size=16),
+        # axis.text.x=element_blank(),
+        axis.title.x=element_text(size=16,vjust=1.0),
+        axis.title.y=element_text(size=16,vjust=1.0),
+        plot.title=element_blank(),
+        legend.text=element_text(size=14), legend.title=element_text(size=14),
+        legend.position = "bottom") +
+  labs(title = "", 
+       x = "", y = "") +
+  ylim(0,max(WBData$SWEaccum.in))

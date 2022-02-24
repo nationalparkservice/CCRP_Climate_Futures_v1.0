@@ -140,3 +140,50 @@ dot_plot(MonthlyWB_delta, sum_aet.in, Month, grp=CF, cols=colors2,
          xlab="Change in AET (inches)",labels=MonthLabels)
 ggsave("Monthly-dot-sum_aet.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
+
+### Additional plots
+# Max SWE
+AnnualWB$max_SWEaccum.in <- aggregate(SWEaccum.in ~ Year+GCM, data=aggregate(SWEaccum.in~Year+GCM,data=WBData,sum), mean)[,3]
+density_plot(AnnualWB, xvar=max_SWEaccum.in,cols=col,title=paste(SiteID,"maximum annual SWE in", Yr,  "and Historical Period (", BasePeriod,")",sep=" "),
+             xlab="Max SWE (in)")
+ggsave("Density-max_SWEaccum.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
+
+var_bar_plot(AnnualWB, "max_SWEaccum.in", cols=colors3, ylab="Max SWE (in)",
+             title=paste0("Average annual max SWE in. in ", Yr, " vs ", BasePeriod))
+ggsave("Annual-bar-max_SWEaccum.in.png", width = PlotWidth, height = PlotHeight, path = FigDir)
+
+var_line_plot(AnnualWB, var=max_SWEaccum.in, cols=col, title="Average annual max SWE in.",
+              ylab="Max SWE (in)")
+ggsave("Annual-line-max_SWEaccum.in.png", width = PlotWidth, height = PlotHeight, path = FigDir)
+
+# SWE spaghetti
+Hist.SWE<-spaghetti_plot(subset(WBData,CF=="Historical"),"SWEaccum.in",col=col[1],CF="Historical")
+CF1.SWE<-spaghetti_plot(subset(WBData,CF %in% CFs[1]),"SWEaccum.in",col=col[2], CF=CFs[1])
+CF2.SWE<-spaghetti_plot(subset(WBData,CF %in% CFs[2]),"SWEaccum.in",col=col[3], CF=CFs[2])
+
+SWEgrid <- ggarrange(Hist.SWE, CF1.SWE, CF2.SWE, ncol = 1, nrow = 3,common.legend = T)
+
+annotate_figure(SWEgrid, left = textGrob("SWE (in)", rot = 90, vjust = 1, gp = gpar(cex = 1.3)),
+                         bottom = textGrob("Julian day", gp = gpar(cex = 1.3)),
+                         top = textGrob("Daily SWE for each climate future",
+                                        gp=gpar(fontface="bold", col="black",  fontsize=26)))
+ggsave("spaghetti-SWEaccum.in.png", width = PlotWidth, height = PlotHeight, path = FigDir)
+
+
+# runoff spaghetti
+Hist.runoff<-spaghetti_plot(subset(WBData,CF=="Historical"),"Runoff.in",col=col[1],CF="Historical")
+CF1.runoff<-spaghetti_plot(subset(WBData,CF %in% CFs[1]),"Runoff.in",col=col[2], CF=CFs[1])
+CF2.runoff<-spaghetti_plot(subset(WBData,CF %in% CFs[2]),"Runoff.in",col=col[3], CF=CFs[2])
+
+runoffgrid <- ggarrange(Hist.runoff, CF1.runoff, CF2.runoff, ncol = 1, nrow = 3,common.legend = T)
+
+annotate_figure(runoffgrid, left = textGrob("Runoff (in)", rot = 90, vjust = 1, gp = gpar(cex = 1.3)),
+                bottom = textGrob("Julian day", gp = gpar(cex = 1.3)),
+                top = textGrob("Daily Runoff for each climate future",
+                               gp=gpar(fontface="bold", col="black",  fontsize=26)))
+ggsave("spaghetti-Runoff.in.png", width = PlotWidth, height = PlotHeight, path = FigDir)
+
+rm(Hist.SWE,CF1.SWE,CF2.SWE,SWEgrid,Hist.runoff,CF1.runoff,CF2.runoff, runoffgrid)
+
+
+
