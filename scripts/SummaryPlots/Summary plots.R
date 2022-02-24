@@ -24,23 +24,23 @@ WBAvgs$SWEaccum.inRoll10 <- rollmean(WBAvgs$SWEaccum.in, rollLen, fill = NA, ali
 
 
 # Tmean
-t<-LT_plot(yrAvgs,TavgF,rollvar=TavgRoll10,cols=col,yaxis="Mean annual temperature (\u00B0F)")
+t<-LT_plot(yrAvgs,TavgF,rollvar=TavgRoll10,cols=col,yaxis="Mean annual temperature (\u00B0F)",title="")
 ggsave("LT-TavgF.png",t, path = FigDir, height=PlotHeight, width=PlotWidth)
 
 # Precip
-p<-LT_plot(yrAvgs,PrcpIn,rollvar=PrcpRoll10,cols=col,yaxis="Mean annual precipitation (inches/Yr)")
+p<-LT_plot(yrAvgs,PrcpIn,rollvar=PrcpRoll10,cols=col,yaxis="Mean annual precipitation (inches/Yr)",title="")
 ggsave("LT-PrcpIn.png", p, path = FigDir, height=PlotHeight, width=PlotWidth)
 
 # Deficit
-d<-LT_plot(WBAvgs,D.in,rollvar=D.inRoll10,cols=col,yaxis="Mean annual climatic water deficit (in/year)")
+d<-LT_plot(WBAvgs,D.in,rollvar=D.inRoll10,cols=col,yaxis="Mean annual climatic water deficit (in/year)",title="")
 ggsave("LT-D.in.png", d, path = FigDir, height=PlotHeight, width=PlotWidth)
 
 # Runoff
-r<-LT_plot(WBAvgs, Runoff.in, rollvar=Runoff.inRoll10, cols=col,yaxis="Mean annual runoff (in/year)")
+r<-LT_plot(WBAvgs, Runoff.in, rollvar=Runoff.inRoll10, cols=col,yaxis="Mean annual runoff (in/year)",title="")
 ggsave("LT-Runoff.in.png", s, path = FigDir, height=PlotHeight, width=PlotWidth)
 
 # SWEaccum
-s<-LT_plot(WBAvgs, SWEaccum.in, rollvar=SWEaccum.inRoll10,cols=col,yaxis="Mean annual accumulated SWE (in/year)")
+s<-LT_plot(WBAvgs, SWEaccum.in, rollvar=SWEaccum.inRoll10,cols=col,yaxis="Mean annual accumulated SWE (in/year)",title="")
 ggsave("LT-SWEaccum.in.png", path = FigDir, height=PlotHeight, width=PlotWidth)
 
 
