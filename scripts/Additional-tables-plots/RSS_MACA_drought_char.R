@@ -5,15 +5,11 @@ SPEI_annual_bar <- function(data, period.box=T, title){
     {if(period.box==T) geom_rect(xmin=Yr-Range/2, xmax=Yr+Range/2, ymin=-Inf, ymax=Inf, alpha=0.1, fill="darkgray", col="darkgray")} +
     geom_bar(stat="identity",aes(fill=col),col="black") + 
     geom_hline(yintercept=-.5,linetype=2,colour="black",size=1) +
-    scale_fill_manual(name="",values =c("blue","red")) +
+    scale_fill_manual(name="",values =c("turquoise2","orange1")) +
     labs(title = title, 
          x = "Date", y = "SPEI") +
     guides(color=guide_legend(override.aes = list(size=7))) + PlotTheme
 }
-
-
-
-
 
 ############################### FORMAT DATAFRAMES  ############################################
 # Historical
@@ -289,9 +285,14 @@ write.csv(Drought_char,paste0(TableDir,"Drought_char.csv"),row.names=FALSE)
 Drought_all = Drought_char
 Drought_all$CF = factor(Drought_all$CF, levels = c("Historical",CFs))
 
-#Drought severity barplot
+#Drought duration barplot
 var_bar_plot(Drought_all,"Duration", colors3, "Average Drought Duration", "Years")
 ggsave("Bar-DroughtDuration.png", path = FigDir, height=PlotHeight, width=PlotWidth)
+
+#Drought severity barplot
+var_bar_plot(Drought_all,"Severity", colors3, "Average Drought Severity", 
+             "Severity (Intensity * Duration)")
+ggsave("Bar-DroughtSeverity.png", path = FigDir, height=PlotHeight, width=PlotWidth)
 
 #Drought intensity barplot
 var_bar_plot(Drought_all,"Intensity", colors3, "Average Drought Intensity", 
@@ -303,3 +304,39 @@ var_bar_plot(Drought_all,"Frequency", colors3, "Average Drought-Free Interval",
              "Years")
 ggsave("Bar-DroughtFrequency.png", path = FigDir, height=PlotHeight, width=PlotWidth)
 
+
+####################################### REPORT FIGURES ##############################################
+# Option 1
+a <- SPEI_annual_bar(CF1, period.box=T,
+                title=CFs[1]) 
+b <- SPEI_annual_bar(CF2, period.box=T,
+                     title=CFs[2])
+
+c <- var_bar_plot(Drought_all,"Duration", colors3, "Duration", "Years")
+d <- var_bar_plot(Drought_all,"Frequency", colors3, "Return interval", 
+             "Years")
+e<- var_bar_plot(Drought_all,"Severity", colors3, "Severity", 
+                  "Severity (Intensity * Duration)")
+
+spei.time <- grid_arrange_shared_legend(a + rremove("ylab") + rremove("x.text"),b +  rremove("ylab"),
+                                        nrow=2,ncol=1,position="bottom")
+
+spei.time <- annotate_figure(spei.time, left = textGrob("SPEI", rot = 90, vjust = 1, gp = gpar(cex = 2)))
+
+drt.char <- grid.arrange(c+rremove("x.text"),d+rremove("x.text"),e,nrow=3,
+                         top = textGrob("Average drought characteristics",gp=gpar(fontface="bold", col="black", fontsize=26,hjust=0.5)))
+
+g <- grid.arrange(spei.time, drt.char,ncol = 2, clip = FALSE)
+ggsave("Panel-DroughtCharacteristics-1.png",g, path = FigDir, height=PanelHeight, width=PanelWidth)
+
+
+# Option 2
+c <- c+ theme(legend.title=element_text(size=24),legend.text=element_text(size=22),legend.position = "bottom")
+d <- d+ theme(legend.title=element_text(size=24),legend.text=element_text(size=22),legend.position = "bottom")
+e <- e+ theme(legend.title=element_text(size=24),legend.text=element_text(size=22),legend.position = "bottom")
+
+drt.char <-grid_arrange_shared_legend(c+ rremove("x.text"),d+ rremove("x.text"),e+ rremove("x.text"),
+                                      ncol=3,nrow=1,position="bottom",
+                                      top = textGrob("Average drought characteristics",gp=gpar(fontface="bold", col="black", fontsize=26,hjust=0.5)))
+g <- grid.arrange(spei.time, drt.char,nrow=2,ncol = 1, clip = FALSE)
+ggsave("Panel-DroughtCharacteristics-2.png",g, path = FigDir, height=PanelHeight, width=PanelWidth)                      
