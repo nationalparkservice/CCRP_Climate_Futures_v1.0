@@ -17,13 +17,13 @@ SPEI_annual_bar <- function(data, period.box=T, title){
 
 ############################### FORMAT DATAFRAMES  ############################################
 # Historical
-head(Gridmet)
-Gridmet$TavgC<-(Gridmet$TavgF-32)*5/9
-Gridmet$Prcpmm<-Gridmet$PrcpIn*25.4
-Gridmet$Month<-format(Gridmet$Date,format="%m")
-d<-aggregate(Prcpmm~Month+Year,Gridmet,sum)
-d2<-aggregate(TavgC~Month+Year,Gridmet,mean)
-drt<-merge(d,d2,by=c("Month","Year"));rm(d,d2)
+Grid <- Gridmet
+Grid$TavgC<-(Grid$TavgF-32)*5/9
+Grid$Prcpmm<-Grid$PrcpIn*25.4
+Grid$Month<-format(Grid$Date,format="%m")
+d<-aggregate(Prcpmm~Month+Year,Grid,sum)
+d2<-aggregate(TavgC~Month+Year,Grid,mean)
+drt<-merge(d,d2,by=c("Month","Year"));rm(d,d2,Grid)
 drt<-drt[with(drt, order(Year, Month)),]
 drt$PET<-thornthwaite(drt$TavgC,lat = Lat)
 
