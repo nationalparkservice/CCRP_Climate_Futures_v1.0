@@ -131,3 +131,35 @@ spaghetti_plot <- function(data, var, col,CF){
            x = "", y = "")
 }
 
+LTPlotTheme = theme(axis.text=element_text(size=20),    #Text size for axis tick mark labels
+                    axis.title.x=element_text(size=24, hjust=0.5, margin=margin(t=20, r=20, b=20, l=20)),               #Text size and alignment for x-axis label
+                    axis.title.y=element_text(size=24, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20)),              #Text size and alignment for y-axis label
+                    plot.title=element_blank(),      #No title
+                    legend.title=element_text(size=24),                                                                    #Text size of legend category labels
+                    legend.text=element_text(size=20), #Text size of legend title
+                    legend.position = c(0,1),legend.justification = c(-.1,1.1),  #Set top left
+                    panel.border = element_blank(), #Remove border around plot
+                    axis.line = element_line(colour = "black"), #Add axis lines
+                    panel.background = element_blank(), #Background white
+                    panel.grid.major = element_line("light grey",0.3)) #add grid back
+
+
+
+LT_plot <-function(data,yvar, rollvar,cols,yaxis){
+  ggplot(data, aes(x=Year, y={{yvar}}, col=CF, fill=CF)) + 
+    geom_rect(xmin=Yr-Range/2, xmax=Yr+Range/2, ymin=0, ymax=80, alpha=0.1, fill="lightgray", col="lightgray") +
+    # geom_ribbon(aes(x=as.numeric(as.character(year)), ymin=Tavg.min, ymax=Tavg.max, fill=CF), alpha=0.5) +
+    geom_line(size=2) + geom_point(col="black", size=2, shape=16) +
+    geom_point() +
+    geom_line(aes(x=Year, y={{rollvar}}),size=1.25,colour="black", na.rm=TRUE) +
+    geom_line(aes(x=Year, y={{rollvar}},colour = CF), size=.75 ,na.rm=TRUE) +
+    scale_x_continuous(breaks=c(1980, 2000, 2020, 2040, 2060, 2080, 2100)) +
+    labs(x="Year", y=yaxis) +
+    scale_color_manual(name="Climate Future",values=cols) +
+    scale_fill_manual(name="Climate Future",values=cols) + PlotTheme +
+    theme( axis.line = element_line(colour = "black"), #Add axis lines
+           panel.background = element_blank(), #Background white
+           panel.grid.major = element_line("light grey",0.3)) #add grid back)
+}
+
+
