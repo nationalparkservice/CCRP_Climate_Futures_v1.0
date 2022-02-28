@@ -9,7 +9,7 @@ checkFile <- function(fName, fileURL=F){
   tmpFiles <- list.files(DataDir)
   if(fName %in% tmpFiles){
     print(paste(fName, " File exists. Not downloaded"))
-    if("zip" == tolower(str_sub(fName, str_length(fName)-2, str_length(fName))))unzip(paste(DataDir,fName,sep=''), exdir=OutDir) 
+    if("zip" == tolower(str_sub(fName, str_length(fName)-2, str_length(fName))))unzip(paste(DataDir,fName,sep='')) 
     return(1)
   }  # 1 file exists
   # no file so go get it
@@ -20,7 +20,7 @@ checkFile <- function(fName, fileURL=F){
   if(fileURL!=F)getName <- paste(fileURL, fName, sep='')
   download.file(getName, destfile=paste(DataDir,fName,sep=''), mode="wb")
   # unzip if necessary
-  if("zip" == tolower(str_sub(fName, str_length(fName)-2, str_length(fName))))unzip(paste(DataDir,fName,sep=''), exdir=OutDir)
+  if("zip" == tolower(str_sub(fName, str_length(fName)-2, str_length(fName))))unzip(paste(DataDir,fName,sep=''))
 }   # end checkFile
 
 
@@ -79,8 +79,8 @@ checkFile(hName,WBFileURL)
 fName <- paste(SiteID, "_water_balance_future.zip", sep='')
 checkFile(fName,WBFileURL)
 
-file.rename(paste0(OutDir,SiteID,"_water_balance_historical.csv"),paste0(DataDir,SiteID,"_water_balance_historical.csv"))
-file.rename(paste0(OutDir,SiteID,"_water_balance_future.csv"),paste0(DataDir,SiteID,"_water_balance_future.csv"))
+file.rename(paste0(SiteID,"_water_balance_historical.csv"),paste0(DataDir,SiteID,"_water_balance_historical.csv"))
+file.rename(paste0(SiteID,"_water_balance_future.csv"),paste0(DataDir,SiteID,"_water_balance_future.csv"))
 file.remove(list.files(path = DataDir, pattern = '.zip', full.names = TRUE))
 
 histWB <- read.csv(paste(DataDir, SiteID,"_water_balance_historical.csv", sep=''))
