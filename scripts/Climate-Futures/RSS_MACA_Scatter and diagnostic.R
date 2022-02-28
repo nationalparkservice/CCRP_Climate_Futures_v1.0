@@ -4,7 +4,7 @@
 
 #Create output directory for MACA figs
 
-DataFile <- list.files(path = OutDir, pattern = 'Final_Environment.RData', full.names = TRUE) # Environment needs to be added if not parsing MACA data
+DataFile <- list.files(path = DataDir, pattern = 'Final_Environment.RData', full.names = TRUE) # Environment needs to be added if not parsing MACA data
 load(DataFile)
 
 ##Color schemes
