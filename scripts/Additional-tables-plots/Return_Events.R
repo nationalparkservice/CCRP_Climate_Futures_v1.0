@@ -26,7 +26,7 @@ return50base$modeled<-predict(regression,newdata=return50base)
 return50base$GCM<-"Historical"
 
 ### CFs future 
-Future_subset <- subset(Future_all, GCM %in% WB_GCMs$GCM)
+Future_subset <- subset(Future_all, GCM %in% WB_GCMs$GCM & CF %in% CFs)
 Future_split <- aggregate(PrcpIn~Year+GCM,Future_subset,max)
 
 Future_GCM<-split(Future_split,Future_split$GCM)
