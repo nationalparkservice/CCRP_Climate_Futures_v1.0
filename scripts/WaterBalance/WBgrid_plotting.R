@@ -43,14 +43,16 @@ AnnualWB$CF<-factor(AnnualWB$CF, levels=c("Historical",CFs))
 AnnualWB$CF[is.na(AnnualWB$CF)] <- "Historical"
 
 
-ggplot(AnnualWB, aes(x=sum_d.in, y=sum_aet.in, colour=CF)) + geom_point(size=3)+ geom_smooth(method="lm", se=FALSE, size=2)+
+ggplot(AnnualWB, aes(x=sum_d.in, y=sum_aet.in, colour=CF)) +  
+  geom_point(size=3) +   
+  geom_smooth(method="lm", se=FALSE, size=2) +
   scale_colour_manual("",values=col) +
   labs(
     y = "Annual Actual Evapotranspiration (in)",
     x = "Annual water deficit (in)",
     colour = "GCM",
     title = paste("Water Balance for ",SiteID,sep="")  
-  ) + PlotTheme + axis.title.x=element_text(size=24, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20))
+  ) + PlotTheme + theme(axis.title.x=element_text(size=24, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20)))
 
 ggsave("WaterBalance.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 

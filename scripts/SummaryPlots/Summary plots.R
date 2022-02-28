@@ -37,7 +37,7 @@ ggsave("LT-D.in.png", d, path = FigDir, height=PlotHeight, width=PlotWidth)
 
 # Runoff
 r<-LT_plot(WBAvgs, Runoff.in, rollvar=Runoff.inRoll10, cols=col,yaxis="Mean annual runoff (in/year)",title="")
-ggsave("LT-Runoff.in.png", s, path = FigDir, height=PlotHeight, width=PlotWidth)
+ggsave("LT-Runoff.in.png", r, path = FigDir, height=PlotHeight, width=PlotWidth)
 
 # SWEaccum
 s<-LT_plot(WBAvgs, SWEaccum.in, rollvar=SWEaccum.inRoll10,cols=col,yaxis="Mean annual accumulated SWE (in/year)",title="")

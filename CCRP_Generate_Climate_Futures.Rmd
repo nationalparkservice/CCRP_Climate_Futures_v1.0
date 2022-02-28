@@ -135,8 +135,9 @@ SPEI_end <- 2012
 ```{r Climate-Futures, message=FALSE, warning=FALSE, include=FALSE, results=HIDE}
 
 if(centroids_csv == "Y") {
-  source(here::here("scripts", "Climate-Futures", "download_Tercek.csvs.R"), local = knitr::knit_global())
+  source(here::here("scripts", "Climate-Futures", "download_Tercek_csvs.R"), local = knitr::knit_global())
 } else {
+  print("Other data needed")
   #source(here::here("scripts", "Climate-Futures", "CFT_CF_parsing_v1.R")) # Parse MACA data. Output = "_init_parsed.RData". # 9-8-21: CFT parsing script is not working due to an issue with the package or MACA servers. ACR to talk to CU Boulder about the issue. For now, add _init_parsed.RData file manually to parsed-data folder. 
 }
 
@@ -186,11 +187,13 @@ source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts.R")) # 
 
 source(here::here("scripts", "Additional-tables-plots", "RSS_MACA_drought_char.R"))
 
-source(here:here("scripts", "Additional-tables-plots", "Return_Events"))
+source(here::here("scripts", "Additional-tables-plots", "Return_Events.R"))
 
 source(here::here("scripts", "WaterBalance", "WBgrid_plotting.R")) # Run the Water Balance Model
 
 source(here::here("scripts", "SummaryPlots", "Summary plots.R"))
+
+source(here::here("scripts", "Misc", "Report_plots.R"))
 
 ```
 
@@ -234,11 +237,13 @@ source(here::here("scripts", "Climate-Futures", "RSS_Plotting_Bar_Charts.R")) # 
 
 source(here::here("scripts", "Additional-tables-plots", "RSS_MACA_drought_char.R"))
 
-source(here:here("scripts", "Additional-tables-plots", "Return_Events"))
+source(here::here("scripts", "Additional-tables-plots", "Return_Events.R"))
 
 source(here::here("scripts", "WaterBalance", "WBgrid_plotting.R")) # Run the Water Balance Model
 
 source(here::here("scripts", "SummaryPlots", "Summary plots.R"))
+
+source(here::here("scripts", "Misc", "Report_plots.R"))
 
 ```
 
