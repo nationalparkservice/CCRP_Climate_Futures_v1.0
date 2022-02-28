@@ -246,7 +246,7 @@ WB_Means %>% mutate(WB_GCM = ifelse(GCM == ww,"Warm Wet",
                                                 ifelse(GCM == hw, "Hot Wet",
                                                        ifelse( GCM == hd, "Hot Dry",NA))))) -> WB_Means
 
-WB_Means %>% drop_na() %>% filter(CF %in% CFs) %>% select(c(GCM,CF)) -> WB_GCMs
+WB_Means %>% drop_na() %>% filter(CF %in% CFs_all) %>% select(c(GCM,CF)) -> WB_GCMs
 
 Future_Means<-left_join(Future_Means, WB_Means[,c("GCM","WB_GCM")], by="GCM")
 
@@ -254,9 +254,8 @@ rm(lx,ux,ly,uy,ww,wd,hw,hd, pts, WB_Means)
 
 #######################
 ## CHANGE CF NAMES FOR DRY/DAMP
-dry.quadrant = CFs[grepl('Dry', CFs)]
+dry.quadrant = CFs[grepl('Dry', CFs_all)]
 split <- Future_Means %>% filter(CF == dry.quadrant) %>% summarise(PrcpMean=mean(DeltaPr*365))
-CFs <- if(split$PrcpMean>0.5) {gsub("Dry","Damp",CFs)} else(CFs)
 CFs_all <- if(split$PrcpMean>0.5) {gsub("Dry","Damp",CFs_all)} else(CFs_all)
 
 Future_Means %>% rowwise() %>% 
