@@ -2,6 +2,8 @@
 DataFile <- list.files(path = DataDir, pattern = 'Final_Environment.RData', full.names = TRUE) # Environment needs to be added if not parsing MACA data
 load(DataFile)
 
+vars <- names(F_annual[,4:length(F_annual)])
+
 #################################################### SUBSET DATAFRAMES ###################################################
 Monthly<-subset(Monthly,CF %in% FutureSubset); Monthly$CF<-factor(Monthly$CF, levels=c("Historical",FutureSubset))
 # Monthly$Month<-factor(Monthly$Month,levels=c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"))
@@ -19,7 +21,9 @@ Season_delta$season<-factor(Season_delta$season,levels=c("Winter","Spring","Summ
 # Join historical and future for bar plots
 H <- subset(H_annual, select = -c(GCM))
 F_annual<-subset(F_annual, CF %in% FutureSubset)
-Fut_annual<-aggregate(.~Year+CF,subset(F_annual, select = -c(GCM)),mean)
+Fut_annual <- F_annual %>% select(-GCM) %>% group_by(Year,CF) %>% 
+  summarise_all(mean)
+
 Annual<-rbind(H, Fut_annual)
 Annual$CF<-factor(Annual$CF,levels=c("Historical",CFs), ordered=is.ordered(Annual$CF))
 

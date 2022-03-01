@@ -155,6 +155,7 @@ source(here::here("scripts", "Climate-Futures", "RSS_MACA_Scatter and diagnostic
 # Specify Climate Futures
 
 FutureSubset <- c("Warm Wet","Hot Dry"); CFs = FutureSubset  # Pick pair of climate futures.
+WB_GCMs <- subset(WB_GCMs, CF %in% CFs)
 
 colors2<- c("#9A9EE5","#E10720")  # Select pair of climate futures - WarmWet/HotDry
 #colors2<- c("#F3D3CB","#12045C")  # Select pair of climate futures - HotWet/WarmDry
