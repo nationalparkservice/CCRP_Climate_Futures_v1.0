@@ -408,13 +408,13 @@ Baseline_all %>%
   group_by(GCM, idx = cumsum(GDD == 0L)) %>% 
   mutate(GDD_count = row_number()) %>% 
   ungroup %>% 
-  select(-idx) -> Future_all
+  select(-idx) -> Baseline_all
 
 Baseline_all %>% 
   group_by(GCM, idx = cumsum(GDD == 1L)) %>% 
   mutate(N_GDD_count = row_number()) %>% 
   ungroup %>% 
-  select(-idx) -> Future_all
+  select(-idx) -> Baseline_all
 Baseline_all$HI = heat_index(Baseline_all$TmaxF,Baseline_all$RHminPct)
 Baseline_all$HI.EC = Baseline_all$HI >89 & Baseline_all$HI <103
 Baseline_all$HI.Dan = Baseline_all$HI >102 & Baseline_all$HI < 124
