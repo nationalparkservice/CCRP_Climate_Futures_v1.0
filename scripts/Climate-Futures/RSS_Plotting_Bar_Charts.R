@@ -342,6 +342,23 @@ ggsave("Annual-line-HI.Dan.png", width = PlotWidth, height = PlotHeight, path = 
 
 ############################################### PRINT TABLES #################################################################
 A<-aggregate(.~CF,Annual[,c(1,3:27)], mean) 
-write.xlsx(list("Means"=A,"Annual"=Annual,"Season"=Season,"D_Season"=Season_delta,"Monthly"=Monthly,"Monthly_delta"=Monthly_delta), 
-           file=(paste0(TableDir,"Plot_data.xlsx")),col.names=TRUE)
+S<-aggregate(.~CF,Annual[,c(1,3:27)],sd) #Withing CF
+WB_GCM_all <- rbind(H_annual,subset(F_annual, GCM %in% WB_GCMs$GCM))
+WB_GCM_Means <-aggregate(.~CF,WB_GCM_all[,c(1,4:24)], mean, na.rm=TRUE)
+WB_GCM_SD <-aggregate(.~CF,WB_GCM_all[,c(1,4:24)], sd, na.rm=TRUE)
 
+WB_GCM_YOY <- split(WB_GCM_all,WB_GCM_all$CF)
+for (i in 1:length(WB_GCM_YOY)){
+  # name=names(WB_GCM_YOY)[i]
+  WB_GCM_YOY[[i]][,4:24] <- 
+    lag(WB_GCM_YOY[[i]][,4:24] ,1) - WB_GCM_YOY[[i]][,4:24] 
+}
+
+WB_GCM_YOY <- ldply(WB_GCM_YOY, data.frame)
+YOY <- aggregate(.~CF,WB_GCM_YOY[,c(2,5:length(WB_GCM_YOY))], FUN=mean, na.rm=TRUE)
+
+
+write.xlsx(list("Means"=A,"Annual"=Annual,"Season"=Season,"D_Season"=Season_delta,"Monthly"=Monthly,"Monthly_delta"=Monthly_delta,
+                "SD"=S, "WB_GCM_Means"=WB_GCM_Means, "WB_GCM_SD"=WB_GCM_SD,"WB_GCM_YOY"=YOY), 
+           file=(paste0(TableDir,"Plot_data.xlsx")),col.names=TRUE)
+rm(S,A,WB_GCM_Means,WB_GCM_SD,WB_GCM_YOY,YOY)

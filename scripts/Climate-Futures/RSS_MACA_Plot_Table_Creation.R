@@ -134,13 +134,13 @@ BaseMeanTmx = mean(Baseline_all$TmaxF)
 BaseMeanTmn = mean(Baseline_all$TminF)
 
 ####Create Future/Baseline means data tables, with averages for all four weather variables, organized by GCM
-Future_Means = data.frame(aggregate(cbind(Future_all$PrcpIn, Future_all$TmaxF, Future_all$TminF, Future_all$TavgF)
-                                    ~ Future_all$GCM, Future_all, mean,na.rm=F))   # , Future_all$Wind
-names(Future_Means) = c("GCM", "PrcpIn", "TmaxF", "TminF", "TavgF")    # , "Wind"
+Future_Means = aggregate(cbind(PrcpIn, TmaxF, TminF, TavgF)
+                                    ~ GCM, Future_all, mean,na.rm=FALSE)   # , Future_all$Wind
+# names(Future_Means) = c("GCM", "PrcpIn", "TmaxF", "TminF", "TavgF")    # , "Wind"
 
-Baseline_Means = data.frame(aggregate(cbind(PrcpIn, TmaxF, TminF, TavgF)~GCM, 
-                                      Baseline_all, mean))    
-names(Baseline_Means) = c("GCM", "PrcpIn", "TmaxF", "TminF", "TavgF") 
+Baseline_Means = aggregate(cbind(PrcpIn, TmaxF, TminF, TavgF)~GCM, 
+                                      Baseline_all, mean)   
+# names(Baseline_Means) = c("GCM", "PrcpIn", "TmaxF", "TminF", "TavgF") 
 
 #### add delta columns in order to classify CFs
 Future_Means$DeltaPr = Future_Means$PrcpIn - Baseline_Means$PrcpIn
@@ -459,7 +459,7 @@ colnames(H)[4] <- "BegGrow"
 H<-merge(H,Historical_SE[,c("CF","GCM","Year","adjusted")], by=c("CF","Year","GCM"))
 colnames(H)[5] <- "EndGrow"
 H$GrowLen<- H$EndGrow - H$BegGrow
-H_annual<-merge(H_annual,H,by=c("CF","GCM","Year"))
+H_annual<-merge(H_annual,H,by=c("CF","GCM","Year"), all=TRUE)
 rm(Historical_GS,Historical_GU,Historical_SE,H)
 
 # Frost length calculations - late spring freeze events
@@ -474,7 +474,7 @@ F_annual<-aggregate(cbind(PrcpIn,OverHotTemp, OverHighQ, Tmax99, UnderColdTemp,U
                           FThaw, GDD,HI.EC,HI.Dan)~CF+GCM+Year,Future_all,sum)
 
 Fmeans<-aggregate(cbind(TmaxF,TminF,TavgF,RHmean)~CF+GCM+Year,Future_all,FUN=mean)
-F_annual<-merge(F_annual,Fmeans,by=c("CF","GCM","Year"));rm(Fmeans)
+F_annual<-merge(F_annual,Fmeans,by=c("CF","GCM","Year"), all=TRUE);rm(Fmeans)
 
 # Agrregate mean w/ temps only W months
 F.WinterTemp<-aggregate(TavgF~CF+GCM+Year,data=subset(Future_all,Month<3 | Month>11), mean)
@@ -489,16 +489,16 @@ Future_SE<-Future_GS[N_GDD_count==6 & halfyr == 2,.SD[1],by=.(Year,CF,GCM)]
 Future_SE$adjusted<-Future_SE$Julian - 6
 F<-aggregate(cbind(Julian)~CF+GCM+Year,data=Future_GU,mean,na.rm=TRUE)
 colnames(F)[4] <- "BegGrow"
-F<-merge(F,Future_SE[,c("CF","GCM","Year","adjusted")], by=c("CF","Year","GCM"))
+F<-merge(F,Future_SE[,c("CF","GCM","Year","adjusted")], by=c("CF","Year","GCM"), all=TRUE)
 colnames(F)[5] <- "EndGrow"
 F$GrowLen<- F$EndGrow - F$BegGrow
-F_annual<-merge(F_annual,F,by=c("CF","GCM","Year"))
+F_annual<-merge(F_annual,F,by=c("CF","GCM","Year"), all=TRUE)
 rm(Future_GS,Future_GU,Future_SE,F)
 
 # Frost length calculations - late spring freeze events
 Sp.Frost<-aggregate(Frost~CF+GCM+Year,data=subset(Future_all,Julian<180),sum)
 colnames(Sp.Frost)[4] <- "Sp.Frost"
-F_annual<-merge(F_annual,Sp.Frost,by=c("CF","GCM","Year"));rm(Sp.Frost)
+F_annual<-merge(F_annual,Sp.Frost,by=c("CF","GCM","Year"), all=TRUE);rm(Sp.Frost)
 
 
 ######################################## END THRESHOLD CALCULATIONS ##############################

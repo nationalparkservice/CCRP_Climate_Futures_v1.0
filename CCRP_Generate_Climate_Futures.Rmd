@@ -163,10 +163,7 @@ colors3<-c("white",colors2)
 col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
 #col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
 
-ww_hd <- paste0(local_rss_dir,"/WarmWet_HotDry")
-dir.create(ww_hd)
-
-CFDir = paste0(OutDir,"/WarmWet_HotDry/") # for .csv's
+CFDir = paste0(OutDir,"WarmWet_HotDry/") # for .csv's
 if(dir.exists(CFDir) == FALSE){
   dir.create(CFDir)
 }
@@ -206,27 +203,26 @@ source(here::here("scripts", "Misc", "Report_plots.R"))
 
 FutureSubset <- c("Warm Dry","Hot Wet"); CFs = FutureSubset  # Pick pair of climate futures.
 
+WB_GCMs <- subset(WB_GCMs, CF %in% CFs)
+
 # colors2<- c("#9A9EE5","#E10720")  # Select pair of climate futures - WarmWet/HotDry
 colors2<- c("#F3D3CB","#12045C")  # Select pair of climate futures - HotWet/WarmDry
 
 colors3<-c("white",colors2)
-col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
-#col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
+# col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
+col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
 
-ww_hd <- paste0(local_rss_dir,"/WarmDry_HotWet")
-dir.create(ww_hd)
-
-CFDir = paste0(OutDir,"/WarmDry_HotWet") # for .csv's
+CFDir = paste0(OutDir,"WarmDry_HotWet/") # for .csv's
 if(dir.exists(CFDir) == FALSE){
   dir.create(CFDir)
 }
 
-TableDir = paste0(CFDir,"/tables") # for .csv's
+TableDir = paste0(CFDir,"tables/") # for .csv's
 if(dir.exists(TableDir) == FALSE){
   dir.create(TableDir)
 }
 
-FigDir = paste0(CFDir,"/figures") # for .csv's
+FigDir = paste0(CFDir,"figures/") # for .csv's
 if(dir.exists(FigDir) == FALSE){
   dir.create(FigDir)
 }
@@ -255,9 +251,6 @@ source(here::here("scripts", "Misc", "Report_plots.R"))
 
 # This script is for copying and pasting files and folders unique to an RSS to a local folder, for the purposes of using, sharing, or archiving products. Files are then deleted from the Climate_Futures repo so that files are not inadvertently overwritten or confused with products from a different site.
 
-
-# remove climate csv files
-source(here::here("scripts", "Misc", "var_summary_stats.R")) #read in output/Plot_data for each CF
 
 source(here::here("scripts", "Misc", "write_metadata.R"))
 
