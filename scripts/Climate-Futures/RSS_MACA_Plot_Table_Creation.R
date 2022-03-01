@@ -373,6 +373,8 @@ Season_delta$season = factor(Season_delta$season, levels = c("Winter","Spring","
 ######################################## CALCULATE ANNUAL DAYS ABOVE/BELOW TEMP & PRECIP THRESHOLDS ##########################
 
 ###### TOTAL & CONSECUTIVE DAYS OVER/UNDER THRESHOLD TEMPS ######
+Baseline_all[order("Date","GCM"),]
+Future_all[order("Date","GCM"),]
 
 HistYears = length(unique(Baseline_all$Date$year))
 
@@ -402,8 +404,17 @@ Baseline_all$PrecipOver1 = Baseline_all$PrcpIn > 1
 Baseline_all$PrecipOver2 = Baseline_all$PrcpIn > 2
 Baseline_all$FThaw = Baseline_all$TminF<28 & Baseline_all$TmaxF>34
 Baseline_all$GDD = Baseline_all$TavgF>41 # 5 deg C
-Baseline_all$GDD_count = Baseline_all$GDD * unlist(lapply(rle(Baseline_all$GDD)$lengths, seq_len))
-Baseline_all$N_GDD_count = (Baseline_all$GDD == FALSE) * unlist(lapply(rle(Baseline_all$GDD)$lengths, seq_len))
+Baseline_all %>% 
+  group_by(GCM, idx = cumsum(GDD == 0L)) %>% 
+  mutate(GDD_count = row_number()) %>% 
+  ungroup %>% 
+  select(-idx) -> Future_all
+
+Baseline_all %>% 
+  group_by(GCM, idx = cumsum(GDD == 1L)) %>% 
+  mutate(N_GDD_count = row_number()) %>% 
+  ungroup %>% 
+  select(-idx) -> Future_all
 Baseline_all$HI = heat_index(Baseline_all$TmaxF,Baseline_all$RHminPct)
 Baseline_all$HI.EC = Baseline_all$HI >89 & Baseline_all$HI <103
 Baseline_all$HI.Dan = Baseline_all$HI >102 & Baseline_all$HI < 124
@@ -429,75 +440,112 @@ Future_all$PrecipOver1 = Future_all$PrcpIn > 1
 Future_all$PrecipOver2 = Future_all$PrcpIn > 2
 Future_all$FThaw = Future_all$TminF<28 & Future_all$TmaxF>34
 Future_all$GDD = Future_all$TavgF>41 # 5 deg C
-Future_all$GDD_count = Future_all$GDD * unlist(lapply(rle(Future_all$GDD)$lengths, seq_len))
-Future_all$N_GDD_count = (Future_all$GDD == FALSE) * unlist(lapply(rle(Future_all$GDD)$lengths, seq_len))
+
+Future_all %>% 
+  group_by(GCM, idx = cumsum(GDD == 0L)) %>% 
+  mutate(GDD_count = row_number()) %>% 
+  ungroup %>% 
+  select(-idx) -> Future_all
+
+Future_all %>% 
+  group_by(GCM, idx = cumsum(GDD == 1L)) %>% 
+  mutate(N_GDD_count = row_number()) %>% 
+  ungroup %>% 
+  select(-idx) -> Future_all
+
 Future_all$HI = heat_index(Future_all$TmaxF,Future_all$RHminPct)
 Future_all$HI.EC = Future_all$HI >89 & Future_all$HI <103
 Future_all$HI.Dan = Future_all$HI >102 & Future_all$HI < 124
 Future_all$Frost = Future_all$GDD == TRUE & Future_all$TminF < 32
 
 #### Historical Dataframes aggregated by Year+GCM ###########
-H_annual<-aggregate(cbind(PrcpIn,OverHotTemp, OverHighQ, Tmax99, UnderColdTemp,UnderLowQ,  
-                          NoPrecip, NoPrecipLength, OverPrecip95, OverPrecip99, PrecipOver1, PrecipOver2,
-                          FThaw, GDD,HI.EC,HI.Dan)~CF+GCM+Year,Baseline_all,sum, na.action = 'na.pass')
+H_annual <- Baseline_all %>% group_by(CF, GCM, Year) %>%
+  summarise_at(vars(PrcpIn,OverHotTemp, OverHighQ, Tmax99, UnderColdTemp,UnderLowQ,  
+                    NoPrecip, NoPrecipLength, OverPrecip95, OverPrecip99, PrecipOver1, PrecipOver2,
+                    FThaw, GDD,HI.EC,HI.Dan), sum)  
 
-Hmeans<-aggregate(cbind(TmaxF,TminF,TavgF,RHmean)~CF+GCM+Year,Baseline_all,FUN=mean, na.action = 'na.pass')
-H_annual<-merge(H_annual,Hmeans,by=c("CF","GCM","Year"));rm(Hmeans)
+Hmeans<-Baseline_all %>% group_by(CF, GCM, Year) %>%
+  summarise_at(vars(TmaxF,TminF,TavgF,RHmean),mean)
+H_annual<-merge(H_annual,Hmeans,by=c("CF","GCM","Year"), all=TRUE);rm(Hmeans)
 
 # Agrregate mean w/ temps only W months
-H.WinterTemp<-aggregate(TavgF~CF+GCM+Year,data=subset(Baseline_all,Month<3 | Month>11), mean, na.action = 'na.pass')
-colnames(H.WinterTemp)[4]<-"W.Temp"
+H.WinterTemp<- Baseline_all %>% group_by(CF, GCM, Year) %>% 
+  filter(Month<3 | Month>11) %>% 
+  summarise(W.Temp=mean(TavgF)) 
 H_annual <- merge(H_annual,H.WinterTemp,by=c("CF","GCM","Year")); rm(H.WinterTemp)
 
-# Further Growing Season Calculations
-Historical_GS <- as.data.table(subset(Baseline_all,select=c(Year,CF,GCM,Julian,GDD_count,N_GDD_count,halfyr)))
-Historical_GU<-Historical_GS[GDD_count==7 & halfyr==1,.SD[1],by=.(Year,CF,GCM)]
-Historical_SE<-Historical_GS[N_GDD_count==6 & halfyr==2,.SD[1],by=.(Year,CF,GCM)]
-Historical_SE$adjusted<-Historical_SE$Julian - 6
-H<-aggregate(cbind(Julian)~CF+GCM+Year,data=Historical_GU,mean,na.rm=TRUE)
-colnames(H)[4] <- "BegGrow"
-H<-merge(H,Historical_SE[,c("CF","GCM","Year","adjusted")], by=c("CF","Year","GCM"))
-colnames(H)[5] <- "EndGrow"
+
+# # Further Growing Season Calculations
+Baseline_GS <- as.data.table(subset(Baseline_all,select=c(Year,CF,GCM,Julian,GDD_count,N_GDD_count,halfyr)))
+Baseline_GS[order("Date","GCM"),]
+Baseline_GU <- Baseline_GS %>% group_by(CF, GCM, Year) %>% 
+  filter(GDD_count ==7, halfyr == 1) %>% 
+  slice(1) %>% # takes the first occurrence if there is a tie
+  ungroup()
+
+Baseline_SE <- Baseline_GS %>% group_by(CF, GCM, Year) %>% 
+  filter(N_GDD_count ==6, halfyr == 2) %>% 
+  slice(1) %>% # takes the first occurrence if there is a tie
+  ungroup()
+Baseline_SE$"EndGrow"<-Baseline_SE$Julian - 6
+
+H<-Baseline_GU %>% group_by(CF, GCM, Year) %>%
+  summarise(BegGrow = mean(Julian))
+H<-merge(H,Baseline_SE[,c("CF","GCM","Year","EndGrow")],by=c("CF","GCM","Year"), all=TRUE)
 H$GrowLen<- H$EndGrow - H$BegGrow
 H_annual<-merge(H_annual,H,by=c("CF","GCM","Year"), all=TRUE)
-rm(Historical_GS,Historical_GU,Historical_SE,H)
+rm(Baseline_GS,Baseline_GU,Baseline_SE,H)
 
 # Frost length calculations - late spring freeze events
-Sp.Frost<-aggregate(Frost~CF+GCM+Year,data=subset(Baseline_all,Julian<180),sum)
-colnames(Sp.Frost)[4] <- "Sp.Frost"
-H_annual<-merge(H_annual,Sp.Frost,by=c("CF","GCM","Year"));rm(Sp.Frost)
+Sp.Frost<-Baseline_all %>% group_by(CF, GCM, Year) %>%
+  filter(Julian < 180) %>% 
+  summarise(Sp.Frost = sum(Frost))
+H_annual<-merge(H_annual,Sp.Frost,by=c("CF","GCM","Year"), all=TRUE);rm(Sp.Frost)
+
 
 
 #### Future Dataframes aggregated by Year+GCM ###########
-F_annual<-aggregate(cbind(PrcpIn,OverHotTemp, OverHighQ, Tmax99, UnderColdTemp,UnderLowQ,  
-                          NoPrecip, NoPrecipLength, OverPrecip95, OverPrecip99, PrecipOver1, PrecipOver2,
-                          FThaw, GDD,HI.EC,HI.Dan)~CF+GCM+Year,Future_all,sum)
-
-Fmeans<-aggregate(cbind(TmaxF,TminF,TavgF,RHmean)~CF+GCM+Year,Future_all,FUN=mean)
+F_annual <- Future_all %>% group_by(CF, GCM, Year) %>%
+  summarise_at(vars(PrcpIn,OverHotTemp, OverHighQ, Tmax99, UnderColdTemp,UnderLowQ,  
+                    NoPrecip, NoPrecipLength, OverPrecip95, OverPrecip99, PrecipOver1, PrecipOver2,
+                    FThaw, GDD,HI.EC,HI.Dan), sum)  
+  
+Fmeans<-Future_all %>% group_by(CF, GCM, Year) %>%
+  summarise_at(vars(TmaxF,TminF,TavgF,RHmean),mean)
 F_annual<-merge(F_annual,Fmeans,by=c("CF","GCM","Year"), all=TRUE);rm(Fmeans)
 
 # Agrregate mean w/ temps only W months
-F.WinterTemp<-aggregate(TavgF~CF+GCM+Year,data=subset(Future_all,Month<3 | Month>11), mean)
-colnames(F.WinterTemp)[4]<-"W.Temp"
+F.WinterTemp<- Future_all %>% group_by(CF, GCM, Year) %>% 
+  filter(Month<3 | Month>11) %>% 
+  summarise(W.Temp=mean(TavgF)) 
 F_annual <- merge(F_annual,F.WinterTemp,by=c("CF","GCM","Year")); rm(F.WinterTemp)
 
 
 # # Further Growing Season Calculations
 Future_GS <- as.data.table(subset(Future_all,select=c(Year,CF,GCM,Julian,GDD_count,N_GDD_count,halfyr)))
-Future_GU<-Future_GS[GDD_count==7 & halfyr==1,.SD[1],by=.(Year,CF,GCM)]
-Future_SE<-Future_GS[N_GDD_count==6 & halfyr == 2,.SD[1],by=.(Year,CF,GCM)]
-Future_SE$adjusted<-Future_SE$Julian - 6
-F<-aggregate(cbind(Julian)~CF+GCM+Year,data=Future_GU,mean,na.rm=TRUE)
-colnames(F)[4] <- "BegGrow"
-F<-merge(F,Future_SE[,c("CF","GCM","Year","adjusted")], by=c("CF","Year","GCM"), all=TRUE)
-colnames(F)[5] <- "EndGrow"
+Future_GS[order("Date","GCM"),]
+Future_GU <- Future_GS %>% group_by(CF, GCM, Year) %>% 
+  filter(GDD_count ==7, halfyr == 1) %>% 
+  slice(1) %>% # takes the first occurrence if there is a tie
+  ungroup()
+
+Future_SE <- Future_GS %>% group_by(CF, GCM, Year) %>% 
+  filter(N_GDD_count ==6, halfyr == 2) %>% 
+  slice(1) %>% # takes the first occurrence if there is a tie
+  ungroup()
+Future_SE$"EndGrow"<-Future_SE$Julian - 6
+
+F<-Future_GU %>% group_by(CF, GCM, Year) %>%
+  summarise(BegGrow = mean(Julian))
+F<-merge(F,Future_SE[,c("CF","GCM","Year","EndGrow")],by=c("CF","GCM","Year"), all=TRUE)
 F$GrowLen<- F$EndGrow - F$BegGrow
 F_annual<-merge(F_annual,F,by=c("CF","GCM","Year"), all=TRUE)
 rm(Future_GS,Future_GU,Future_SE,F)
 
 # Frost length calculations - late spring freeze events
-Sp.Frost<-aggregate(Frost~CF+GCM+Year,data=subset(Future_all,Julian<180),sum)
-colnames(Sp.Frost)[4] <- "Sp.Frost"
+Sp.Frost<-Future_all %>% group_by(CF, GCM, Year) %>%
+  filter(Julian < 180) %>% 
+  summarise(Sp.Frost = sum(Frost))
 F_annual<-merge(F_annual,Sp.Frost,by=c("CF","GCM","Year"), all=TRUE);rm(Sp.Frost)
 
 
