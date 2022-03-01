@@ -24,7 +24,6 @@ rmd <- list.files(project_root_dir, pattern = '.Rmd')
 file.copy(file.path(project_root_dir, rmd), local_rss_dir)
 
 # Remove figures and park-specific data from repo
-unlink(OutDir, recursive = TRUE)
-# f <- list.files(OutDir, include.dirs = F, full.names = T, recursive = T)
-# file.remove(f)
+base::unlink(paste0('./PARK/',SiteID), recursive = TRUE)
+
 
