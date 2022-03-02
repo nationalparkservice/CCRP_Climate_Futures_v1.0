@@ -10,8 +10,8 @@ load(DataFile)
 ##Color schemes
 
 #Colors for CF values plotted side by side (match order of CFs vector)
-colors5 <-  c("#9A9EE5","#12045C","#F3D3CB","#E10720","white")
-colors5.2 <- c("#9A9EE5", "#12045C", "white", "#F3D3CB", "#E10720")
+colors5 <-  c("slateblue2", "green4", "gold1", "red3","white")
+colors5.2 <- c("slateblue2", "green4", "white", "gold1", "red3")
 
 #Colors for RCP 4.5, RCP 8.5
 col.RCP2 = c("blue", "red")
@@ -201,6 +201,7 @@ ggplot(Monthly_delta, aes(x=Month,y=PrcpIn,fill=CF)) +
   scale_x_discrete(labels = MonthLabels)
 
 ggsave("Monthly-bar-PrcpInDelta.png", width = PlotWidth, height = PlotHeight, path = OutDir)
+
 
 #Bar graph of seasonal precip by CF
 ggplot(Season_delta, aes(x=season,y=PrcpIn,fill=CF)) +

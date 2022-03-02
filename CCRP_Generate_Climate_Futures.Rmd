@@ -54,7 +54,7 @@ rm(list = ls())
 
 # -------------- Input site information -------------------------------------- #
 
-SiteID = "TUSK" 
+SiteID = "VALL" 
 # Lat = 40.44039704 # Can manually input lat/lon, otherwise run get_site_info.R
 # Lon = -111.7093944
 
@@ -157,11 +157,11 @@ source(here::here("scripts", "Climate-Futures", "RSS_MACA_Scatter and diagnostic
 FutureSubset <- c("Warm Wet","Hot Dry"); CFs = FutureSubset  # Pick pair of climate futures.
 # WB_GCMs <- subset(WB_GCMs, CF %in% CFs)
 
-colors2<- c("#9A9EE5","#E10720")  # Select pair of climate futures - WarmWet/HotDry
+colors2<- c("slateblue2", "red3") # Select pair of climate futures - WarmWet/HotDry
 #colors2<- c("#F3D3CB","#12045C")  # Select pair of climate futures - HotWet/WarmDry
 
 colors3<-c("white",colors2)
-col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
+col<- c("darkgray",colors2)  # WarmWet/HotDry
 #col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
 
 CFDir = paste0(OutDir,"WarmWet_HotDry/") # for .csv's
@@ -207,11 +207,11 @@ FutureSubset <- c("Warm Dry","Hot Wet"); CFs = FutureSubset  # Pick pair of clim
 # WB_GCMs <- subset(WB_GCMs, CF %in% CFs)
 
 # colors2<- c("#9A9EE5","#E10720")  # Select pair of climate futures - WarmWet/HotDry
-colors2<- c("#F3D3CB","#12045C")  # Select pair of climate futures - HotWet/WarmDry
+colors2<- c("green4", "gold1") # Select pair of climate futures - HotWet/WarmDry
 
 colors3<-c("white",colors2)
 # col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
-col<- c("darkgray","#F3D3CB","#12045C")  # HotWet/WarmDry
+col<- c("darkgray", colors2)  # HotWet/WarmDry
 
 CFDir = paste0(OutDir,"WarmDry_HotWet/") # for .csv's
 if(dir.exists(CFDir) == FALSE){
