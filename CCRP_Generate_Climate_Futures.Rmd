@@ -207,7 +207,7 @@ FutureSubset <- c("Warm Dry","Hot Wet"); CFs = FutureSubset  # Pick pair of clim
 # WB_GCMs <- subset(WB_GCMs, CF %in% CFs)
 
 # colors2<- c("#9A9EE5","#E10720")  # Select pair of climate futures - WarmWet/HotDry
-colors2<- c("green4", "gold1") # Select pair of climate futures - HotWet/WarmDry
+colors2<- c("gold1","green4") # Select pair of climate futures - HotWet/WarmDry
 
 colors3<-c("white",colors2)
 # col<- c("darkgray","#9A9EE5","#E10720")  # WarmWet/HotDry
