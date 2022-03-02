@@ -122,15 +122,15 @@ density_plot <- function(data, xvar, cols,title, xlab) {
     PlotTheme
 }
 
-spaghetti_plot <- function(data, var, col,CF){
+spaghetti_plot_wateryr <- function(data, var, col,CF){
   df <- deparse(substitute(data))
     ggplot() +
-      geom_line(data=data,aes(x=DOY,y=eval(parse(text=var)),group=Year),colour=col,size=1) +
-      geom_vline(xintercept=91, linetype="dashed", color = "black") +
-      geom_text(aes(x=91, label="Apr 1\n", y=max(eval(parse(text=paste0("WBData", "$",var))))), 
+      geom_line(data=data,aes(x=WaterYr,y=eval(parse(text=var)),group=Year),colour=col,size=1) +
+      geom_vline(xintercept=183, linetype="dashed", color = "black") +
+      geom_text(aes(x=183, label="Apr 1\n", y=max(eval(parse(text=paste0("WBData", "$",var))))), 
                 colour="black", angle=90, text=element_text(size=11),hjust=1) +
-      geom_vline(xintercept=274, linetype="dashed", color = "black") +
-      geom_text(aes(x=274, label="\nOct 1", y=max(eval(parse(text=paste0("WBData", "$",var))))),
+      geom_vline(xintercept=1, linetype="dashed", color = "black") +
+      geom_text(aes(x=1, label="\nOct 1", y=max(eval(parse(text=paste0("WBData", "$",var))))),
                 colour="black", angle=90, text=element_text(size=11),hjust=1) +
       coord_cartesian(ylim = c(0, max(eval(parse(text=paste0("WBData","$",var))))))+
       PlotTheme + 
@@ -138,7 +138,6 @@ spaghetti_plot <- function(data, var, col,CF){
       labs(title = CF, 
            x = "", y = "")
 }
-
 
 
 LT_plot <-function(data,yvar, rollvar,cols,yaxis,title){
