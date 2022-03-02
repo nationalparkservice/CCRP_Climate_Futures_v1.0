@@ -7,6 +7,10 @@ load(DataFile)
 
 # This script prints analysis metadata into the sessionInfo.txt file
 sink(paste(OutDir,"sessionInfo.txt")) # Create sessionInfo text file
+
+sessionInfo() # add information on package and R versions
+cat("\n")
+
 cat(paste("Climate futures for",SiteID))
 cat("\n")
 cat(paste("Lat:", Lat))
@@ -68,8 +72,7 @@ cat("\n")
 # cat(paste("Long-term timeseries plots use PRISM historical data - bias-corrected against gridMET from", BC.min, "to", BC.max, "using the delta method. Projections use MACA data."))
 
 
-sessionInfo() # add information on package and R versions
-cat("\n")
+
 
 
 sink()

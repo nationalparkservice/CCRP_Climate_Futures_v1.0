@@ -123,5 +123,5 @@ ggmap(myMap2, aes(x=x, y=y)) +
 ggsave(filename = "MACA-map-zoomed-in.png", device = "png", path = OutDir)                         
 
 rm(myMap,myMap2,Sp_park,park,maca.sf,maca.poly,maca_grid_shp,maca_grid_crop,maca_cell,maca,adjacent_poly_sf,
-   adjacent_poly,adjacent_cells, nps_boundary, nps_centroids, centroid, box, cell, maca_grid_sf,)
+   adjacent_poly,adjacent_cells, nps_boundary, nps_centroids, centroid, box, cell, maca_grid_sf)
 

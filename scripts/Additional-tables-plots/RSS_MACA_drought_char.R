@@ -12,6 +12,8 @@ SPEI_annual_bar <- function(data, period.box=T, title){
 }
 
 ############################### FORMAT DATAFRAMES  ############################################
+WB_GCMs <- subset(WB_GCMs, CF %in% CFs)
+
 # Historical
 Grid <- Gridmet
 Grid$TavgC<-(Grid$TavgF-32)*5/9
