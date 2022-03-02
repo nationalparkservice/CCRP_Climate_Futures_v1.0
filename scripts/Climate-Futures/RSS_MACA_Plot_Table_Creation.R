@@ -246,7 +246,7 @@ WB_Means %>% mutate(WB_GCM = ifelse(GCM == ww,"Warm Wet",
                                                 ifelse(GCM == hw, "Hot Wet",
                                                        ifelse( GCM == hd, "Hot Dry",NA))))) -> WB_Means
 
-WB_Means %>% drop_na() %>% filter(CF %in% CFs_all) %>% select(c(GCM,CF)) -> WB_GCMs
+WB_Means  %>% filter(CF %in% CFs_all) %>% drop_na(WB_GCM) %>% select(c(GCM,CF)) -> WB_GCMs
 
 Future_Means<-left_join(Future_Means, WB_Means[,c("GCM","WB_GCM")], by="GCM")
 
