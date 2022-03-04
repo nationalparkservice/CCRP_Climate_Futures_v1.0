@@ -1,14 +1,17 @@
 ##################################################
 ##    METADATA    ################################
 ##################################################
-DataFile <- list.files(path = DataDir, pattern = 'Final_Environment.RData', full.names = TRUE) # Environment needs to be added if not parsing MACA data
-load(DataFile)
+
 
 
 # This script prints analysis metadata into the sessionInfo.txt file
 sink(paste(OutDir,"sessionInfo.txt")) # Create sessionInfo text file
 
 sessionInfo() # add information on package and R versions
+
+DataFile <- list.files(path = DataDir, pattern = 'Final_Environment.RData', full.names = TRUE) # Environment needs to be added if not parsing MACA data
+load(DataFile)
+
 cat("\n")
 
 cat(paste("Climate futures for",SiteID))

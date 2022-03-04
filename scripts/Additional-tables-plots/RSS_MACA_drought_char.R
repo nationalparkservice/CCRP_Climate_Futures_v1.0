@@ -250,6 +250,8 @@ for (i in 1:length(CF.split)){
       CF.split[[i]]$count[d[j+1]]-CF.split[[i]]$count[nd[j]]
   }
 }
+HistoricalDrought$freq[is.na(HistoricalDrought$freq)] <- 0
+FutureDrought$freq[is.na(FutureDrought$freq)] <- 0
 
 head(HistoricalDrought)
 head(FutureDrought)
