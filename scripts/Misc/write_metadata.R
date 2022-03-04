@@ -1,17 +1,16 @@
 ##################################################
 ##    METADATA    ################################
 ##################################################
+DataFile <- list.files(path = DataDir, pattern = 'Final_Environment.RData', full.names = TRUE) # Environment needs to be added if not parsing MACA data
+load(DataFile)
 
-
+my_session_info <- devtools::session_info()
+SI <- sessionInfo()
 
 # This script prints analysis metadata into the sessionInfo.txt file
 sink(paste(OutDir,"sessionInfo.txt")) # Create sessionInfo text file
 
-sessionInfo() # add information on package and R versions
-
-DataFile <- list.files(path = DataDir, pattern = 'Final_Environment.RData', full.names = TRUE) # Environment needs to be added if not parsing MACA data
-load(DataFile)
-
+# sessionInfo() # add information on package and R versions
 cat("\n")
 
 cat(paste("Climate futures for",SiteID))
@@ -73,11 +72,18 @@ cat("\n")
 # cat("BIAS CORRECTION METHODS")
 # cat("\n")
 # cat(paste("Long-term timeseries plots use PRISM historical data - bias-corrected against gridMET from", BC.min, "to", BC.max, "using the delta method. Projections use MACA data."))
+cat("\n")
+cat(paste("Program completed at ",Sys.time()))
+cat("\n")
+cat("R SESSION INFORMATION")
+cat("\n")
 
-
-
-
-
+cat("\n")
+cat(R.version.string)
+print(my_session_info)
+cat("\n")
+cat(print(Sys.info()))
+cat("\n")
 sink()
 
 # # copy to local folder and delete
