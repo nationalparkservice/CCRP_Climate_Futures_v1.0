@@ -235,7 +235,15 @@ for (i in 1:length(ND)){
   FutureDrought$severity[i]<-sum(Future.drt$SPEI[D[i]:(ND[i]-1)])
   FutureDrought$peak[i]<-min(Future.drt$SPEI[D[i]:(ND[i]-1)])
 }
+if(length(unique(FutureDrought$CF == 1))) {FD <- FutureDrought %>% filter(row_number()==1) %>%
+  mutate(Year = 9999, CF = CFs[!(CFs %in% unique(FutureDrought$CF))],
+         duration = 0, severity = 0, peak = 0, freq = 0)
+CFs[!(CFs %in% unique(FutureDrought$CF))]
+FutureDrought = rbind(FutureDrought, FD)
+rm(FD)}
+
 FutureDrought$CF<-as.factor(FutureDrought$CF)
+
 
 ## Freq
 
@@ -312,9 +320,9 @@ ggsave("Bar-DroughtFrequency.png", path = FigDir, height=PlotHeight, width=PlotW
 ####################################### REPORT FIGURES ##############################################
 # Option 1
 a <- SPEI_annual_bar(CF1, period.box=T,
-                title=CFs[1]) 
+                title=CFs[1]) + coord_cartesian(ylim = c(min(all3$SPEI), max(all3$SPEI)))
 b <- SPEI_annual_bar(CF2, period.box=T,
-                     title=CFs[2])
+                     title=CFs[2]) +  coord_cartesian(ylim = c(min(all3$SPEI), max(all3$SPEI)))
 
 c <- var_bar_plot(Drought_all,"Duration", colors3, "Duration", "Years")
 d <- var_bar_plot(Drought_all,"Frequency", colors3, "Return interval", 
