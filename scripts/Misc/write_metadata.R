@@ -8,7 +8,7 @@ my_session_info <- devtools::session_info()
 SI <- sessionInfo()
 
 # This script prints analysis metadata into the sessionInfo.txt file
-sink(paste(OutDir,"sessionInfo.txt")) # Create sessionInfo text file
+sink(paste0(OutDir,"sessionInfo.txt")) # Create sessionInfo text file
 
 # sessionInfo() # add information on package and R versions
 cat("\n")

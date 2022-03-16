@@ -160,7 +160,7 @@ ggsave("scatter6.png", width = PlotWidth, height = PlotHeight, path = OutDir)
 #  scatter plots with GCM name identifying points. For all, and separate 4.5 and 8.5 plots
 
 plot_name <- "scatter7.png"
-OFName <- paste(OutDir, plot_name)
+OFName <- paste0(OutDir, plot_name)
 
 png(filename = OFName, width = 1280, height = 1280)
 plot(Future_Means$DeltaTavg, 365*Future_Means$DeltaPr, pch=20, main=paste("RCP 4.5 & 8.5", Yr), 
@@ -173,7 +173,7 @@ dev.off()
 
 
 plot_name <- "scatter8.png"
-OFName <- paste(OutDir, plot_name)
+OFName <- paste0(OutDir, plot_name)
 
 png(OFName, width = 1280, height = 1280)
 plot(365*DeltaPr ~ DeltaTavg, data=Future_Means, subset = emissions == "RCP 4.5", pch=20, main= paste("RCP 4.5", Yr), 
@@ -182,7 +182,7 @@ text(365*DeltaPr ~ DeltaTavg, data=Future_Means, subset = emissions == "RCP 4.5"
 dev.off()
 
 plot_name <- "scatter9.png"
-OFName <- paste(OutDir, plot_name)
+OFName <- paste0(OutDir, plot_name)
 
 png(OFName, width = 1280, height = 1280)
 plot(365*DeltaPr ~ DeltaTavg, data=Future_Means, subset = emissions == "RCP 8.5",
