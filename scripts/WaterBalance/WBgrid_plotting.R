@@ -9,7 +9,7 @@ WBData$yrmon = strftime(WBData$Date, "%Y%m")
 MonthlyWB = aggregate(Rain.in~yrmon+GCM,data=aggregate(Rain.in~yrmon+GCM,data=WBData,sum),mean)
 colnames(MonthlyWB)[3]<-"sum_rain.in"
 
-MonthlyWB$sum_SWEaccum.in = aggregate(SWEaccum.in~yrmon+GCM,data=aggregate(SWEaccum.in~yrmon+GCM,data=WBData,sum),mean)[,3]
+MonthlyWB$max_SWEaccum.in = aggregate(SWEaccum.in~yrmon+GCM,data=WBData,max)[,3]
 MonthlyWB$sum_runoff.in = aggregate(Runoff.in~yrmon+GCM,data=aggregate(Runoff.in~yrmon+GCM,data=WBData,sum),mean)[,3]
 MonthlyWB$sum_pet.in = aggregate(PET.in~yrmon+GCM,data=aggregate(PET.in~yrmon+GCM,data=WBData,sum),mean)[,3]
 MonthlyWB$avg_SM.in = aggregate(SM.in ~ yrmon+GCM, data=WBData, FUN=mean)[,3]
@@ -20,7 +20,7 @@ MonthlyWB$sum_d.in = aggregate(D.in~yrmon+GCM,data=aggregate(D.in~yrmon+GCM,data
 AnnualWB = aggregate(Rain.in ~ Year+GCM, data=aggregate(Rain.in~Year+GCM,data=WBData,sum), mean)
 colnames(AnnualWB)[3]<-"sum_rain.in"
 
-AnnualWB$sum_SWEaccum.in = aggregate(SWEaccum.in ~ Year+GCM, data=aggregate(SWEaccum.in~Year+GCM,data=WBData,sum), mean)[,3]
+AnnualWB$max_SWEaccum.in = aggregate(SWEaccum.in ~ Year+GCM, data=WBData, max)[,3]
 AnnualWB$sum_runoff.in = aggregate(Runoff.in ~ Year+GCM, data=aggregate(Runoff.in~Year+GCM,data=WBData,sum), mean)[,3]
 AnnualWB$sum_pet.in = aggregate(PET.in ~ Year+GCM, data=aggregate(PET.in~Year+GCM,data=WBData,sum), mean)[,3]
 AnnualWB$avg_SM.in = aggregate(SM.in ~ Year+GCM, data=WBData, FUN=mean)[,3]
