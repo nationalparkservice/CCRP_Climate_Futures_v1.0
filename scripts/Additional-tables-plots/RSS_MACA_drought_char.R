@@ -85,17 +85,17 @@ all3<-aggregate(cbind(Prcpmm,SPEI)~Year+CF,all2,mean)
 
 ###################################### PLOT ANNUAL TIME-SERIES #################################################
 # Gridmet
-drt3$col[drt3$SPEI>=0]<-"wet"
-drt3$col[drt3$SPEI<0]<-"dry"
-drt3$col<-factor(drt3$col, levels=c("wet","dry"))
+drt3$col[drt3$SPEI>=0]<-"above average"
+drt3$col[drt3$SPEI<0]<-"below average"
+drt3$col<-factor(drt3$col, levels=c("above average","below average"))
 
 SPEI_annual_bar(drt3, period.box=F,title="SPEI values for Historical Period (gridMET)")
 ggsave("Annual-bar-SPEI-gridmet.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
 # MACA prep dataframe
-all3$col[all3$SPEI>=0]<-"wet"
-all3$col[all3$SPEI<0]<-"dry"
-all3$col<-factor(all3$col, levels=c("wet","dry"))
+all3$col[all3$SPEI>=0]<-"above average"
+all3$col[all3$SPEI<0]<-"below average"
+all3$col<-factor(all3$col, levels=c("above average","below average"))
 all3$Year<-as.numeric(all3$Year)
 
 # CF 
