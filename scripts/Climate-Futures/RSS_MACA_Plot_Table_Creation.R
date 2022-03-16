@@ -493,6 +493,7 @@ Baseline_SE$"EndGrow"<-Baseline_SE$Julian - 6
 H<-Baseline_GU %>% group_by(CF, GCM, Year) %>%
   summarise(BegGrow = mean(Julian))
 H<-merge(H,Baseline_SE[,c("CF","GCM","Year","EndGrow")],by=c("CF","GCM","Year"), all=TRUE)
+H$EndGrow[is.na(H$EndGrow)]<-365
 H$GrowLen<- H$EndGrow - H$BegGrow
 H_annual<-merge(H_annual,H,by=c("CF","GCM","Year"), all=TRUE)
 rm(Baseline_GS,Baseline_GU,Baseline_SE,H)
@@ -539,6 +540,7 @@ Future_SE$"EndGrow"<-Future_SE$Julian - 6
 F<-Future_GU %>% group_by(CF, GCM, Year) %>%
   summarise(BegGrow = mean(Julian))
 F<-merge(F,Future_SE[,c("CF","GCM","Year","EndGrow")],by=c("CF","GCM","Year"), all=TRUE)
+F$EndGrow[is.na(F$EndGrow)]<-365
 F$GrowLen<- F$EndGrow - F$BegGrow
 F_annual<-merge(F_annual,F,by=c("CF","GCM","Year"), all=TRUE)
 rm(Future_GS,Future_GU,Future_SE,F)

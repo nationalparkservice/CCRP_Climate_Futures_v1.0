@@ -21,8 +21,10 @@ Season_delta$season<-factor(Season_delta$season,levels=c("Winter","Spring","Summ
 # Join historical and future for bar plots
 H <- subset(H_annual, select = -c(GCM))
 F_annual<-subset(F_annual, CF %in% FutureSubset)
-Fut_annual <- F_annual %>% select(-GCM) %>% group_by(Year,CF) %>% 
-  summarise_all(mean)
+# Fut_annual <- F_annual %>% select(-GCM) %>% group_by(Year,CF) %>% 
+#   summarise_all(mean) #drops NAs
+
+Fut_annual<-aggregate(.~Year+CF,subset(F_annual, select = -c(GCM)),mean)
 
 Annual<-rbind(H, Fut_annual)
 Annual$CF<-factor(Annual$CF,levels=c("Historical",CFs), ordered=is.ordered(Annual$CF))
@@ -51,8 +53,8 @@ dualscatter  + geom_text_repel(aes(label=GCM)) +
         legend.text=element_text(size=18), legend.title=element_text(size=16)) + 
   ###
   labs(title =paste(SiteID," Changes in climate means in ", Yr, " by GCM run",sep=""), 
-       x = paste("Changes in ",Longx,sep=""), # Change
-       y = paste("Changes in ",Longy,sep="")) + #change
+       x = "Changes in annual average temperature (\u00B0F)", # Change
+       y = "Changes in annual average precipitation (in)") + #change
   scale_color_manual(name="Scenarios", values=c("black")) +
   # scale_fill_manual(name="Scenarios",values = c("black")) + 
   theme(legend.position="none") +
@@ -80,8 +82,8 @@ dualscatter  + geom_text_repel(aes(label=GCM)) +
         legend.text=element_text(size=18), legend.title=element_text(size=16)) + 
   ###
   labs(title =paste(SiteID," Changes in climate means in ", Yr, " by GCM run",sep=""), 
-       x = paste("Changes in ",Longx,sep=""), # Change
-       y = paste("Changes in ",Longy,sep="")) + #change
+       x = "Changes in annual average temperature (\u00B0F)", # Change
+       y = "Changes in annual average precipitation (in)") + #change
   scale_color_manual(name="Scenarios", values=c("black")) +
   # scale_fill_manual(name="Scenarios",values = c("black")) + 
   theme(legend.position="none") +
