@@ -222,42 +222,42 @@ ggsave("Annual-line-OverHighQ.png", width = PlotWidth, height = PlotHeight, path
 
 ## OverPrecip95
 var_bar_plot(Annual, "OverPrecip95", cols=colors3, ylab="Days/Yr",
-             title=paste0("Average Days/Yr > Historical 95th Percentile (", round(HistPrecip95, 1), " in) in ", Yr, " vs ", BasePeriod))
+             title=paste0("Average Days/Yr Precipitation > Historical 95th Percentile (", round(HistPrecip95, 1), " in) in ", Yr, " vs ", BasePeriod))
 ggsave("Annual-bar-OverPrecip95.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
 var_box_plot(Annual, "OverPrecip95", cols=colors3, ylab="Days/Yr",
-             title=paste0("Average Days/Yr > Historical 95th Percentile (", round(HistPrecip95, 1), " in) in ", Yr, " vs ", BasePeriod))
+             title=paste0("Average Days/Yr Precipitation > Historical 95th Percentile (", round(HistPrecip95, 1), " in) in ", Yr, " vs ", BasePeriod))
 ggsave("Annual-box-OverPrecip95.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
-var_line_plot(Annual, var=OverPrecip95, cols=col, title=paste0("Average Days/Yr > Historical 95th Percentile (", round(HistPrecip95, 1), " in)"),
+var_line_plot(Annual, var=OverPrecip95, cols=col, title=paste0("Average Days/Yr Precipitation > Historical 95th Percentile (", round(HistPrecip95, 1), " in)"),
               ylab="Days/Yr")
 ggsave("Annual-line-OverPrecip95.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
 
 ## PrecipOver1
 var_bar_plot(Annual, "PrecipOver1", cols=colors3, ylab="Days/Yr",
-             title=paste0("Average Days/Yr > 1 in. in ", Yr, " vs ", BasePeriod))
+             title=paste0("Average Days/Yr Precipitation > 1 in. in ", Yr, " vs ", BasePeriod))
 ggsave("Annual-bar-PrecipOver1.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
 var_box_plot(Annual, "PrecipOver1", cols=colors3, ylab="Days/Yr",
-             title=paste0("Average Days/Yr > 1 in. in ", Yr, " vs ", BasePeriod))
+             title=paste0("Average Days/Yr Precipitation > 1 in. in ", Yr, " vs ", BasePeriod))
 ggsave("Annual-box-PrecipOver1.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
-var_line_plot(Annual, var=PrecipOver1, cols=col, title=paste0("Average Days/Yr > 1 in."),
+var_line_plot(Annual, var=PrecipOver1, cols=col, title=paste0("Average Days/Yr Precipitation > 1 in."),
               ylab="Days/Yr")
 ggsave("Annual-line-PrecipOver1.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
 
 ## PrecipOver2
 var_bar_plot(Annual, "PrecipOver2", cols=colors3, ylab="Days/Yr",
-             title=paste0("Average Days/Yr > 2 in. in ", Yr, " vs ", BasePeriod))
+             title=paste0("Average Days/Yr Precipitation > 2 in. in ", Yr, " vs ", BasePeriod))
 ggsave("Annual-bar-PrecipOver2.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
 var_box_plot(Annual, "PrecipOver2", cols=colors3, ylab="Days/Yr",
-             title=paste0("Average Days/Yr > 2 in. in ", Yr, " vs ", BasePeriod))
+             title=paste0("Average Days/Yr Precipitation > 2 in. in ", Yr, " vs ", BasePeriod))
 ggsave("Annual-box-PrecipOver2.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
-var_line_plot(Annual, var=PrecipOver2, cols=col, title=paste0("Average Days/Yr > 2 in."),
+var_line_plot(Annual, var=PrecipOver2, cols=col, title=paste0("Average Days/Yr Precipitation > 2 in."),
               ylab="Days/Yr")
 ggsave("Annual-line-PrecipOver2.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
