@@ -36,12 +36,13 @@ a <- ggplot(allregressions, aes(x=return, y=modeled, group=CF, colour = CF)) +
   geom_line(size = 2, stat = "identity",colour="black") + 
   geom_line(size = 1.5, stat = "identity") +
   geom_point(colour= "black", size=4, aes(fill = factor(CF), shape = factor(CF))) +
-  PlotTheme + axis.title.x=element_text(size=24, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20))
+  PlotTheme + theme(axis.title.x=element_text(size=24, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20))) +
   labs(title = paste(SiteID, " - Recurrence intervals for 24-hour precipitation totals",sep=""),
        x = "Recurrence interval (year)", y = "Precipitation (inches/day)") +
   scale_color_manual(name="",values = colors3) +
   scale_fill_manual(name="",values = colors3) +
   scale_shape_manual(name="",values = c(21,22,23))
+  
 b <- LT_plot(WBAvgs, Runoff.in, rollvar=Runoff.inRoll10, cols=col,yaxis="Runoff (in/year)",title="Mean annual runoff ")
 legend <- grid_arrange_shared_legend(a,b,nrow=2,ncol=1,position="bottom")
 ggsave("Panel-recurrenceinterval-Runoff.in.png",legend, path = FigDir, height=PanelHeight, width=PanelWidth)
