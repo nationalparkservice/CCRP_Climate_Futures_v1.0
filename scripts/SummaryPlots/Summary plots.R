@@ -24,7 +24,7 @@ WBAvgs$SWEaccum.inRoll10 <- rollmean(WBAvgs$SWEaccum.in, rollLen, fill = NA, ali
 
 
 # Tmean
-t<-LT_plot(yrAvgs,TavgF,rollvar=TavgRoll10,cols=col,yaxis="Mean annual temperature (\u00B0F)",title="")
+t<-LT_plot(yrAvgs,TavgF,rollvar=TavgRoll10,cols=col,yaxis="Mean annual temperature (\u00B0F)",title="") 
 ggsave("LT-TavgF.png",t, path = FigDir, height=PlotHeight, width=PlotWidth)
 
 # Precip
