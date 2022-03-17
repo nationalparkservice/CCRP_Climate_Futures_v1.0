@@ -164,9 +164,6 @@ hydro.day.new = function(x, start.month = 10L){
 }
 WBData$WaterYr <- hydro.day.new(WBData$Date)
 
-H<- subset(WBData,CF=="Historical")
-h <- as.xts.data.table(H)
-
 # SWE spaghetti
 Hist.SWE<-spaghetti_plot_wateryr(subset(WBData,CF=="Historical"),"SWEaccum.in",col=col[1],CF="Historical")
 CF1.SWE<-spaghetti_plot_wateryr(subset(WBData,CF %in% CFs[1]),"SWEaccum.in",col=col[2], CF=CFs[1])
