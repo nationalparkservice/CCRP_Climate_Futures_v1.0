@@ -6,7 +6,7 @@
 #################################################
 #################   Functions  ##################     
 checkFile <- function(fName, fileURL=F){
-  tmpFiles <- list.files(DataDir)
+  tmpFiles <- list.files(here::here(DataDir))
   if(fName %in% tmpFiles){
     print(paste(fName, " File exists. Not downloaded"))
     if("zip" == tolower(str_sub(fName, str_length(fName)-2, str_length(fName))))unzip(paste(DataDir,fName,sep='')) 
@@ -46,18 +46,22 @@ VPD <- function(TminF, TmaxF, RHmin, RHmax){
 #################################################################
 ##############  Create Data Sets - Hist and Proj  ###############
 
-histInFile <-  paste(SiteID,"_historical.csv", sep='')        # histInFile <- file.choose()    #  browse to path/file
-projInFile <- paste(SiteID,"_future.csv", sep='')
-checkFile(histInFile)
-Gridmet<- read.csv(paste(DataDir, histInFile, sep=''))
+histInFileName <-  str_c(SiteID,"_historical.csv")        # histInFile <- file.choose()    #  browse to path/file
+projInFileName <- str_c(SiteID,"_future.csv")
+checkFile(histInFileName)     # see if file exists, read if necessary
+
+  
+Gridmet<- read.csv(here::here(DataDir, histInFileName))
 names(Gridmet) <- c("Date","GCM","PrcpIn","TmaxF","TminF","RHmaxPct","RHminPct","TavgF")
+
 Gridmet <- Gridmet %>% mutate(Year = year(Date),
                               RCP = "Hist",
                               VPD = VPD(TminF, TmaxF, RHminPct, RHmaxPct),
                               DOY = yday(Date))   # for plotting
 
 checkFile(projInFile)
-Future_all <- read.csv(paste(DataDir, projInFile, sep=""))
+Future_all <- read.csv(here::here(DataDir, projInFile))
+
 Future_all$Year <- year(Future_all$Date)
 Future_all$RCP <- str_sub(Future_all$GCM, str_length(Future_all$GCM)-1, str_length(Future_all$GCM))
 
@@ -67,25 +71,22 @@ Future_all <- Future_all %>% #dplyr::filter(GCM %in% wbGCMs) %>%
   mutate(VPD = VPD(TminF, TmaxF, RHminPct, RHmaxPct),
          DOY = yday(Date))
 
-#### Extract WB data ############
-#  1,124,960 obs with all GCMs.   731,224 obs after filter
 
 ##############  Initials   ################
 WBFileURL <- "https://parkfutures.s3.us-west-2.amazonaws.com/park-centroid-wb/"
 
-hName <- paste(SiteID, "_water_balance_historical.zip", sep='')
-checkFile(hName,WBFileURL)  
+hName <- str_c(SiteID, "_water_balance_historical.zip")  # don't include directory
+checkFile(hName, WBFileURL)  
 
-fName <- paste(SiteID, "_water_balance_future.zip", sep='')
+fName <- str_c(SiteID, "_water_balance_future.zip")
 checkFile(fName,WBFileURL)
 
 file.rename(paste0(SiteID,"_water_balance_historical.csv"),paste0(DataDir,SiteID,"_water_balance_historical.csv"))
 file.rename(paste0(SiteID,"_water_balance_future.csv"),paste0(DataDir,SiteID,"_water_balance_future.csv"))
-file.remove(list.files(path = DataDir, pattern = '.zip', full.names = TRUE))
+      # file.remove(list.files(path = DataDir, pattern = '.zip', full.names = TRUE))  # if space needed, delete csv instead and keep (smaller) zip
 
 histWB <- read.csv(paste(DataDir, SiteID,"_water_balance_historical.csv", sep=''))
 futWB <- read.csv(paste(DataDir, SiteID, "_water_balance_future.csv", sep=''))
-
 
 rm(hName, fName)
 
