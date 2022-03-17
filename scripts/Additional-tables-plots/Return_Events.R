@@ -73,7 +73,7 @@ allreturns<-rbind(return50base, return50future)
 allreturns$CF<-factor(allreturns$CF, levels=c("Historical",CFs))
 
 #Bar graph 50-year return int for a 24-hour event
-var_bar_plot(allreturns,"modeled", cols=colors3, title="50-year recurrence interval", 
+var_bar_plot(allreturns,"modeled", cols=colors3, title="Extreme precipitation 50-year recurrence interval", 
              ylab="Precipitation (inches/day)")
 ggsave("Bar-50yrRecurrence.png", path=FigDir, width = PlotWidth, height = PlotHeight)
 
@@ -91,7 +91,7 @@ ggplot(allregressions, aes(x=return, y=modeled, group=CF, colour = CF)) +
   geom_line(size = 2, stat = "identity",colour="black") + 
   geom_line(size = 1.5, stat = "identity") +
   geom_point(colour= "black", size=4, aes(fill = factor(CF), shape = factor(CF))) +
-  PlotTheme +
+  PlotTheme + theme(axis.title.x=element_text(size=24, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20))) +
   labs(title = paste(SiteID, " - Recurrence intervals for 24-hour precipitation totals",sep=""),
        x = "Recurrence interval (year)", y = "Precipitation (inches/day)") +
   scale_color_manual(name="",values = colors3) +
