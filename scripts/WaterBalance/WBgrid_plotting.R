@@ -27,9 +27,8 @@ AnnualWB$avg_SM.in = aggregate(SM.in ~ Year+GCM, data=WBData, FUN=mean)[,3]
 AnnualWB$sum_aet.in = aggregate(AET.in ~ Year+GCM, data=aggregate(AET.in~Year+GCM,data=WBData,sum), mean)[,3]
 AnnualWB$sum_d.in = aggregate(D.in ~ Year+GCM, data=aggregate(D.in~Year+GCM,data=WBData,sum), mean)[,3]
 
-
-write.csv(MonthlyWB,paste0(TableDir,"MonthlyWB.csv"),row.names=FALSE)
-write.csv(AnnualWB,paste0(TableDir, "AnnualWB.csv"),row.names=FALSE)
+MonthlyWB %>% mutate_at(3:9,funs(round(.,1))) %>% write.csv(.,paste0(TableDir,"MonthlyWB.csv"),row.names=FALSE)
+AnnualWB %>% mutate_at(3:9,funs(round(.,1))) %>% write.csv(.,paste0(TableDir,"AnnualWB.csv"),row.names=FALSE)
 
 
 #######################################################################################################################
@@ -89,7 +88,7 @@ ggsave("Monthly-line-avg_SM.in.png", path = FigDir, width = PlotWidth, height = 
 
 dot_plot(MonthlyWB_delta, avg_SM.in, Month, grp=CF, cols=colors2,
          title = paste("Change in average monthly soil moisture in", Yr, "vs Historical (",BasePeriod,")"),
-         xlab="Change in soil moisture (inches)",labels=MonthLabels)
+         xlab="Change in soil moisture (inches)",ylab="Month",labels=MonthLabels)
 ggsave("Monthly-dot-avg_SM.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
 ## sum_d.in
@@ -100,7 +99,7 @@ ggsave("Monthly-line-sum_d.in.png", path = FigDir, width = PlotWidth, height = P
 
 dot_plot(MonthlyWB_delta, sum_d.in, Month, grp=CF, cols=colors2,
          title = paste("Change in average monthly water deficit in", Yr, "vs Historical (",BasePeriod,")"),
-         xlab="Change in deficit (inches)",labels=MonthLabels)
+         xlab="Change in deficit (inches)",ylab="Month",labels=MonthLabels)
 ggsave("Monthly-dot-sum_d.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
 
@@ -112,19 +111,19 @@ ggsave("Monthly-line-sum_runoff.in.png", path = FigDir, width = PlotWidth, heigh
 
 dot_plot(MonthlyWB_delta, sum_runoff.in, Month, grp=CF, cols=colors2,
          title = paste("Change in average monthly runoff in", Yr, "vs Historical (",BasePeriod,")"),
-         xlab="Change in runoff (inches)",labels=MonthLabels)
+         xlab="Change in runoff (inches)",ylab="Month",labels=MonthLabels)
 ggsave("Monthly-dot-sum_runoff.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
 
 ## sum_SWEaccum.in
-Month_line_plot(MonthlyWB_delta, Month, sum_SWEaccum.in, grp=CF, cols=colors2, 
+Month_line_plot(MonthlyWB_delta, Month, max_SWEaccum.in, grp=CF, cols=colors2, 
                 title= paste("Change in average monthly SWE in", Yr, "vs Historical (",BasePeriod,")"),
                 xlab="Month", ylab="Change in SWE (inches)")
 ggsave("Monthly-line-sum_SWEaccum.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
-dot_plot(MonthlyWB_delta, sum_SWEaccum.in, Month, grp=CF, cols=colors2,
+dot_plot(MonthlyWB_delta, max_SWEaccum.in, Month, grp=CF, cols=colors2,
          title = paste("Change in average monthly SWE in", Yr, "vs Historical (",BasePeriod,")"),
-         xlab="Change in SWE (inches)",labels=MonthLabels)
+         xlab="Change in SWE (inches)",ylab="Month",labels=MonthLabels)
 ggsave("Monthly-dot-sum_SWEaccum.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
 
@@ -136,19 +135,19 @@ ggsave("Monthly-line-sum_aet.in.png", path = FigDir, width = PlotWidth, height =
 
 dot_plot(MonthlyWB_delta, sum_aet.in, Month, grp=CF, cols=colors2,
          title = paste("Change in average monthly AET in", Yr, "vs Historical (",BasePeriod,")"),
-         xlab="Change in AET (inches)",labels=MonthLabels)
+         xlab="Change in AET (inches)",ylab="Month",labels=MonthLabels)
 ggsave("Monthly-dot-sum_aet.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
 
 ### Additional plots
 # Max SWE
-AnnualWB$max_SWEaccum.in <- aggregate(SWEaccum.in ~ Year+GCM, data=aggregate(SWEaccum.in~Year+GCM,data=WBData,sum), mean)[,3]
+# AnnualWB$max_SWEaccum.in <- aggregate(SWEaccum.in ~ Year+GCM, data=aggregate(SWEaccum.in~Year+GCM,data=WBData,sum), mean)[,3]
 density_plot(AnnualWB, xvar=max_SWEaccum.in,cols=col,title=paste(SiteID,"maximum annual SWE in", Yr,  "and Historical Period (", BasePeriod,")",sep=" "),
              xlab="Max SWE (in)")
 ggsave("Density-max_SWEaccum.in.png", path = FigDir, width = PlotWidth, height = PlotHeight)
 
 var_bar_plot(AnnualWB, "max_SWEaccum.in", cols=colors3, ylab="Max SWE (in)",
-             title=paste0("Average annual max SWE in. in ", Yr, " vs ", BasePeriod))
+             title=paste0("Average annual max SWE in ", Yr, " vs ", BasePeriod))
 ggsave("Annual-bar-max_SWEaccum.in.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
 var_line_plot(AnnualWB, var=max_SWEaccum.in, cols=col, title="Average annual max SWE in.",
@@ -165,6 +164,9 @@ hydro.day.new = function(x, start.month = 10L){
 }
 WBData$WaterYr <- hydro.day.new(WBData$Date)
 
+H<- subset(WBData,CF=="Historical")
+h <- as.xts.data.table(H)
+
 # SWE spaghetti
 Hist.SWE<-spaghetti_plot_wateryr(subset(WBData,CF=="Historical"),"SWEaccum.in",col=col[1],CF="Historical")
 CF1.SWE<-spaghetti_plot_wateryr(subset(WBData,CF %in% CFs[1]),"SWEaccum.in",col=col[2], CF=CFs[1])
@@ -173,7 +175,7 @@ CF2.SWE<-spaghetti_plot_wateryr(subset(WBData,CF %in% CFs[2]),"SWEaccum.in",col=
 SWEgrid <- ggarrange(Hist.SWE, CF1.SWE, CF2.SWE, ncol = 1, nrow = 3,common.legend = T)
 
 annotate_figure(SWEgrid, left = textGrob("SWE (in)", rot = 90, vjust = 1, gp = gpar(cex = 1.3)),
-                         bottom = textGrob("Julian day", gp = gpar(cex = 1.3)),
+                         bottom = textGrob("Water year day", gp = gpar(cex = 1.3)),
                          top = textGrob("Daily SWE for each climate future by water year",
                                         gp=gpar(fontface="bold", col="black",  fontsize=26)))
 ggsave("spaghetti-SWEaccum.in.png", width = PlotWidth, height = PlotHeight, path = FigDir)
@@ -189,7 +191,7 @@ CF2.runoff<-spaghetti_plot_wateryr(subset(WBData,CF %in% CFs[2]),"Runoff.in",col
 runoffgrid <- ggarrange(Hist.runoff, CF1.runoff, CF2.runoff, ncol = 1, nrow = 3,common.legend = T)
 
 annotate_figure(runoffgrid, left = textGrob("Runoff (in)", rot = 90, vjust = 1, gp = gpar(cex = 1.3)),
-                bottom = textGrob("Julian day", gp = gpar(cex = 1.3)),
+                bottom = textGrob("Water year day", gp = gpar(cex = 1.3)),
                 top = textGrob("Daily Runoff for each climate futureby water year",
                                gp=gpar(fontface="bold", col="black",  fontsize=26)))
 ggsave("spaghetti-Runoff.in.png", width = PlotWidth, height = PlotHeight, path = FigDir)
