@@ -235,12 +235,12 @@ for (i in 1:length(ND)){
   FutureDrought$severity[i]<-sum(Future.drt$SPEI[D[i]:(ND[i]-1)])
   FutureDrought$peak[i]<-min(Future.drt$SPEI[D[i]:(ND[i]-1)])
 }
-if(length(unique(FutureDrought$CF == 1))) {FD <- FutureDrought %>% filter(row_number()==1) %>%
+if(length(unique(FutureDrought$CF)) == 1) {FD <- FutureDrought %>% filter(row_number()==1) %>%
   mutate(Year = 9999, CF = CFs[!(CFs %in% unique(FutureDrought$CF))],
          duration = 0, severity = 0, peak = 0, freq = 0)
 CFs[!(CFs %in% unique(FutureDrought$CF))]
 FutureDrought = rbind(FutureDrought, FD)
-rm(FD)}
+rm(FD)}  
 
 FutureDrought$CF<-as.factor(FutureDrought$CF)
 
