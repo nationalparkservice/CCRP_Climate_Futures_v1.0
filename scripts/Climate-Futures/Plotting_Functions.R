@@ -47,14 +47,14 @@ ggplot(data, aes(x={{xvar}}, y={{yvar}}, group={{grp}}, colour = {{grp}})) +
 }
 
 
-dot_plot <- function(data, xvar, yvar, grp, cols, title,xlab,labels){
+dot_plot <- function(data, xvar, yvar, grp, cols, title,xlab,ylab,labels){
   ggplot(data, aes(x={{xvar}},y={{yvar}},fill={{grp}})) +
     geom_vline(xintercept=0, linetype="dashed", color = "black") + 
     geom_point(stat="identity",size=8,colour="black",aes(fill = factor({{grp}}), shape = factor({{grp}}))) +
     PlotTheme +
     theme(axis.title.x=element_text(size=20, vjust=0.5)) +
     labs(title = title, 
-         x = xlab, y = "") +
+         x = xlab, y = ylab) +
     scale_fill_manual(name="",values =cols) +
     scale_shape_manual(name="",values = c(seq(21,21+length(cols)-1,1))) +
     scale_y_discrete(labels=rev(labels), limits=rev)
@@ -133,6 +133,7 @@ spaghetti_plot_wateryr <- function(data, var, col,CF){
       geom_text(aes(x=1, label="\nOct 1", y=max(eval(parse(text=paste0("WBData", "$",var))))),
                 colour="black", angle=90, text=element_text(size=11),hjust=1) +
       coord_cartesian(ylim = c(0, max(eval(parse(text=paste0("WBData","$",var))))))+
+      # scale_x_date(breaks = date_breaks("months"),labels = date_format("%b")) +
       PlotTheme + 
       theme(plot.title=element_text(size=16,hjust=0.5,face="plain", margin=margin(t=1, r=1, b=1, l=1))) +
       labs(title = CF, 
