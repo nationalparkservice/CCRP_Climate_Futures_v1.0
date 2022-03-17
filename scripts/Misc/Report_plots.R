@@ -1,12 +1,16 @@
 # Delta tmax and tmin
 a <- dot_plot(Monthly_delta, TminF, Month, grp=CF, cols=colors2,
          title = paste(""),
-         xlab="Change in minimum temperature (\u00B0F)",labels=MonthLabels)
+         xlab="Change in minimum temperature (\u00B0F)",
+         ylab="Months",
+         labels=MonthLabels)
 b <- dot_plot(Monthly_delta, TmaxF, Month, grp=CF, cols=colors2,
               title = paste(""),
-              xlab="Change in maximum temperature (\u00B0F)",labels=MonthLabels)
+              xlab="Change in maximum temperature (\u00B0F)",
+              ylab=" ",
+              labels=MonthLabels)
 
-legend <- grid_arrange_shared_legend(a+ rremove("ylab"),b+ rremove("ylab") + rremove("y.text"),
+legend <- grid_arrange_shared_legend(a,b+ rremove("y.text"),
                                      ncol=2,nrow=1,position="bottom", 
                                      top=textGrob(paste0("Historical and future projections for ", SiteID),
                                               gp=gpar(fontface="bold", col="black", fontsize=26)))
@@ -32,7 +36,7 @@ a <- ggplot(allregressions, aes(x=return, y=modeled, group=CF, colour = CF)) +
   geom_line(size = 2, stat = "identity",colour="black") + 
   geom_line(size = 1.5, stat = "identity") +
   geom_point(colour= "black", size=4, aes(fill = factor(CF), shape = factor(CF))) +
-  PlotTheme +
+  PlotTheme + axis.title.x=element_text(size=24, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20))
   labs(title = paste(SiteID, " - Recurrence intervals for 24-hour precipitation totals",sep=""),
        x = "Recurrence interval (year)", y = "Precipitation (inches/day)") +
   scale_color_manual(name="",values = colors3) +
