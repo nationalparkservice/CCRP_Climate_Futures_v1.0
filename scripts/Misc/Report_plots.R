@@ -68,17 +68,18 @@ ggsave("Panel-recurrenceinterval-OverPrecip95.png", plot=g,path = FigDir, height
 
 
 # Fire: WaterBalance, AET
-a <- ggplot(AnnualWB, aes(x=sum_d.in, y=sum_aet.in, colour=CF)) + geom_point(size=3)+ geom_smooth(method="lm", se=FALSE, size=2)+
+a<-LT_plot(WBAvgs,D.in,rollvar=D.inRoll10,cols=col,yaxis="Mean annual climatic water deficit (in/year)",
+           title=paste("Water Balance for ",SiteID,sep=""))
+b <- ggplot(AnnualWB, aes(x=sum_d.in, y=sum_aet.in, colour=CF)) + geom_point(size=3)+ geom_smooth(method="lm", se=FALSE, size=2)+
   scale_colour_manual("",values=col) +
   labs(
     y = "Annual Actual Evapotranspiration (in)",
     x = "Annual water deficit (in)",
     colour = "GCM",
-    title = paste("Water Balance for ",SiteID,sep="")  
+    title = ""  
   ) + PlotTheme + theme(axis.title.x=element_text(size=24, vjust=0.5,  margin=margin(t=20, r=20, b=20, l=20)))
-b<-LT_plot(WBAvgs,D.in,rollvar=D.inRoll10,cols=col,yaxis="Mean annual climatic water deficit (in/year)",title="")
 legend <- grid_arrange_shared_legend(a,b,nrow=2,ncol=1,position="bottom")
-ggsave("Panel-WaterBalance-D.in.png",legend, path = FigDir, height=PanelHeight, width=PanelWidth)
+ggsave("Panel-D.in-WaterBalance.png",legend, path = FigDir, height=PanelHeight, width=PanelWidth)
 
 
 #Drought: Multi-panel ts and characteristic bar plots
