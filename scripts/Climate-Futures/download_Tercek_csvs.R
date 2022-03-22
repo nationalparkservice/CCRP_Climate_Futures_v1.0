@@ -6,7 +6,7 @@
 #################################################
 #################   Functions  ##################     
 checkFile <- function(fName, fileURL=F){
-  tmpFiles <- list.files(DataDir)
+  tmpFiles <- list.files(here::here(DataDir))
   if(fName %in% tmpFiles){
     print(paste(fName, " File exists. Not downloaded"))
     if("zip" == tolower(str_sub(fName, str_length(fName)-2, str_length(fName))))unzip(paste(DataDir,fName,sep='')) 
@@ -46,18 +46,20 @@ VPD <- function(TminF, TmaxF, RHmin, RHmax){
 #################################################################
 ##############  Create Data Sets - Hist and Proj  ###############
 
-histInFile <-  paste(SiteID,"_historical.csv", sep='')        # histInFile <- file.choose()    #  browse to path/file
-projInFile <- paste(SiteID,"_future.csv", sep='')
+histInFile <-  str_c(SiteID,"_historical.csv", sep='')        # histInFile <- file.choose()    #  browse to path/file
+projInFile <- str_c(SiteID,"_future.csv", sep='')
 checkFile(histInFile)
-Gridmet<- read.csv(paste(DataDir, histInFile, sep=''))
+
+Gridmet<- read.csv(here::here(DataDir, histInFile))
 names(Gridmet) <- c("Date","GCM","PrcpIn","TmaxF","TminF","RHmaxPct","RHminPct","TavgF")
+
 Gridmet <- Gridmet %>% mutate(Year = year(Date),
                               RCP = "Hist",
                               VPD = VPD(TminF, TmaxF, RHminPct, RHmaxPct),
                               DOY = yday(Date))   # for plotting
 
 checkFile(projInFile)
-Future_all <- read.csv(paste(DataDir, projInFile, sep=""))
+Future_all <- read.csv(here::here(DataDir, projInFileName))
 Future_all$Year <- year(Future_all$Date)
 Future_all$RCP <- str_sub(Future_all$GCM, str_length(Future_all$GCM)-1, str_length(Future_all$GCM))
 
@@ -73,10 +75,10 @@ Future_all <- Future_all %>% #dplyr::filter(GCM %in% wbGCMs) %>%
 ##############  Initials   ################
 WBFileURL <- "https://parkfutures.s3.us-west-2.amazonaws.com/park-centroid-wb/"
 
-hName <- paste(SiteID, "_water_balance_historical.zip", sep='')
+hName <- str_c(SiteID, "_water_balance_historical.zip")
 checkFile(hName,WBFileURL)  
 
-fName <- paste(SiteID, "_water_balance_future.zip", sep='')
+fName <- str_c(SiteID, "_water_balance_future.zip")
 checkFile(fName,WBFileURL)
 
 file.rename(paste0(SiteID,"_water_balance_historical.csv"),paste0(DataDir,SiteID,"_water_balance_historical.csv"))
