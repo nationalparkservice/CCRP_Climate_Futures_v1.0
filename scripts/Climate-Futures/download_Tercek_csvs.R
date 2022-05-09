@@ -59,7 +59,7 @@ Gridmet <- Gridmet %>% mutate(Year = year(Date),
                               DOY = yday(Date))   # for plotting
 
 checkFile(projInFile)
-Future_all <- read.csv(here::here(DataDir, projInFileName))
+Future_all <- read.csv(here::here(DataDir, projInFile))
 Future_all$Year <- year(Future_all$Date)
 Future_all$RCP <- str_sub(Future_all$GCM, str_length(Future_all$GCM)-1, str_length(Future_all$GCM))
 
