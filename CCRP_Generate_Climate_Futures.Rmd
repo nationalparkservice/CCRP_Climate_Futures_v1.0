@@ -54,7 +54,7 @@ rm(list = ls())
 
 # -------------- Input site information -------------------------------------- #
 
-SiteID = "CACO" 
+SiteID = "TUSK" 
 # Lat = 40.44039704 # Can manually input lat/lon, otherwise run get_site_info.R
 # Lon = -111.7093944
 
