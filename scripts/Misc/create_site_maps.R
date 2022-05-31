@@ -3,6 +3,8 @@
 
 ###### Map of MACA cell in context of the park  #############################
 
+
+
 maca <- raster('./data/general/spatial-data/Climate_grid/tdn_90d.nc')
 maca <- projectRaster(maca, crs = park)
 # Park
@@ -19,12 +21,12 @@ centroid <- filter(nps_centroids, UNIT_CODE == SiteID) # use this line if using 
 box = sf::st_bbox(park) # Get bbox before turning into sp object
 Sp_park= as(park, "Spatial")
 
-myMap <- get_stamenmap(bbox = c(left = Sp_park@bbox[1],
+myMap <- suppressWarnings(get_stamenmap(bbox = c(left = Sp_park@bbox[1],
                                 bottom = Sp_park@bbox[2],
                                 right = Sp_park@bbox[3],
                                 top = Sp_park@bbox[4]),
                        maptype = "terrain",
-                       crop = FALSE, zoom = calc_zoom(lat = c(box[2],box[4]),lon=c(box[1],box[3])))
+                       crop = FALSE, zoom = calc_zoom(lat = c(box[2],box[4]),lon=c(box[1],box[3]))))
 ggmap(myMap)
 
 
@@ -88,12 +90,12 @@ box = sf::st_bbox(adjacent_poly)
 
 # Get bounding box and map
 
-myMap2 <- get_stamenmap(bbox = c(left = adjacent_poly@bbox[1],
+myMap2 <- suppressWarnings(get_stamenmap(bbox = c(left = adjacent_poly@bbox[1],
                                   bottom = adjacent_poly@bbox[2],
                                   right = adjacent_poly@bbox[3],
                                   top = adjacent_poly@bbox[4]),
                          maptype = "terrain",
-                         crop = FALSE, zoom = calc_zoom(lat = c(box[2],box[4]),lon=c(box[1],box[3])))
+                         crop = FALSE, zoom = calc_zoom(lat = c(box[2],box[4]),lon=c(box[1],box[3]))))
 
 ggmap(myMap2, aes(x=x, y=y)) + 
   geom_sf(data = adjacent_poly_sf, inherit.aes = FALSE, aes(color = "MACA grid"), fill = NA, lwd = 1) + 
@@ -124,4 +126,6 @@ ggsave(filename = "MACA-map-zoomed-in.png", device = "png", path = OutDir)
 
 rm(myMap,myMap2,Sp_park,park,maca.sf,maca.poly,maca_grid_shp,maca_grid_crop,maca_cell,maca,adjacent_poly_sf,
    adjacent_poly,adjacent_cells, nps_boundary, nps_centroids, centroid, box, cell, maca_grid_sf)
+
+
 
