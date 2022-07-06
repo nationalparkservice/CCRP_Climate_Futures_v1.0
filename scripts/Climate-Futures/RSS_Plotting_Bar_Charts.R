@@ -222,7 +222,7 @@ ggsave("Annual-line-OverHighQ.png", width = PlotWidth, height = PlotHeight, path
 
 ## OverPrecip95
 var_bar_plot(Annual, "OverPrecip95", cols=colors3, ylab="Days/Yr",
-             title=paste0("Average Days/Yr Precipitation > Historical 95th Percentile (", round(HistPrecip95, 1), " in) in ", Yr, " vs ", BasePeriod))
+             title=paste0("Average Days/Yr Precipitation > Historical 95th Percentile (", round(HistPrecip95, 1), " in) \n in ", Yr, " vs ", BasePeriod))
 ggsave("Annual-bar-OverPrecip95.png", width = PlotWidth, height = PlotHeight, path = FigDir)
 
 var_box_plot(Annual, "OverPrecip95", cols=colors3, ylab="Days/Yr",
